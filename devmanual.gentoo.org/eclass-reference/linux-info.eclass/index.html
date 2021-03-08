@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>linux-info.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>LINUX-INFO.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+linux-info.eclass - eclass used for accessing kernel related information
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+This eclass is used as a central eclass for accessing kernel
+related information for source or binary already installed.
+It is vital for linux-mod.eclass to function correctly, and is split
+out so that any ebuild behaviour &quot;templates&quot; are abstracted out
+using additional eclasses.
+<P>
+&quot;kernel config&quot; in this file means:
+The .config of the currently installed sources is used as the first
+preference, with a fall-back to bundled config (/proc/config.gz) if available.
+<P>
+Before using any of the config-handling functions in this eclass, you must
+ensure that one of the following functions has been called (in order of
+preference), otherwise you will get bugs like #364041):
+linux-info_pkg_setup
+linux-info_get_any_version
+get_version
+get_running_version
+
+<H2 ID="lbAD">FUNCTIONS</H2>
+
+<DL>
+<DT><B>set_arch_to_kernel</B> <DD>
+Set the env ARCH to match what the kernel expects.
+<DT><B>set_arch_to_portage</B> <DD>
+Set the env ARCH to match what portage expects.
+<DT><B>getfilevar</B> &lt;variable&gt; &lt;configfile&gt;<DD>
+It detects the value of the variable defined in the file configfile. This is
+done by including the configfile, and printing the variable with Make.
+It WILL break if your makefile has missing dependencies!
+<P>
+Return value: the value of the variable
+<DT><B>getfilevar_noexec</B> &lt;variable&gt; &lt;configfile&gt;<DD>
+It detects the value of the variable defined in the file configfile.
+This is done with sed matching an expression only. If the variable is defined,
+you will run into problems. See getfilevar for those cases.
+<P>
+Return value: the value of the variable
+<DT><B>linux_config_src_exists</B> <DD>
+It returns true if .config exists in a build directory otherwise false
+<P>
+Return value: true or false
+<DT><B>linux_config_bin_exists</B> <DD>
+It returns true if .config exists in /proc, otherwise false
+<P>
+Return value: true or false
+<DT><B>linux_config_exists</B> <DD>
+It returns true if .config exists otherwise false
+<P>
+This function MUST be checked before using any of the linux_chkconfig_*
+functions.
+<P>
+Return value: true or false
+<DT><B>linux_config_path</B> <DD>
+Echo the name of the config file to use.  If none are found,
+then return false.
+<DT><B>require_configured_kernel</B> <DD>
+This function verifies that the current kernel is configured (it checks against the existence of .config)
+otherwise it dies.
+<DT><B>linux_chkconfig_present</B> &lt;option&gt;<DD>
+It checks that CONFIG_&lt;option&gt;=y or CONFIG_&lt;option&gt;=m is present in the current kernel .config
+If linux_config_exists returns false, the results of this are UNDEFINED. You
+MUST call linux_config_exists first.
+<P>
+Return value: true or false
+<DT><B>linux_chkconfig_module</B> &lt;option&gt;<DD>
+It checks that CONFIG_&lt;option&gt;=m is present in the current kernel .config
+If linux_config_exists returns false, the results of this are UNDEFINED. You
+MUST call linux_config_exists first.
+<P>
+Return value: true or false
+<DT><B>linux_chkconfig_builtin</B> &lt;option&gt;<DD>
+It checks that CONFIG_&lt;option&gt;=y is present in the current kernel .config
+If linux_config_exists returns false, the results of this are UNDEFINED. You
+MUST call linux_config_exists first.
+<P>
+Return value: true or false
+<DT><B>linux_chkconfig_string</B> &lt;option&gt;<DD>
+It prints the CONFIG_&lt;option&gt; value of the current kernel .config (it requires a configured kernel).
+If linux_config_exists returns false, the results of this are UNDEFINED. You
+MUST call linux_config_exists first.
+<P>
+Return value: CONFIG_&lt;option&gt;
+<DT><B>kernel_is</B> [-lt -gt -le -ge -eq] &lt;major_number&gt; [minor_number patch_number]<DD>
+It returns true when the current kernel version satisfies the comparison against the passed version.
+-eq is the default comparison.
+<P>
+<PRE>
+For Example where KV = 2.6.9
+kernel_is 2 4   returns false
+kernel_is 2     returns true
+kernel_is 2 6   returns true
+kernel_is 2 6 8 returns false
+kernel_is 2 6 9 returns true
+</PRE>
+
+<P>
+Return value: true or false
+<DT><B>get_version</B> <DD>
+It gets the version of the kernel inside KERNEL_DIR and populates the KV_FULL variable
+(if KV_FULL is already set it does nothing).
+<P>
+The kernel version variables (KV_MAJOR, KV_MINOR, KV_PATCH, KV_EXTRA and KV_LOCAL) are also set.
+<P>
+The KV_DIR is set using the KERNEL_DIR env var, the KV_DIR_OUT is set using a valid
+KBUILD_OUTPUT (in a decreasing priority list, we look for the env var, makefile var or the
+symlink /lib/modules/${KV_MAJOR}.${KV_MINOR}.${KV_PATCH}${KV_EXTRA}/build).
+<DT><B>get_running_version</B> <DD>
+It gets the version of the current running kernel and the result is the same as get_version() if the
+function can find the sources.
+<DT><B>linux-info_get_any_version</B> <DD>
+This attempts to find the version of the sources, and otherwise falls back to
+the version of the running kernel.
+<DT><B>check_kernel_built</B> <DD>
+This function verifies that the current kernel sources have been already prepared otherwise it dies.
+<DT><B>check_modules_supported</B> <DD>
+This function verifies that the current kernel support modules (it checks CONFIG_MODULES=y) otherwise it dies.
+<DT><B>check_extra_config</B> <DD>
+It checks the kernel config options specified by CONFIG_CHECK. It dies only when a required config option (i.e.
+the prefix ~ is not used) doesn't satisfy the directive. Ignored on non-Linux systems.
+<DT><B>linux-info_pkg_setup</B> <DD>
+Force a get_version() call when inherited from linux-mod.eclass and then check if the kernel is configured
+to support the options specified in CONFIG_CHECK (if not null)
+</DL>
+
+<H2 ID="lbAE">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>KERNEL_DIR</B><DD>
+A string containing the directory of the target kernel sources. The default value is
+&quot;/usr/src/linux&quot;
+<DT><B>CONFIG_CHECK</B><DD>
+A string containing a list of .config options to check for before
+proceeding with the install.
+<P>
+<BR>&nbsp;&nbsp;e.g.:&nbsp;CONFIG_CHECK=&quot;MTRR&quot;
+<P>
+You can also check that an option doesn't exist by
+prepending it with an exclamation mark (!).
+<P>
+<BR>&nbsp;&nbsp;e.g.:&nbsp;CONFIG_CHECK=&quot;!MTRR&quot;
+<P>
+To simply warn about a missing option, prepend a '~'.
+It may be combined with '!'.
+<P>
+In general, most checks should be non-fatal. The only time fatal checks should
+be used is for building kernel modules or cases that a compile will fail
+without the option.
+<P>
+This is to allow usage of binary kernels, and minimal systems without kernel
+sources.
+<DT><B>ERROR_&lt;CFG&gt;</B><DD>
+A string containing the error message to display when the check against CONFIG_CHECK
+fails. &lt;CFG&gt; should reference the appropriate option used in CONFIG_CHECK.
+<P>
+<BR>&nbsp;&nbsp;e.g.:&nbsp;ERROR_MTRR=&quot;MTRR&nbsp;exists&nbsp;in&nbsp;the&nbsp;.config&nbsp;but&nbsp;shouldn't!!&quot;
+<DT><B>KBUILD_OUTPUT</B><DD>
+A string passed on commandline, or set from the kernel makefile. It contains the directory
+which is to be used as the kernel object directory.
+<DT><B>KV_FULL</B><DD>
+A read-only variable. It's a string containing the full kernel version. ie: 2.6.9-gentoo-johnm-r1
+<DT><B>KV_MAJOR</B><DD>
+A read-only variable. It's an integer containing the kernel major version. ie: 2
+<DT><B>KV_MINOR</B><DD>
+A read-only variable. It's an integer containing the kernel minor version. ie: 6
+<DT><B>KV_PATCH</B><DD>
+A read-only variable. It's an integer containing the kernel patch version. ie: 9
+<DT><B>KV_EXTRA</B><DD>
+A read-only variable. It's a string containing the kernel EXTRAVERSION. ie: -gentoo
+<DT><B>KV_LOCAL</B><DD>
+A read-only variable. It's a string containing the kernel LOCALVERSION concatenation. ie: -johnm
+<DT><B>KV_DIR</B><DD>
+A read-only variable. It's a string containing the kernel source directory, will be null if
+KERNEL_DIR is invalid.
+<DT><B>KV_OUT_DIR</B><DD>
+A read-only variable. It's a string containing the kernel object directory, will be KV_DIR unless
+KBUILD_OUTPUT is used. This should be used for referencing .config.
+</DL>
+
+<H2 ID="lbAF">AUTHORS</H2>
+
+Original author: John Mylchreest &lt;<A HREF="mailto:johnm@gentoo.org">johnm@gentoo.org</A>&gt;
+
+<H2 ID="lbAG">MAINTAINERS</H2>
+
+<A HREF="mailto:kernel@gentoo.org">kernel@gentoo.org</A>
+
+<H2 ID="lbAH">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAI">FILES</H2>
+
+<B>linux-info.eclass</B>
+
+
+<H2 ID="lbAJ">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/linux-info.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/linux-info.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAE">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAF">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAG">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAH">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAI">FILES</A><DD>
+<DT><A HREF="index.html#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

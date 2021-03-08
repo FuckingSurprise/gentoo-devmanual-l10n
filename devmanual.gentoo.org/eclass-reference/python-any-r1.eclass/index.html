@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>python-any-r1.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>PYTHON-ANY-R1.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+python-any-r1.eclass - An eclass for packages having build-time dependency on Python.
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+A minimal eclass for packages which need any Python interpreter
+installed without a need for explicit choice and invariability.
+This usually involves packages requiring Python at build-time
+but having no other relevance to it.
+<P>
+This eclass provides a minimal PYTHON_DEPS variable with a dependency
+string on any of the supported Python implementations. It also exports
+pkg_setup() which finds the best supported implementation and sets it
+as the active one.
+<P>
+Optionally, you can define a python_check_deps() function. It will
+be called by the eclass with EPYTHON set to each matching Python
+implementation and it is expected to check whether the implementation
+fulfills the package requirements. You can use the locally exported
+PYTHON_USEDEP or PYTHON_SINGLE_USEDEP to check USE-dependencies
+of relevant packages. It should return a true value (0) if the Python
+implementation fulfills the requirements, a false value (non-zero)
+otherwise.
+<P>
+Please note that python-any-r1 will always inherit python-utils-r1
+as well. Thus, all the functions defined there can be used in the
+packages using python-any-r1, and there is no need ever to inherit
+both.
+<P>
+For more information, please see the Python Guide:
+<A HREF="https://dev.gentoo.org/~mgorny/python-guide/">https://dev.gentoo.org/~mgorny/python-guide/</A>
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+5 6 7
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>python_gen_any_dep</B> &lt;dependency-block&gt;<DD>
+Generate an any-of dependency that enforces a version match between
+the Python interpreter and Python packages. &lt;dependency-block&gt; needs
+to list one or more dependencies with verbatim '${PYTHON_USEDEP}'
+or '${PYTHON_SINGLE_USEDEP}' references (quoted!) that will get
+expanded inside the function.
+<P>
+This should be used along with an appropriate python_check_deps()
+that checks which of the any-of blocks were matched.
+<P>
+Example use:
+<PRE>
+DEPEND=&quot;$(python_gen_any_dep '
+dev-python/foo[${PYTHON_SINGLE_USEDEP}]
+|| ( dev-python/bar[${PYTHON_USEDEP}]
+        dev-python/baz[${PYTHON_USEDEP}] )')&quot;
+
+python_check_deps() {
+has_version &quot;dev-python/foo[${PYTHON_SINGLE_USEDEP}]&quot; \
+        &amp;&amp; { has_version &quot;dev-python/bar[${PYTHON_USEDEP}]&quot; \
+                || has_version &quot;dev-python/baz[${PYTHON_USEDEP}]&quot;; }
+}
+</PRE>
+
+<P>
+Example value:
+<PRE>
+|| (
+(
+        dev-lang/python:3.7
+        dev-python/foo[python_single_target_python3_7(-)]
+        || ( dev-python/bar[python_targets_python3_7(-),-python_single_target_python3_7(-)]
+                dev-python/baz[python_targets_python3_7(-),-python_single_target_python3_7(-)] )
+)
+(
+        dev-lang/python:3.8
+        dev-python/foo[python_single_target_python3_8(-)]
+        || ( dev-python/bar[python_targets_python3_8(-),-python_single_target_python3_8(-)]
+                dev-python/baz[python_targets_python3_8(-),-python_single_target_python3_8(-)] )
+)
+)
+</PRE>
+
+<DT><B>python_setup</B> <DD>
+Determine what the best installed (and supported) Python
+implementation is, and set the Python build environment up for it.
+<P>
+This function will call python_check_deps() if defined.
+<DT><B>python-any-r1_pkg_setup</B> <DD>
+Runs python_setup during from-source installs.
+<P>
+In a binary package installs is a no-op. If you need Python in pkg_*
+phases of a binary package, call python_setup directly.
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>PYTHON_COMPAT</B> (REQUIRED)<DD>
+This variable contains a list of Python implementations the package
+supports. It must be set before the `inherit' call. It has to be
+an array.
+<P>
+Example:
+<PRE>
+PYTHON_COMPAT=( python{2_5,2_6,2_7} )
+</PRE>
+
+<DT><B>PYTHON_COMPAT_OVERRIDE</B> (USER VARIABLE)<DD>
+This variable can be used when working with ebuilds to override
+the in-ebuild PYTHON_COMPAT. It is a string naming the implementation
+which will be used to build the package. It needs to be specified
+in the calling environment, and not in ebuilds.
+<P>
+It should be noted that in order to preserve metadata immutability,
+PYTHON_COMPAT_OVERRIDE does not affect dependencies. The value of
+EPYTHON and eselect-python preferences are ignored. Dependencies need
+to be satisfied manually.
+<P>
+Example:
+<PRE>
+PYTHON_COMPAT_OVERRIDE='pypy' emerge -1v dev-python/bar
+</PRE>
+
+<DT><B>PYTHON_REQ_USE</B><DD>
+The list of USEflags required to be enabled on the Python
+implementations, formed as a USE-dependency string. It should be valid
+for all implementations in PYTHON_COMPAT, so it may be necessary to
+use USE defaults.
+<P>
+Example:
+<PRE>
+PYTHON_REQ_USE=&quot;gdbm,ncurses(-)?&quot;
+</PRE>
+
+<P>
+It will cause the Python dependencies to look like:
+<PRE>
+|| ( dev-lang/python:X.Y[gdbm,ncurses(-)?] ... )
+</PRE>
+
+<DT><B>PYTHON_DEPS</B> (GENERATED BY ECLASS)<DD>
+This is an eclass-generated Python dependency string for all
+implementations listed in PYTHON_COMPAT.
+<P>
+Any of the supported interpreters will satisfy the dependency.
+<P>
+Example use:
+<PRE>
+DEPEND=&quot;${RDEPEND}
+${PYTHON_DEPS}&quot;
+</PRE>
+
+<P>
+Example value:
+<PRE>
+|| ( dev-lang/python:2.7[gdbm]
+        dev-lang/python:2.6[gdbm] )
+</PRE>
+
+<DT><B>PYTHON_USEDEP</B> (GENERATED BY ECLASS)<DD>
+An eclass-generated USE-dependency string for the currently tested
+implementation. It is set locally for python_check_deps() call.
+<P>
+The generated USE-flag list is compatible with packages using
+python-r1 eclass. For python-single-r1 dependencies,
+use PYTHON_SINGLE_USEDEP.
+<P>
+Example use:
+<PRE>
+python_check_deps() {
+        has_version &quot;dev-python/foo[${PYTHON_USEDEP}]&quot;
+}
+</PRE>
+
+<P>
+Example value:
+<PRE>
+python_targets_python3_7(-),-python_single_target_python3_7(-)
+</PRE>
+
+<DT><B>PYTHON_SINGLE_USEDEP</B> (GENERATED BY ECLASS)<DD>
+An eclass-generated USE-dependency string for the currently tested
+implementation. It is set locally for python_check_deps() call.
+<P>
+The generated USE-flag list is compatible with packages using
+python-single-r1 eclass. For python-r1 dependencies,
+use PYTHON_USEDEP.
+<P>
+Example use:
+<PRE>
+python_check_deps() {
+        has_version &quot;dev-python/bar[${PYTHON_SINGLE_USEDEP}]&quot;
+}
+</PRE>
+
+<P>
+Example value:
+<PRE>
+python_single_target_python3_7(-)
+</PRE>
+
+</DL>
+
+<H2 ID="lbAG">AUTHORS</H2>
+
+Author: Michał Górny &lt;<A HREF="mailto:mgorny@gentoo.org">mgorny@gentoo.org</A>&gt;
+<BR>
+
+Based on work of: Krzysztof Pawlik &lt;<A HREF="mailto:nelchael@gentoo.org">nelchael@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">MAINTAINERS</H2>
+
+Python team &lt;<A HREF="mailto:python@gentoo.org">python@gentoo.org</A>&gt;
+
+<H2 ID="lbAI">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAJ">FILES</H2>
+
+<B>python-any-r1.eclass</B>
+
+
+<H2 ID="lbAK">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/python-any-r1.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/python-any-r1.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAH">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAI">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAJ">FILES</A><DD>
+<DT><A HREF="index.html#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

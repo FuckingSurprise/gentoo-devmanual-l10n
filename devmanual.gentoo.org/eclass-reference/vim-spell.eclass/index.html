@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>vim-spell.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>VIM-SPELL.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+vim-spell.eclass - Eclass for managing Vim spell files.
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+How to make a vim spell file package using prebuilt spell lists
+from upstream (${CODE} is the language's two letter code):
+<P>
+* Get the ${CODE}.*.spl, ${CODE}.*.sug (if your language has them) and
+<BR>&nbsp;&nbsp;README_${CODE}.txt&nbsp;files.&nbsp;Currently&nbsp;they're&nbsp;at
+<BR>&nbsp;&nbsp;<A HREF="ftp://ftp.vim.org/pub/vim/unstable/runtime/spell/">ftp://ftp.vim.org/pub/vim/unstable/runtime/spell/</A>&nbsp;(except&nbsp;for&nbsp;English,
+<BR>&nbsp;&nbsp;which&nbsp;should&nbsp;be&nbsp;taken&nbsp;from&nbsp;CVS&nbsp;instead).
+<P>
+* Stick them in vim-spell-${CODE}-$(date --iso | tr -d - ).tar.bz2 . Make sure
+<BR>&nbsp;&nbsp;that&nbsp;they're&nbsp;in&nbsp;the&nbsp;appropriately&nbsp;named&nbsp;subdirectory&nbsp;to&nbsp;avoid&nbsp;having&nbsp;to&nbsp;mess
+<BR>&nbsp;&nbsp;with&nbsp;S=.
+<P>
+* Upload the tarball to the Gentoo mirrors.
+<P>
+* Add your spell file to package.mask next to the other vim things. Vim
+<BR>&nbsp;&nbsp;Project&nbsp;members&nbsp;will&nbsp;handle&nbsp;unmasking&nbsp;your&nbsp;spell&nbsp;packages&nbsp;when&nbsp;vim&nbsp;comes&nbsp;out
+<BR>&nbsp;&nbsp;of&nbsp;package.mask.
+<P>
+* Create the app-vim/vim-spell-${CODE} package. You should base your ebuild
+<BR>&nbsp;&nbsp;upon&nbsp;app-vim/vim-spell-en.&nbsp;You&nbsp;will&nbsp;need&nbsp;to&nbsp;change&nbsp;VIM_SPELL_LANGUAGE,
+<BR>&nbsp;&nbsp;KEYWORDS&nbsp;and&nbsp;LICENSE.&nbsp;Check&nbsp;the&nbsp;license&nbsp;carefully!&nbsp;The&nbsp;README&nbsp;will&nbsp;tell
+<BR>&nbsp;&nbsp;you&nbsp;what&nbsp;it&nbsp;is.
+<P>
+* Don't forget metadata.xml. You should list the Vim project and yourself
+<BR>&nbsp;&nbsp;as&nbsp;maintainers.&nbsp;There&nbsp;is&nbsp;no&nbsp;need&nbsp;to&nbsp;join&nbsp;the&nbsp;Vim&nbsp;project&nbsp;just&nbsp;for&nbsp;spell
+<BR>&nbsp;&nbsp;files.&nbsp;Here's&nbsp;an&nbsp;example&nbsp;of&nbsp;a&nbsp;metadata.xml&nbsp;file:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&lt;?xml&nbsp;version=&quot;1.0&quot;&nbsp;encoding=&quot;UTF-8&quot;?&gt;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&lt;!DOCTYPE&nbsp;pkgmetadata&nbsp;SYSTEM&nbsp;&quot;<A HREF="https://www.gentoo.org/dtd/metadata.dtd">https://www.gentoo.org/dtd/metadata.dtd</A>&quot;&gt;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&lt;pkgmetadata&gt;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;maintainer&nbsp;type=&quot;person&quot;&gt;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;email&gt;<A HREF="mailto:your@email.tld">your@email.tld</A>&lt;/email&gt;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;Your&nbsp;Name&lt;/name&gt;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/maintainer&gt;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;maintainer&nbsp;type=&quot;project&quot;&gt;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;email&gt;<A HREF="mailto:vim@gentoo.org">vim@gentoo.org</A>&lt;/email&gt;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;Vim&nbsp;Maintainers&lt;/name&gt;
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/maintainer&gt;
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;longdescription&nbsp;lang=&quot;en&quot;&gt;<BR>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vim&nbsp;spell&nbsp;files&nbsp;for&nbsp;French&nbsp;(fr).&nbsp;Supported&nbsp;character&nbsp;sets&nbsp;are<BR>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UTF-8&nbsp;and&nbsp;latin1.<BR>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/longdescription&gt;<BR>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/pkgmetadata&gt;
+<P>
+* Send an email to <A HREF="mailto:vim@gentoo.org">vim@gentoo.org</A> to let us know.
+<P>
+Don't forget to update your package as necessary.
+<P>
+If there isn't an upstream-provided pregenerated spell file for your language
+yet, read :help spell.txt from inside vim for instructions on how to create
+spell files. It's best to let upstream know if you've generated spell files
+for another language rather than keeping them Gentoo-specific.
+
+<H2 ID="lbAD">FUNCTIONS</H2>
+
+<DL>
+<DT><B>vim-spell_src_install</B> <DD>
+This function installs Vim spell files.
+<DT><B>vim-spell_pkg_postinst</B> <DD>
+This function displays installed Vim spell files.
+</DL>
+
+<H2 ID="lbAE">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>VIM_SPELL_LANGUAGE</B> ?= <I>&quot;English&quot;</I><DD>
+This variable defines the language for the spell package being
+installed.
+The default value is &quot;English&quot;.
+<DT><B>DESCRIPTION</B> ?= <I>&quot;vim spell files: ${VIM_SPELL_LANGUAGE} (${VIM_SPELL_LOCALE})&quot;</I><DD>
+This variable defines the DESCRIPTION for Vim spell ebuilds.
+<DT><B>HOMEPAGE</B> ?= <I>&quot;<A HREF="https://www.vim.org">https://www.vim.org</A>&quot;</I><DD>
+This variable defines the HOMEPAGE for Vim spell ebuilds.
+</DL>
+
+<H2 ID="lbAF">AUTHORS</H2>
+
+Ciaran McCreesh &lt;<A HREF="mailto:ciaranm@gentoo.org">ciaranm@gentoo.org</A>&gt;
+
+<H2 ID="lbAG">MAINTAINERS</H2>
+
+Vim Maintainers &lt;<A HREF="mailto:vim@gentoo.org">vim@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAI">FILES</H2>
+
+<B>vim-spell.eclass</B>
+
+
+<H2 ID="lbAJ">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/vim-spell.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/vim-spell.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAE">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAF">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAG">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAH">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAI">FILES</A><DD>
+<DT><A HREF="index.html#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

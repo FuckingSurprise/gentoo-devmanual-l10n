@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>ros-catkin.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>ROS-CATKIN.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+ros-catkin.eclass - Template eclass for catkin based ROS packages.
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+Provides function for building ROS packages on Gentoo.
+It supports selectively building messages, single-python installation, live ebuilds (git only).
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+5 6 7
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>ros-catkin_src_prepare</B> <DD>
+Calls cmake_src_prepare (so that PATCHES array is handled there) and initialises the workspace
+by installing a recursive CMakeLists.txt to handle bundles.
+<DT><B>mycatkincmakeargs</B><DD>
+Optional cmake defines as a bash array. Should be defined before calling
+src_configure.
+<DT><B>ros-catkin_src_configure</B> <DD>
+Configures a catkin-based package.
+<DT><B>ros-catkin_src_compile</B> <DD>
+Builds a catkin-based package.
+<DT><B>ros-catkin_src_test</B> <DD>
+Run the tests of a catkin-based package.
+<DT><B>ros-catkin_src_install</B> <DD>
+Installs a catkin-based package.
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>ROS_REPO_URI</B><DD>
+URL of the upstream repository. Usually on github.
+Serves for fetching tarballs, live ebuilds and inferring the meta-package name.
+<DT><B>ROS_SUBDIR</B><DD>
+Subdir in which current packages is located.
+Usually, a repository contains several packages, hence a typical value is:
+ROS_SUBDIR=${PN}
+<DT><B>CATKIN_IN_SOURCE_BUILD</B><DD>
+Set to enable in-source build.
+<DT><B>CATKIN_HAS_MESSAGES</B><DD>
+Set it to a non-empty value before inherit to tell the eclass the package has messages to build.
+Messages will be built based on ROS_MESSAGES USE_EXPANDed variable.
+<DT><B>CATKIN_MESSAGES_TRANSITIVE_DEPS</B><DD>
+Some messages have dependencies on other messages.
+In that case, CATKIN_MESSAGES_TRANSITIVE_DEPS should contain a space-separated list of atoms
+representing those dependencies. The eclass uses it to ensure proper dependencies on these packages.
+<DT><B>CATKIN_MESSAGES_CXX_USEDEP</B> = <I>&quot;ros_messages_cxx(-)&quot;</I><DD>
+Use it as cat/pkg[${CATKIN_MESSAGES_CXX_USEDEP}] to indicate a dependency on the C++ messages of cat/pkg.
+<DT><B>CATKIN_MESSAGES_PYTHON_USEDEP</B> = <I>&quot;ros_messages_python(-),${PYTHON_SINGLE_USEDEP}&quot;</I><DD>
+Use it as cat/pkg[${CATKIN_MESSAGES_PYTHON_USEDEP}] to indicate a dependency on the Python messages of cat/pkg.
+<DT><B>CATKIN_MESSAGES_LISP_USEDEP</B> = <I>&quot;ros_messages_lisp(-)&quot;</I><DD>
+Use it as cat/pkg[${CATKIN_MESSAGES_LISP_USEDEP}] to indicate a dependency on the Common-Lisp messages of cat/pkg.
+<DT><B>CATKIN_MESSAGES_EUS_USEDEP</B> = <I>&quot;ros_messages_eus(-)&quot;</I><DD>
+Use it as cat/pkg[${CATKIN_MESSAGES_EUS_USEDEP}] to indicate a dependency on the EusLisp messages of cat/pkg.
+<DT><B>CATKIN_MESSAGES_NODEJS_USEDEP</B> = <I>&quot;ros_messages_nodejs(-)&quot;</I><DD>
+Use it as cat/pkg[${CATKIN_MESSAGES_NODEJS_USEDEP}] to indicate a dependency on the nodejs messages of cat/pkg.
+</DL>
+
+<H2 ID="lbAG">AUTHORS</H2>
+
+Alexis Ballier &lt;<A HREF="mailto:aballier@gentoo.org">aballier@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">MAINTAINERS</H2>
+
+<A HREF="mailto:ros@gentoo.org">ros@gentoo.org</A>
+
+<H2 ID="lbAI">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAJ">FILES</H2>
+
+<B>ros-catkin.eclass</B>
+
+
+<H2 ID="lbAK">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/ros-catkin.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/ros-catkin.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAH">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAI">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAJ">FILES</A><DD>
+<DT><A HREF="index.html#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:01 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

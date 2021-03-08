@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>lua-single.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>LUA-SINGLE.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+lua-single.eclass - An eclass for Lua packages not installed for multiple implementations.
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+An extension of lua.eclass suite for packages which don't support being
+installed for multiple Lua implementations. This mostly includes software
+embedding Lua.
+<P>
+This eclass sets correct IUSE.  It also provides LUA_DEPS
+and LUA_REQUIRED_USE that need to be added to appropriate ebuild
+metadata variables.
+<P>
+The eclass exports LUA_SINGLE_USEDEP that is suitable for depending
+on other packages using the eclass.  Dependencies on packages using
+lua.eclass should be created via lua_gen_cond_dep() function, using
+LUA_USEDEP placeholder.
+<P>
+Please note that packages support multiple Lua implementations
+(using lua.eclass) cannot depend on packages not supporting
+them (using this eclass).
+<P>
+Note that since this eclass always inherits lua-utils as well, in ebuilds
+using the former there is no need to explicitly inherit the latter in order
+to use helper functions such as lua_get_CFLAGS.
+<P>
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+7
+
+<H2 ID="lbAE">EXAMPLE</H2>
+
+<PRE>
+EAPI=7
+
+LUA_COMPAT=( lua5-{1..3} )
+
+inherit lua-single
+
+[...]
+
+REQUIRED_USE=&quot;${LUA_REQUIRED_USE}&quot;
+DEPEND=&quot;${LUA_DEPS}&quot;
+RDEPEND=&quot;${DEPEND}
+    $(lua_gen_cond_dep '
+        dev-lua/foo[${LUA_USEDEP}]
+    ')
+&quot;
+BDEPEND=&quot;virtual/pkgconfig&quot;
+
+# Only neeed if the setup phase has to do more than just call lua-single_pkg_setup
+pkg_setup() {
+    lua-single_pkg_setup
+    [...]
+}
+
+src_install() {
+    emake LUA_VERSION=&quot;$(lua_get_version)&quot; install
+}
+</PRE>
+
+
+<H2 ID="lbAF">FUNCTIONS</H2>
+
+<DL>
+<DT><B>lua_gen_cond_dep</B> &lt;dependency&gt; [&lt;pattern&gt;...]<DD>
+Output a list of &lt;dependency&gt;-ies made conditional to USE flags
+of Lua implementations which are both in LUA_COMPAT and match
+any of the patterns passed as the remaining parameters.
+<P>
+The patterns can be fnmatch-style patterns (matched via bash == operator
+against LUA_COMPAT values). Remember to escape or quote the fnmatch
+patterns to prevent accidental shell filename expansion.
+<P>
+In order to enforce USE constraints on the packages, verbatim
+'${LUA_SINGLE_USEDEP}' and '${LUA_USEDEP}' (quoted!) may
+be placed in the dependency specification. It will get expanded within
+the function into a proper USE dependency string.
+<P>
+Example:
+<PRE>
+LUA_COMPAT=( lua5-{1..3} )
+RDEPEND=&quot;$(lua_gen_cond_dep \
+    'dev-lua/backported_core_module[${LUA_USEDEP}]' lua5-1 lua5-2 )&quot;
+</PRE>
+
+<P>
+It will cause the variable to look like:
+<PRE>
+RDEPEND=&quot;lua_single_target_lua5-1? (
+    dev-lua/backported_core_module[lua_targets_lua5-1(-)?,...] )
+lua_single_target_lua5-2? (
+    dev-lua/backported_core_module[lua_targets_lua5-2(-)?,...] )&quot;
+</PRE>
+
+<DT><B>lua_gen_impl_dep</B> [&lt;requested-use-flags&gt; [&lt;impl-pattern&gt;...]]<DD>
+Output a dependency on Lua implementations with the specified USE
+dependency string appended, or no USE dependency string if called
+without the argument (or with empty argument). If any implementation
+patterns are passed, the output dependencies will be generated only
+for the implementations matching them.
+<P>
+The patterns can be fnmatch-style patterns (matched via bash == operator
+against LUA_COMPAT values). Remember to escape or quote the fnmatch
+patterns to prevent accidental shell filename expansion.
+<P>
+Use this function when you need to request different USE flags
+on the Lua interpreter depending on package's USE flags. If you
+only need a single set of interpreter USE flags, just set
+LUA_REQ_USE and use ${LUA_DEPS} globally.
+<P>
+Example:
+<PRE>
+LUA_COMPAT=( lua5-{1..3} )
+RDEPEND=&quot;foo? ( $(lua_gen_impl_dep 'deprecated(+)' lua5-3 ) )&quot;
+</PRE>
+
+<P>
+It will cause the variable to look like:
+<PRE>
+RDEPEND=&quot;foo? (
+lua_single_target_lua5-3? ( dev-lang/lua:5.3[deprecated(+)] )
+)&quot;
+</PRE>
+
+<DT><B>lua_setup</B> <DD>
+Determine what the selected Lua implementation is and set
+the Lua build environment up for it.
+<DT><B>lua-single_pkg_setup</B> <DD>
+Runs lua_setup.
+</DL>
+
+<H2 ID="lbAG">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>LUA_COMPAT</B> (REQUIRED) (SET BEFORE INHERIT)<DD>
+This variable contains a list of Lua implementations the package
+supports. It must be set before the `inherit' call. It has to be
+an array.
+<P>
+Example:
+<PRE>
+LUA_COMPAT=( lua5-1 lua5-2 lua5-3 )
+</PRE>
+
+<P>
+Please note that you can also use bash brace expansion if you like:
+<PRE>
+LUA_COMPAT=( lua5-{1..3} )
+</PRE>
+
+<DT><B>LUA_COMPAT_OVERRIDE</B> (USER VARIABLE)<DD>
+This variable can be used when working with ebuilds to override
+the in-ebuild LUA_COMPAT. It is a string listing all
+the implementations which package will be built for. It need be
+specified in the calling environment, and not in ebuilds.
+<P>
+It should be noted that in order to preserve metadata immutability,
+LUA_COMPAT_OVERRIDE does not affect IUSE nor dependencies.
+The state of LUA_TARGETS is ignored, and all the implementations
+in LUA_COMPAT_OVERRIDE are built. Dependencies need to be satisfied
+manually.
+<P>
+Example:
+<PRE>
+LUA_COMPAT_OVERRIDE='lua5-2' emerge -1v dev-lua/foo
+</PRE>
+
+<DT><B>LUA_REQ_USE</B> (SET BEFORE INHERIT)<DD>
+The list of USE flags required to be enabled on the chosen Lua
+implementations, formed as a USE-dependency string. It should be valid
+for all implementations in LUA_COMPAT, so it may be necessary to
+use USE defaults.
+This must be set before calling `inherit'.
+<P>
+Example:
+<PRE>
+LUA_REQ_USE=&quot;deprecated&quot;
+</PRE>
+
+<P>
+It will cause the Lua dependencies to look like:
+<PRE>
+lua_targets_luaX-Y? ( dev-lang/lua:X.Y[deprecated] )
+</PRE>
+
+<DT><B>LUA_DEPS</B> (GENERATED BY ECLASS)<DD>
+This is an eclass-generated Lua dependency string for all
+implementations listed in LUA_COMPAT.
+<P>
+Example use:
+<PRE>
+RDEPEND=&quot;${LUA_DEPS}
+    dev-foo/mydep&quot;
+DEPEND=&quot;${RDEPEND}&quot;
+</PRE>
+
+<P>
+Example value:
+<PRE>
+lua_targets_lua5-1? ( dev-lang/lua:5.1 )
+lua_targets_lua5-2? ( dev-lang/lua:5.2 )
+</PRE>
+
+<DT><B>LUA_REQUIRED_USE</B> (GENERATED BY ECLASS)<DD>
+This is an eclass-generated required-use expression which ensures at
+least one Lua implementation has been enabled.
+<P>
+This expression should be utilized in an ebuild by including it in
+REQUIRED_USE, optionally behind a use flag.
+<P>
+Example use:
+<PRE>
+REQUIRED_USE=&quot;lua? ( ${LUA_REQUIRED_USE} )&quot;
+</PRE>
+
+<P>
+Example value:
+<PRE>
+|| ( lua_targets_lua5-1 lua_targets_lua5-2 )
+</PRE>
+
+<DT><B>LUA_SINGLE_USEDEP</B> (GENERATED BY ECLASS)<DD>
+This is an eclass-generated USE-dependency string which can be used
+to depend on another lua-single package being built for the same
+Lua implementations.
+<P>
+If you need to depend on a multi-impl (lua.eclass) package, use
+lua_gen_cond_dep with LUA_USEDEP placeholder instead.
+<P>
+Example use:
+<PRE>
+RDEPEND=&quot;dev-lua/foo[${LUA_SINGLE_USEDEP}]&quot;
+</PRE>
+
+<P>
+Example value:
+<PRE>
+lua_single_target_lua5-1(-)?
+</PRE>
+
+<DT><B>LUA_USEDEP</B> (GENERATED BY ECLASS)<DD>
+This is an eclass-generated USE-dependency string which can be used to
+depend on another Lua package being built for the same Lua
+implementations.
+<P>
+Example use:
+<PRE>
+RDEPEND=&quot;dev-lua/foo[${LUA_USEDEP}]&quot;
+</PRE>
+
+<P>
+Example value:
+<PRE>
+lua_targets_lua5-1(-)?,lua_targets_lua5-2(-)?
+</PRE>
+
+</DL>
+
+<H2 ID="lbAH">AUTHORS</H2>
+
+Marek Szuba &lt;<A HREF="mailto:marecki@gentoo.org">marecki@gentoo.org</A>&gt;
+<BR>
+
+Based on python-single-r1.eclass by Michał Górny &lt;<A HREF="mailto:mgorny@gentoo.org">mgorny@gentoo.org</A>&gt; et al.
+
+<H2 ID="lbAI">MAINTAINERS</H2>
+
+William Hubbs &lt;<A HREF="mailto:williamh@gentoo.org">williamh@gentoo.org</A>&gt;
+<BR>
+
+Marek Szuba &lt;<A HREF="mailto:marecki@gentoo.org">marecki@gentoo.org</A>&gt;
+
+<H2 ID="lbAJ">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAK">FILES</H2>
+
+<B>lua-single.eclass</B>
+
+
+<H2 ID="lbAL">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/lua-single.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/lua-single.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">EXAMPLE</A><DD>
+<DT><A HREF="index.html#lbAF">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAG">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAH">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAI">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAJ">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAK">FILES</A><DD>
+<DT><A HREF="index.html#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>USE Flag Conditional Code – Gentoo Development Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span> Home</a></li>
+<li class="dropdown"><a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></a></li>
+<li><a class="w-250 text-center" href="../eapi/index.html"><span class="fa fa-arrow-left"></span><span class="truncated-text d-inline-block max-w-200 ml-2">EAPI Usage and Description</span></a></li>
+<li><a class="w-250 text-center" href="../error-handling/index.html"><span class="truncated-text d-inline-block max-w-200 mr-2">Error Handling</span><span class="fa fa-arrow-right"></span></a></li>
+</ul></div>
+</div></div></nav><nav class="navbar navbar-grey navbar-stick" id="devmanual-actions" role="navigation"><div class="container"><div class="row"><div class="input-group">
+<input type="search" name="search" placeholder="Search" title="Search Gentoo Developer Manual [f]" accesskey="f" id="searchInput" class="form-control" onclick="fetchDocuments()"><div class="input-group-btn"><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton btn btn-default" onclick="search()"></div>
+</div></div></div></nav><div id="searchResults" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Search Results</h4>
+</div>
+<div class="modal-body"><p>No results found.</p></div>
+<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+</div></div></div>
+<div class="container"><div class="row"><div class="col-md010"><ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Ebuild Writing</a></li>
+</ol></div></div></div></header><main><div class="container">
+<h1 class="first-header">USE Flag Conditional Code</h1>
+<p>
+Often a particular block of code must only be executed if a given USE flag is
+set (or unset). For large blocks, <code class="docutils literal"><span class="pre">if use foo</span></code> is best, or for inverse tests
+either <code class="docutils literal"><span class="pre">if ! use foo</span></code> or <code class="docutils literal"><span class="pre">if use !foo</span></code> can be used (the former is more
+common and is recommended for readability). For single-statement conditions, the
+<code class="docutils literal"><span class="pre">use foo &amp;&amp; blah</span></code> (or <code class="docutils literal"><span class="pre">use foo || blah</span></code> for negatives) form is often more
+readable.
+</p>
+
+<p>
+The <code class="docutils literal"><span class="pre">if [ "`use foo`" ]</span></code> and <code class="docutils literal"><span class="pre">if [ -n "`use foo`" ]</span></code> forms which are
+occasionally seen in older code must <b>not</b> be used. This is because, since portage-2.1, the 'use' portage helper does not produce any output when the use flag is enabled or disabled so the [ "`use foo`" ] statement is pretty much identical to [ "" ] which always evaluates to false.
+</p>
+
+<div class="alert alert-info" role="alert">
+<strong>Note:</strong>
+<code class="docutils literal"><span class="pre">die</span></code> will not work as expected within a subshell, so code in the
+form <code class="docutils literal"><span class="pre">use foo &amp;&amp; ( blah ; blah )</span></code> should be avoided in favour of a proper if
+statement. See <a class="" href="../error-handling/index.html#die-and-subshells">die and Subshells</a>.
+</div>
+
+<pre><span class="Constant">	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> USE conditional blocks...
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">if</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">use</span> livecd <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">;</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">then</span>
+		<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> remove some extra files <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">for</span> a small livecd install
+		<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">rm</span> -fr <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${vimfiles}</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>/{compiler,doc,ftplugin,indent}
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">fi</span>
+
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> Inverse USE conditional blocks...
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">if</span> ! <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">use</span> cscope <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">;</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">then</span>
+		<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> the <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">--</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">disable-cscope</span> configure arg doesn't quite work properly,
+		<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> so <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">sed</span> it out of feature.h <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">if</span> we're not USEing cscope.
+		<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">sed</span> -i -e '/# define FEAT_CSCOPE/d' src/feature.h <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">||</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">die</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>couldn't disable cscope<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">fi</span>
+
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> USE conditional statements...
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">use</span> ssl <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">&amp;&amp;</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">epatch</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${FILESDIR}</span>/<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${P}</span>-ssl.patch<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">use</span> sparc <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">&amp;&amp;</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">filter-flags</span> -fomit-frame-pointer
+
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> Inverse USE conditional statements...
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">use</span> ncurses <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">||</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">epatch</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${FILESDIR}</span>/<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${P}</span>-no-ncurses.patch<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+</span></pre>
+
+<p>
+For echoing content based upon a USE flag, there is often a better helper
+function available.
+</p>
+
+<p>
+It is guaranteed that <code class="docutils literal"><span class="pre">use</span></code> produces no output. If you need output
+displayed, use the <code class="docutils literal"><span class="pre">usev</span></code> function; it echoes the USE flag's name
+if the condition is met.
+The <code class="docutils literal"><span class="pre">useq</span></code> function is a deprecated synonym for <code class="docutils literal"><span class="pre">use</span></code>, don't
+use it in new code.
+</p>
+
+</div></main><footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+                Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+              </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script><script src="/assets.gentoo.org/lunr/lunr.min.js"></script><script>var documentsSrc = "../../documents.js"</script><script src="../../search.js"></script>
+</body>
+</html>

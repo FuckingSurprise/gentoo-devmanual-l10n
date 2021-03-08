@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>ecm.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>ECM.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+ecm.eclass - Support eclass for packages that use KDE Frameworks with ECM.
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+This eclass is intended to streamline the creation of ebuilds for packages
+that use cmake and KDE Frameworks' extra-cmake-modules, thereby following
+some of their packaging conventions. It is primarily intended for the three
+upstream release groups (Frameworks, Plasma, Applications) but also for any
+other package that follows similar conventions.
+<P>
+This eclass unconditionally inherits cmake.eclass and all its public
+variables and helper functions (not phase functions) may be considered as part
+of this eclass's API.
+<P>
+This eclass's phase functions are not intended to be mixed and matched, so if
+any phase functions are overridden the version here should also be called.
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+7
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>ecm_punt_bogus_dep</B> &lt;prefix&gt; &lt;dependency&gt;<DD>
+Removes a specified dependency from a find_package call with multiple
+components.
+<DT><B>ecm_pkg_pretend</B> <DD>
+Checks if the active compiler meets the minimum version requirements.
+phase function is only exported if KDE_GCC_MINIMAL is defined.
+<DT><B>ecm_pkg_setup</B> <DD>
+Checks if the active compiler meets the minimum version requirements.
+<DT><B>ecm_src_prepare</B> <DD>
+Wrapper for cmake_src_prepare with lots of extra logic for magic
+handling of linguas, tests, handbook etc.
+<DT><B>ecm_src_configure</B> <DD>
+Wrapper for cmake_src_configure with extra logic for magic handling of
+handbook, tests etc.
+<DT><B>ecm_src_compile</B> <DD>
+Wrapper for cmake_src_compile. Currently doesn't do anything extra, but
+is included as part of the API just in case it's needed in the future.
+<DT><B>ecm_src_test</B> <DD>
+Wrapper for cmake_src_test with extra logic for magic handling of dbus
+and virtualx.
+<DT><B>ecm_src_install</B> <DD>
+Wrapper for cmake_src_install. Currently doesn't do anything extra, but
+is included as part of the API just in case it's needed in the future.
+<DT><B>ecm_pkg_preinst</B> <DD>
+Sets up environment variables required in ecm_pkg_postinst.
+<DT><B>ecm_pkg_postinst</B> <DD>
+Updates the various XDG caches (icon, desktop, mime) if necessary.
+<DT><B>ecm_pkg_postrm</B> <DD>
+Updates the various XDG caches (icon, desktop, mime) if necessary.
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>VIRTUALX_REQUIRED</B> ?= <I>manual</I><DD>
+For proper description see virtualx.eclass manpage.
+Here we redefine default value to be manual, if your package needs virtualx
+for tests you should proceed with setting VIRTUALX_REQUIRED=test.
+<DT><B>ECM_NONGUI</B><DD>
+By default, for all CATEGORIES except kde-frameworks, assume we are building
+a GUI application. Add dependency on kde-frameworks/breeze-icons or
+kde-frameworks/oxygen-icons and run the xdg.eclass routines for pkg_preinst,
+pkg_postinst and pkg_postrm. If set to &quot;true&quot;, do nothing.
+<DT><B>ECM_KDEINSTALLDIRS</B> ?= <I>true</I><DD>
+Assume the package is using KDEInstallDirs macro and switch
+KDE_INSTALL_USE_QT_SYS_PATHS to ON. If set to &quot;false&quot;, do nothing.
+<DT><B>ECM_DEBUG</B> ?= <I>true</I><DD>
+Add &quot;debug&quot; to IUSE. If !debug, add -DQT_NO_DEBUG to CPPFLAGS. If set to
+&quot;false&quot;, do nothing.
+<DT><B>ECM_DESIGNERPLUGIN</B> ?= <I>false</I><DD>
+If set to &quot;true&quot;, add &quot;designer&quot; to IUSE to toggle build of designer plugins
+and add the necessary BDEPEND. If set to &quot;false&quot;, do nothing.
+<DT><B>ECM_EXAMPLES</B> ?= <I>false</I><DD>
+By default unconditionally ignore a top-level examples subdirectory.
+If set to &quot;true&quot;, add &quot;examples&quot; to IUSE to toggle adding that subdirectory.
+<DT><B>ECM_HANDBOOK</B> ?= <I>false</I><DD>
+Will accept &quot;true&quot;, &quot;false&quot;, &quot;optional&quot;, &quot;forceoptional&quot;. If set to &quot;false&quot;,
+do nothing.
+Otherwise, add &quot;+handbook&quot; to IUSE, add the appropriate dependency, and let
+KF5DocTools generate and install the handbook from docbook file(s) found in
+ECM_HANDBOOK_DIR. However if !handbook, disable build of ECM_HANDBOOK_DIR
+in CMakeLists.txt.
+If set to &quot;optional&quot;, build with -DCMAKE_DISABLE_FIND_PACKAGE_KF5DocTools=ON
+when !handbook. In case package requires KF5KDELibs4Support, see next:
+If set to &quot;forceoptional&quot;, remove a KF5DocTools dependency from the root
+CMakeLists.txt in addition to the above.
+<DT><B>ECM_HANDBOOK_DIR</B> ?= <I>doc</I><DD>
+Specifies the directory containing the docbook file(s) relative to ${S} to
+be processed by KF5DocTools (kdoctools_install).
+<DT><B>ECM_PO_DIRS</B> ?= <I>&quot;po poqm&quot;</I><DD>
+Specifies directories of l10n files relative to ${S} to be processed by
+KF5I18n (ki18n_install). If IUSE nls exists and is disabled then disable
+build of these directories in CMakeLists.txt.
+<DT><B>ECM_QTHELP</B><DD>
+Default value for all CATEGORIES except kde-frameworks is &quot;false&quot;.
+If set to &quot;true&quot;, add &quot;doc&quot; to IUSE, add the appropriate dependency, let
+-DBUILD_QCH=ON generate and install Qt compressed help files when USE=doc.
+If set to &quot;false&quot;, do nothing.
+<DT><B>ECM_TEST</B><DD>
+Will accept &quot;true&quot;, &quot;false&quot;, &quot;optional&quot;, &quot;forceoptional&quot;,
+&quot;forceoptional-recursive&quot;.
+Default value is &quot;false&quot;, except for CATEGORY=kde-frameworks where it is
+set to &quot;true&quot;. If set to &quot;false&quot;, do nothing.
+For any other value, add &quot;test&quot; to IUSE and DEPEND on dev-qt/qttest:5.
+If set to &quot;optional&quot;, build with -DCMAKE_DISABLE_FIND_PACKAGE_Qt5Test=ON
+when USE=!test.
+If set to &quot;forceoptional&quot;, punt Qt5Test dependency and ignore &quot;autotests&quot;,
+&quot;test&quot;, &quot;tests&quot; subdirs from top-level CMakeLists.txt when USE=!test.
+If set to &quot;forceoptional-recursive&quot;, punt Qt5Test dependencies and make
+autotest(s), unittest(s) and test(s) subdirs from *any* CMakeLists.txt in
+${S} and below conditional on BUILD_TESTING when USE=!test. This is always
+meant as a short-term fix and creates ${T}/${P}-tests-optional.patch to
+refine and submit upstream.
+<DT><B>KFMIN</B><DD>
+Minimum version of Frameworks to require. Default value for kde-frameworks
+is ${PV} and 5.64.0 baseline for everything else. This is not going to be
+changed unless we also bump EAPI, which usually implies (rev-)bumping.
+Version will later be used to differentiate between KF5/Qt5 and KF6/Qt6.
+<DT><B>KDE_GCC_MINIMAL</B><DD>
+Minimum version of active GCC to require. This is checked in
+ecm_pkg_pretend and ecm_pkg_setup.
+</DL>
+
+<H2 ID="lbAG">MAINTAINERS</H2>
+
+<A HREF="mailto:kde@gentoo.org">kde@gentoo.org</A>
+
+<H2 ID="lbAH">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAI">FILES</H2>
+
+<B>ecm.eclass</B>
+
+
+<H2 ID="lbAJ">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/ecm.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/ecm.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAH">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAI">FILES</A><DD>
+<DT><A HREF="index.html#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>mozlinguas-v2.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>MOZLINGUAS-V2.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+mozlinguas-v2.eclass - Handle language packs for mozilla products
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+Sets IUSE according to MOZ_LANGS (language packs available). Also exports
+src_unpack, src_compile and src_install for use in ebuilds, and provides
+supporting functions for langpack generation and installation.
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+2 3 4 5 6
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>mozlinguas_src_unpack</B> <DD>
+Unpack xpi language packs according to the user's LINGUAS settings
+<DT><B>mozlinguas_mozconfig</B> <DD>
+if applicable, add the necessary flag to .mozconfig to support
+the generation of locales.  Note that this function requires
+mozconfig_annontate to already be declared via an inherit of
+mozconfig or mozcoreconf.
+<DT><B>mozlinguas_src_compile</B> <DD>
+if applicable, build the selected locales.
+<DT><B>mozlinguas_xpistage_langpacks</B> <DD>
+Add extra langpacks to the xpi-stage dir for prebuilt plugins
+<P>
+First argument is the path to the extension
+Second argument is the prefix of the source (same as first if unspecified)
+Remaining arguments are the modules in the extension that are localized
+<BR>&nbsp;(basename&nbsp;of&nbsp;first&nbsp;if&nbsp;unspecified)
+<P>
+Example - installing extra langpacks for lightning:
+src_install() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;... # general installation steps<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mozlinguas_xpistage_langpacks &nbsp;&nbsp;&quot;${BUILD_OBJ_DIR}&quot;/dist/xpi-stage/lightning &nbsp;&nbsp;&nbsp;&nbsp;&quot;${WORKDIR}&quot;/lightning lightning calendar<BR>
+... # proceed with installation from the xpi-stage dir
+}
+<DT><B>mozlinguas-v2_src_install</B> <DD>
+Install xpi language packs according to the user's L10N settings
+NOTE - uses ${BUILD_OBJ_DIR} or PWD if unset, for source-generated langpacks
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>MOZ_LANGS</B> ?= <I>()</I><DD>
+Array containing the list of language pack xpis available for
+this release. The list can be updated with scripts/get_langs.sh from the
+mozilla overlay.
+<DT><B>MOZ_PV</B> ?= <I>&quot;${PV}&quot;</I><DD>
+Ebuild package version converted to equivalent upstream version.
+Defaults to ${PV}, and should be overridden for alphas, betas, and RCs
+<DT><B>MOZ_PN</B> ?= <I>&quot;${PN}&quot;</I><DD>
+Ebuild package name converted to equivalent upstream name.
+Defaults to ${PN}, and should be overridden for binary ebuilds.
+<DT><B>MOZ_P</B> ?= <I>&quot;${MOZ_PN}-${MOZ_PV}&quot;</I><DD>
+Ebuild package name + version converted to upstream equivalent.
+Defaults to ${MOZ_PN}-${MOZ_PV}
+<DT><B>MOZ_FTP_URI</B> ?= <I>&quot;&quot;</I><DD>
+The ftp URI prefix for the release tarballs and language packs.
+<DT><B>MOZ_HTTP_URI</B> ?= <I>&quot;&quot;</I><DD>
+The http URI prefix for the release tarballs and language packs.
+<DT><B>MOZ_LANGPACK_HTTP_URI</B> ?= <I>${MOZ_HTTP_URI}</I><DD>
+An alternative http URI if it differs from official mozilla URI.
+Defaults to whatever MOZ_HTTP_URI was set to.
+<DT><B>MOZ_LANGPACK_PREFIX</B> ?= <I>&quot;${MOZ_PV}/linux-i686/xpi/&quot;</I><DD>
+The relative path till the lang code in the langpack file URI.
+Defaults to ${MOZ_PV}/linux-i686/xpi/
+<DT><B>MOZ_LANGPACK_SUFFIX</B> ?= <I>&quot;.xpi&quot;</I><DD>
+The suffix after the lang code in the langpack file URI.
+Defaults to '.xpi'
+<DT><B>MOZ_LANGPACK_UNOFFICIAL</B> ?= <I>&quot;&quot;</I><DD>
+The status of the langpack, used to differentiate within
+Manifests and on Gentoo mirrors as to when the langpacks are
+generated officially by Mozilla or if they were generated
+unofficially by others (ie the Gentoo mozilla team).  When
+this var is set, the distfile will have a .unofficial.xpi
+suffix.
+<DT><B>MOZ_GENERATE_LANGPACKS</B> ?= <I>&quot;&quot;</I><DD>
+This flag specifies whether or not the langpacks should be
+generated directly during the build process, rather than
+being downloaded and installed from upstream pre-built
+extensions.  Primarily it supports pre-release builds.
+Defaults to empty.
+<DT><B>MOZ_L10N_SOURCEDIR</B> ?= <I>&quot;${WORKDIR}/l10n-sources&quot;</I><DD>
+The path that l10n sources can be found at, once unpacked.
+Defaults to ${WORKDIR}/l10n-sources
+<DT><B>MOZ_L10N_URI_PREFIX</B> ?= <I>&quot;&quot;</I><DD>
+The full URI prefix of the distfile for each l10n locale.  The
+AB_CD and MOZ_L10N_URI_SUFFIX will be appended to this to complete the
+SRC_URI when MOZ_GENERATE_LANGPACKS is set.  If empty, nothing will
+be added to SRC_URI.
+Defaults to empty.
+<DT><B>MOZ_L10N_URI_SUFFIX</B> ?= <I>&quot;.tar.xz&quot;</I><DD>
+The suffix of l10n source distfiles.
+Defaults to '.tar.xz'
+<DT><B>MOZ_FORCE_UPSTREAM_L10N</B> ?= <I>&quot;&quot;</I><DD>
+Set this to use upstream langpaks even if the package normally
+shouldn't (ie it is an alpha or beta package)
+<DT><B>MOZ_INSTALL_L10N_XPIFILE</B> ?= <I>&quot;&quot;</I><DD>
+Install langpacks as .xpi file instead of unpacked directory.
+Leave unset to install unpacked
+</DL>
+
+<H2 ID="lbAG">AUTHORS</H2>
+
+Nirbheek Chauhan &lt;<A HREF="mailto:nirbheek@gentoo.org">nirbheek@gentoo.org</A>&gt;
+<BR>
+
+Ian Stakenvicius &lt;<A HREF="mailto:axs@gentoo.org">axs@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">MAINTAINERS</H2>
+
+<A HREF="mailto:mozilla@gentoo.org">mozilla@gentoo.org</A>
+
+<H2 ID="lbAI">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAJ">FILES</H2>
+
+<B>mozlinguas-v2.eclass</B>
+
+
+<H2 ID="lbAK">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/mozlinguas-v2.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/mozlinguas-v2.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAH">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAI">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAJ">FILES</A><DD>
+<DT><A HREF="index.html#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

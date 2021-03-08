@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>toolchain-funcs.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>TOOLCHAIN-FUNCS.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+toolchain-funcs.eclass - functions to query common info about the toolchain
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+The toolchain-funcs aims to provide a complete suite of functions
+for gleaning useful information about the toolchain and to simplify
+ugly things like cross-compiling and multilib.  All of this is done
+in such a way that you can rely on the function always returning
+something sane.
+
+<H2 ID="lbAD">FUNCTIONS</H2>
+
+<DL>
+<DT><B>tc-getAR</B> [toolchain prefix]<DD>
+Return value: name of the archiver
+<DT><B>tc-getAS</B> [toolchain prefix]<DD>
+Return value: name of the assembler
+<DT><B>tc-getCC</B> [toolchain prefix]<DD>
+Return value: name of the C compiler
+<DT><B>tc-getCPP</B> [toolchain prefix]<DD>
+Return value: name of the C preprocessor
+<DT><B>tc-getCXX</B> [toolchain prefix]<DD>
+Return value: name of the C++ compiler
+<DT><B>tc-getLD</B> [toolchain prefix]<DD>
+Return value: name of the linker
+<DT><B>tc-getSTRINGS</B> [toolchain prefix]<DD>
+Return value: name of the strings program
+<DT><B>tc-getSTRIP</B> [toolchain prefix]<DD>
+Return value: name of the strip program
+<DT><B>tc-getNM</B> [toolchain prefix]<DD>
+Return value: name of the symbol/object thingy
+<DT><B>tc-getRANLIB</B> [toolchain prefix]<DD>
+Return value: name of the archive indexer
+<DT><B>tc-getREADELF</B> [toolchain prefix]<DD>
+Return value: name of the ELF reader
+<DT><B>tc-getOBJCOPY</B> [toolchain prefix]<DD>
+Return value: name of the object copier
+<DT><B>tc-getOBJDUMP</B> [toolchain prefix]<DD>
+Return value: name of the object dumper
+<DT><B>tc-getF77</B> [toolchain prefix]<DD>
+Return value: name of the Fortran 77 compiler
+<DT><B>tc-getFC</B> [toolchain prefix]<DD>
+Return value: name of the Fortran 90 compiler
+<DT><B>tc-getGCJ</B> [toolchain prefix]<DD>
+Return value: name of the java compiler
+<DT><B>tc-getGO</B> [toolchain prefix]<DD>
+Return value: name of the Go compiler
+<DT><B>tc-getPKG_CONFIG</B> [toolchain prefix]<DD>
+Return value: name of the pkg-config tool
+<DT><B>tc-getRC</B> [toolchain prefix]<DD>
+Return value: name of the Windows resource compiler
+<DT><B>tc-getDLLWRAP</B> [toolchain prefix]<DD>
+Return value: name of the Windows dllwrap utility
+<DT><B>tc-getBUILD_AR</B> [toolchain prefix]<DD>
+Return value: name of the archiver for building binaries to run on the build machine
+<DT><B>tc-getBUILD_AS</B> [toolchain prefix]<DD>
+Return value: name of the assembler for building binaries to run on the build machine
+<DT><B>tc-getBUILD_CC</B> [toolchain prefix]<DD>
+Return value: name of the C compiler for building binaries to run on the build machine
+<DT><B>tc-getBUILD_CPP</B> [toolchain prefix]<DD>
+Return value: name of the C preprocessor for building binaries to run on the build machine
+<DT><B>tc-getBUILD_CXX</B> [toolchain prefix]<DD>
+Return value: name of the C++ compiler for building binaries to run on the build machine
+<DT><B>tc-getBUILD_LD</B> [toolchain prefix]<DD>
+Return value: name of the linker for building binaries to run on the build machine
+<DT><B>tc-getBUILD_STRINGS</B> [toolchain prefix]<DD>
+Return value: name of the strings program for building binaries to run on the build machine
+<DT><B>tc-getBUILD_STRIP</B> [toolchain prefix]<DD>
+Return value: name of the strip program for building binaries to run on the build machine
+<DT><B>tc-getBUILD_NM</B> [toolchain prefix]<DD>
+Return value: name of the symbol/object thingy for building binaries to run on the build machine
+<DT><B>tc-getBUILD_RANLIB</B> [toolchain prefix]<DD>
+Return value: name of the archive indexer for building binaries to run on the build machine
+<DT><B>tc-getBUILD_READELF</B> [toolchain prefix]<DD>
+Return value: name of the ELF reader for building binaries to run on the build machine
+<DT><B>tc-getBUILD_OBJCOPY</B> [toolchain prefix]<DD>
+Return value: name of the object copier for building binaries to run on the build machine
+<DT><B>tc-getBUILD_PKG_CONFIG</B> [toolchain prefix]<DD>
+Return value: name of the pkg-config tool for building binaries to run on the build machine
+<DT><B>tc-getTARGET_CPP</B> [toolchain prefix]<DD>
+Return value: name of the C preprocessor for the toolchain being built (or used)
+<DT><B>tc-export</B> &lt;list of toolchain variables&gt;<DD>
+Quick way to export a bunch of compiler vars at once.
+<DT><B>tc-is-cross-compiler</B> <DD>
+Return value: Shell true if we are using a cross-compiler, shell false otherwise
+<DT><B>tc-cpp-is-true</B> &lt;condition&gt; [cpp flags]<DD>
+Evaluate the given condition using the C preprocessor for CTARGET, if
+defined, or CHOST. Additional arguments are passed through to the cpp
+command. A typical condition would be in the form defined(__FOO__).
+<P>
+Return value: Shell true if the condition is true, shell false otherwise.
+<DT><B>tc-detect-is-softfloat</B> <DD>
+Detect whether the CTARGET (or CHOST) toolchain is a softfloat based
+one by examining the toolchain's output, if possible.  Outputs a value
+alike tc-is-softfloat if detection was possible.
+<P>
+Return value: Shell true if detection was possible, shell false otherwise
+<DT><B>tc-tuple-is-softfloat</B> <DD>
+Determine whether the CTARGET (or CHOST) toolchain is a softfloat
+based one solely from the tuple.
+<P>
+Return value: See tc-is-softfloat for the possible values.
+<DT><B>tc-is-softfloat</B> <DD>
+See if this toolchain is a softfloat based one.
+<PRE>
+The possible return values:
+ - only:   the target is always softfloat (never had fpu)
+ - yes:    the target should support softfloat
+ - softfp: (arm specific) the target should use hardfloat insns, but softfloat calling convention
+ - no:     the target doesn't support softfloat
+</PRE>
+
+This allows us to react differently where packages accept
+softfloat flags in the case where support is optional, but
+rejects softfloat flags where the target always lacks an fpu.
+<DT><B>tc-is-static-only</B> <DD>
+Return shell true if the target does not support shared libs, shell false
+otherwise.
+<DT><B>tc-stack-grows-down</B> <DD>
+Return shell true if the stack grows down.  This is the default behavior
+for the vast majority of systems out there and usually projects shouldn't
+care about such internal details.
+<DT><B>tc-export_build_env</B> [compiler variables]<DD>
+Export common build related compiler settings.
+<DT><B>econf_build</B> [econf flags]<DD>
+Sometimes we need to locally build up some tools to run on CBUILD because
+the package has helper utils which are compiled+executed when compiling.
+This won't work when cross-compiling as the CHOST is set to a target which
+we cannot natively execute.
+<P>
+For example, the python package will build up a local python binary using
+a portable build system (configure+make), but then use that binary to run
+local python scripts to build up other components of the overall python.
+We cannot rely on the python binary in $PATH as that often times will be
+a different version, or not even installed in the first place.  Instead,
+we compile the code in a different directory to run on CBUILD, and then
+use that binary when compiling the main package to run on CHOST.
+<P>
+For example, with newer EAPIs, you'd do something like:
+<PRE>
+src_configure() {
+        ECONF_SOURCE=${S}
+        if tc-is-cross-compiler ; then
+                mkdir &quot;${WORKDIR}&quot;/${CBUILD}
+                pushd &quot;${WORKDIR}&quot;/${CBUILD} &gt;/dev/null
+                econf_build --disable-some-unused-stuff
+                popd &gt;/dev/null
+        fi
+        ... normal build paths ...
+}
+src_compile() {
+        if tc-is-cross-compiler ; then
+                pushd &quot;${WORKDIR}&quot;/${CBUILD} &gt;/dev/null
+                emake one-or-two-build-tools
+                ln/mv build-tools to normal build paths in ${S}/
+                popd &gt;/dev/null
+        fi
+        ... normal build paths ...
+}
+</PRE>
+
+<DT><B>tc-ld-is-gold</B> [toolchain prefix]<DD>
+Return true if the current linker is set to gold.
+<DT><B>tc-ld-is-lld</B> [toolchain prefix]<DD>
+Return true if the current linker is set to lld.
+<DT><B>tc-ld-disable-gold</B> [toolchain prefix]<DD>
+If the gold linker is currently selected, configure the compilation
+settings so that we use the older bfd linker instead.
+<DT><B>tc-ld-force-bfd</B> [toolchain prefix]<DD>
+If the gold or lld linker is currently selected, configure the compilation
+settings so that we use the bfd linker instead.
+<DT><B>tc-has-openmp</B> [toolchain prefix]<DD>
+See if the toolchain supports OpenMP.
+<DT><B>tc-check-openmp</B> <DD>
+Test for OpenMP support with the current compiler and error out with
+a clear error message, telling the user how to rectify the missing
+OpenMP support that has been requested by the ebuild. Using this function
+to test for OpenMP support should be preferred over tc-has-openmp and
+printing a custom message, as it presents a uniform interface to the user.
+<DT><B>tc-has-tls</B> [-s|-c|-l] [toolchain prefix]<DD>
+See if the toolchain supports thread local storage (TLS).  Use -s to test the
+compiler, -c to also test the assembler, and -l to also test the C library
+(the default).
+<DT><B>tc-arch-kernel</B> [toolchain prefix]<DD>
+Return value: name of the kernel arch according to the compiler target
+<DT><B>tc-arch</B> [toolchain prefix]<DD>
+Return value: name of the portage arch according to the compiler target
+<DT><B>tc-get-compiler-type</B> <DD>
+Return value: keyword identifying the compiler: gcc, clang, pathcc, unknown
+<DT><B>tc-is-gcc</B> <DD>
+Return value: Shell true if the current compiler is GCC, false otherwise.
+<DT><B>tc-is-clang</B> <DD>
+Return value: Shell true if the current compiler is clang, false otherwise.
+<DT><B>gcc-fullversion</B> <DD>
+Return value: compiler version (major.minor.micro: [3.4.6])
+<DT><B>gcc-version</B> <DD>
+Return value: compiler version (major.minor: [3.4].6)
+<DT><B>gcc-major-version</B> <DD>
+Return value: major compiler version (major: [3].4.6)
+<DT><B>gcc-minor-version</B> <DD>
+Return value: minor compiler version (minor: 3.[4].6)
+<DT><B>gcc-micro-version</B> <DD>
+Return value: micro compiler version (micro: 3.4.[6])
+<DT><B>clang-fullversion</B> <DD>
+Return value: compiler version (major.minor.micro: [3.4.6])
+<DT><B>clang-version</B> <DD>
+Return value: compiler version (major.minor: [3.4].6)
+<DT><B>clang-major-version</B> <DD>
+Return value: major compiler version (major: [3].4.6)
+<DT><B>clang-minor-version</B> <DD>
+Return value: minor compiler version (minor: 3.[4].6)
+<DT><B>clang-micro-version</B> <DD>
+Return value: micro compiler version (micro: 3.4.[6])
+<DT><B>tc-enables-pie</B> <DD>
+Return truth if the current compiler generates position-independent code (PIC)
+which can be linked into executables.
+<P>
+Return value: Truth if the current compiler generates position-independent code (PIC) which can be linked into executables
+<DT><B>tc-enables-ssp</B> <DD>
+Return truth if the current compiler enables stack smashing protection (SSP)
+on level corresponding to any of the following options:
+<BR>&nbsp;-fstack-protector
+<BR>&nbsp;-fstack-protector-strong
+<BR>&nbsp;-fstack-protector-all
+<P>
+Return value: Truth if the current compiler enables stack smashing protection (SSP) on at least minimal level
+<DT><B>tc-enables-ssp-strong</B> <DD>
+Return truth if the current compiler enables stack smashing protection (SSP)
+on level corresponding to any of the following options:
+<BR>&nbsp;-fstack-protector-strong
+<BR>&nbsp;-fstack-protector-all
+<P>
+Return value: Truth if the current compiler enables stack smashing protection (SSP) on at least middle level
+<DT><B>tc-enables-ssp-all</B> <DD>
+Return truth if the current compiler enables stack smashing protection (SSP)
+on level corresponding to any of the following options:
+<BR>&nbsp;-fstack-protector-all
+<P>
+Return value: Truth if the current compiler enables stack smashing protection (SSP) on maximal level
+<DT><B>gen_usr_ldscript</B> [-a] &lt;list of libs to create linker scripts for&gt;<DD>
+This function is deprecated. Use the version from
+usr-ldscript.eclass instead.
+</DL>
+
+<H2 ID="lbAE">MAINTAINERS</H2>
+
+Toolchain Ninjas &lt;<A HREF="mailto:toolchain@gentoo.org">toolchain@gentoo.org</A>&gt;
+
+<H2 ID="lbAF">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAG">FILES</H2>
+
+<B>toolchain-funcs.eclass</B>
+
+
+<H2 ID="lbAH">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/toolchain-funcs.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/toolchain-funcs.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAE">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAF">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAG">FILES</A><DD>
+<DT><A HREF="index.html#lbAH">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

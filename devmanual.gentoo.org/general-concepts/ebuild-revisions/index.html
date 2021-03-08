@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Ebuild Revisions – Gentoo Development Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span> Home</a></li>
+<li class="dropdown"><a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></a></li>
+<li><a class="w-250 text-center" href="../dependencies/index.html"><span class="fa fa-arrow-left"></span><span class="truncated-text d-inline-block max-w-200 ml-2">Dependencies</span></a></li>
+<li><a class="w-250 text-center" href="../emerge-and-ebuild/index.html"><span class="truncated-text d-inline-block max-w-200 mr-2">Emerge and Ebuild Relationships</span><span class="fa fa-arrow-right"></span></a></li>
+</ul></div>
+</div></div></nav><nav class="navbar navbar-grey navbar-stick" id="devmanual-actions" role="navigation"><div class="container"><div class="row"><div class="input-group">
+<input type="search" name="search" placeholder="Search" title="Search Gentoo Developer Manual [f]" accesskey="f" id="searchInput" class="form-control" onclick="fetchDocuments()"><div class="input-group-btn"><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton btn btn-default" onclick="search()"></div>
+</div></div></div></nav><div id="searchResults" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Search Results</h4>
+</div>
+<div class="modal-body"><p>No results found.</p></div>
+<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+</div></div></div>
+<div class="container"><div class="row"><div class="col-md010"><ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">General Concepts</a></li>
+</ol></div></div></div></header><main><div class="container">
+<h1 class="first-header">Ebuild Revisions</h1>
+<p>
+Ebuilds may have a Gentoo revision number associated with them. This is a
+<code class="docutils literal"><span class="pre">-rX</span></code> suffix, where <code class="docutils literal"><span class="pre">X</span></code> is an integer — see <a class="" href="../../ebuild-writing/file-format/index.html#file-naming-rules">File Naming Rules</a>. This
+component must only be used for Gentoo changes, not upstream releases.
+An ebuild with no explicit revision number has the implicit <code class="docutils literal"><span class="pre">-r0</span></code>
+revision.
+</p>
+
+<p>Ebuild revisions usually serve two purposes:</p>
+<ol>
+  <li>
+    keeping an older copy of an ebuild around when doing a potentially
+    breaking change, and
+  </li>
+
+  <li>
+    propagating the rebuild of a package when performing a meaningful
+    change that would otherwise go unnoticed by users who have installed
+    the current version already.
+  </li>
+</ol>
+
+<p>
+Developers are encouraged to use common sense when determining
+whether to introduce a new <code class="docutils literal"><span class="pre">-rX</span></code> revision. The following rule
+of thumb could be used as a guideline:
+</p>
+<ol>
+  <li>
+    If the change can cause the package to be broken to the point
+    of requiring users to revert to the previous version (in the case
+    of packages marked stable, every non-trivial change is classified
+    as such), then a new revision should be introduced and the old one
+    kept. If the package has stable keywords, the new revision should
+    be dropped to <code class="docutils literal"><span class="pre">~arch</span></code> (see
+    <a class="" href="../../keywording/index.html#keywording-on-upgrades">Keywording on Upgrades</a>).
+    For any such revision bump, the new ebuild should be based
+    on the previous revision to ensure that fixes aren't dropped
+    accidentally.
+  </li>
+
+  <li>
+    If the change makes a substantial difference to the user who already
+    installed the package (fixes runtime issues, changes installed files,
+    etc.) and it would not be propagated using other means, then
+    the ebuild should be renamed to a new revision. If the package has
+    stable keywords, they should be moved to the new revision without
+    dropping. To commit the ebuild, <code class="docutils literal"><span class="pre">repoman commit
+    --straight-to-stable</span></code> option should be used.
+  </li>
+
+  <li>
+    Otherwise, the change can be done in place in the current revision
+    of the ebuild.
+  </li>
+</ol>
+
+<p>Examples of changes that warrant a new revision are:</p>
+<ul>
+  <li>adding a patch to fix a runtime issue,</li>
+  <li>installing additional files that could be useful to the user,</li>
+  <li>adding a missing runtime dependency to one of the existing blocks,</li>
+  <li>
+    adding a missing build-time dependency that contributed to
+    a successfully yet incorrect build (e.g. missing some feature),
+  </li>
+  <li>
+    restricting a runtime dependency version, unless the <code class="docutils literal"><span class="pre">:=</span></code>
+    subslot operator is going to trigger a rebuild.
+  </li>
+</ul>
+
+<p>Examples of changes that can be done without a revision bump are:</p>
+<ul>
+  <li>
+    adding a patch to fix a build-time issue that prevented users from
+    building the package (since it does not affect users who already
+    managed to build it),
+  </li>
+  <li>adding a trivial documentation fix,</li>
+  <li>
+    installing an additional file of relatively little value (minor
+    documentation, editor syntax file, bash completion) compared
+    to the cost of rebuilding the package (especially if a new bump
+    is expected soon),
+  </li>
+  <li>
+    adding a missing build-time dependency that caused a build failure,
+  </li>
+  <li>
+    adding a new USE flag or removing an existing one (since change
+    in USE flags is going to trigger <code class="docutils literal"><span class="pre">--changed-use</span></code> rebuild),
+  </li>
+  <li>
+    a trivial stylistic / ebuild code change (as long as the new code
+    is equivalent to the old code),
+  </li>
+  <li>
+    a dependency change that is a result of a package move (slot move).
+  </li>
+</ul>
+
+
+</div></main><footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+                Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+              </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script><script src="/assets.gentoo.org/lunr/lunr.min.js"></script><script>var documentsSrc = "../../documents.js"</script><script src="../../search.js"></script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Eclass Reference – Gentoo Development Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../devmanual.css" type="text/css">
+<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../index.html"><span class="fa fa-home"></span> Home</a></li>
+<li class="dropdown">
+<a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></a><ul class="dropdown-menu"><li><a class="reference" href="index.html#contents">Contents</a></li></ul>
+</li>
+<li><a class="w-250 text-center" href="../function-reference/sandbox-functions/index.html"><span class="fa fa-arrow-left"></span><span class="truncated-text d-inline-block max-w-200 ml-2">Sandbox Functions Reference</span></a></li>
+<li><a class="w-250 text-center" href="../tools-reference/index.html"><span class="truncated-text d-inline-block max-w-200 mr-2">Tools Reference</span><span class="fa fa-arrow-right"></span></a></li>
+</ul></div>
+</div></div></nav><nav class="navbar navbar-grey navbar-stick" id="devmanual-actions" role="navigation"><div class="container"><div class="row"><div class="input-group">
+<input type="search" name="search" placeholder="Search" title="Search Gentoo Developer Manual [f]" accesskey="f" id="searchInput" class="form-control" onclick="fetchDocuments()"><div class="input-group-btn"><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton btn btn-default" onclick="search()"></div>
+</div></div></div></nav><div id="searchResults" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Search Results</h4>
+</div>
+<div class="modal-body"><p>No results found.</p></div>
+<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+</div></div></div>
+<div class="container"><div class="row"><div class="col-md010"><ol class="breadcrumb"><li><a href="../index.html">Master Index</a></li></ol></div></div></div></header><main><div class="container">
+<h1 class="first-header">Eclass Reference</h1>
+
+<p>
+This section provides a reference for some of the more commonly used eclasses.
+Note that most eclasses have an accompanying manual page. These man pages can be
+installed by emerging <code class="docutils literal"><span class="pre">app-doc/eclass-manpages</span></code>.
+</p>
+
+<div class="section">
+<h2 id="contents">Contents</h2>
+<ul class="list-group fix-links">
+<li class="list-group-item"><a class="list-group-item" href="acct-group.eclass/index.html">acct-group.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="acct-user.eclass/index.html">acct-user.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="ada.eclass/index.html">ada.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="alternatives.eclass/index.html">alternatives.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="ant-tasks.eclass/index.html">ant-tasks.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="apache-2.eclass/index.html">apache-2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="apache-module.eclass/index.html">apache-module.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="aspell-dict-r1.eclass/index.html">aspell-dict-r1.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="autotools.eclass/index.html">autotools.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="autotools-multilib.eclass/index.html">autotools-multilib.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="autotools-utils.eclass/index.html">autotools-utils.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="base.eclass/index.html">base.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="bash-completion-r1.eclass/index.html">bash-completion-r1.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="bazel.eclass/index.html">bazel.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="cannadic.eclass/index.html">cannadic.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="cargo.eclass/index.html">cargo.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="cdrom.eclass/index.html">cdrom.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="check-reqs.eclass/index.html">check-reqs.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="chromium-2.eclass/index.html">chromium-2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="cmake.eclass/index.html">cmake.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="cmake-multilib.eclass/index.html">cmake-multilib.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="cmake-utils.eclass/index.html">cmake-utils.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="common-lisp-3.eclass/index.html">common-lisp-3.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="cron.eclass/index.html">cron.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="cuda.eclass/index.html">cuda.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="cvs.eclass/index.html">cvs.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="darcs.eclass/index.html">darcs.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="db.eclass/index.html">db.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="depend.apache.eclass/index.html">depend.apache.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="desktop.eclass/index.html">desktop.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="dist-kernel-utils.eclass/index.html">dist-kernel-utils.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="distutils-r1.eclass/index.html">distutils-r1.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="docs.eclass/index.html">docs.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="dotnet.eclass/index.html">dotnet.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="dune.eclass/index.html">dune.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="eapi7-ver.eclass/index.html">eapi7-ver.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="eapi8-dosym.eclass/index.html">eapi8-dosym.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="ebuild/index.html">ebuild</a></li>
+<li class="list-group-item"><a class="list-group-item" href="ecm.eclass/index.html">ecm.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="edos2unix.eclass/index.html">edos2unix.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="elisp-common.eclass/index.html">elisp-common.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="elisp.eclass/index.html">elisp.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="emboss-r2.eclass/index.html">emboss-r2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="epatch.eclass/index.html">epatch.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="estack.eclass/index.html">estack.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="eutils.eclass/index.html">eutils.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="fcaps.eclass/index.html">fcaps.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="findlib.eclass/index.html">findlib.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="fixheadtails.eclass/index.html">fixheadtails.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="flag-o-matic.eclass/index.html">flag-o-matic.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="font.eclass/index.html">font.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="fortran-2.eclass/index.html">fortran-2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="freedict.eclass/index.html">freedict.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="games.eclass/index.html">games.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="ghc-package.eclass/index.html">ghc-package.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="git-r3.eclass/index.html">git-r3.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="gkrellm-plugin.eclass/index.html">gkrellm-plugin.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="gnome2.eclass/index.html">gnome2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="gnome2-utils.eclass/index.html">gnome2-utils.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="gnome.org.eclass/index.html">gnome.org.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="gnustep-2.eclass/index.html">gnustep-2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="gnustep-base.eclass/index.html">gnustep-base.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="golang-base.eclass/index.html">golang-base.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="golang-build.eclass/index.html">golang-build.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="golang-vcs.eclass/index.html">golang-vcs.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="golang-vcs-snapshot.eclass/index.html">golang-vcs-snapshot.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="go-module.eclass/index.html">go-module.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="gstreamer.eclass/index.html">gstreamer.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="haskell-cabal.eclass/index.html">haskell-cabal.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="java-ant-2.eclass/index.html">java-ant-2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="java-osgi.eclass/index.html">java-osgi.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="java-pkg-2.eclass/index.html">java-pkg-2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="java-pkg-opt-2.eclass/index.html">java-pkg-opt-2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="java-pkg-simple.eclass/index.html">java-pkg-simple.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="java-utils-2.eclass/index.html">java-utils-2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="java-virtuals-2.eclass/index.html">java-virtuals-2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="java-vm-2.eclass/index.html">java-vm-2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="kde.org.eclass/index.html">kde.org.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="kernel-2.eclass/index.html">kernel-2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="kernel-build.eclass/index.html">kernel-build.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="kernel-install.eclass/index.html">kernel-install.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="kodi-addon.eclass/index.html">kodi-addon.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="l10n.eclass/index.html">l10n.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="latex-package.eclass/index.html">latex-package.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="libretro-core.eclass/index.html">libretro-core.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="libtool.eclass/index.html">libtool.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="linux-info.eclass/index.html">linux-info.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="linux-mod.eclass/index.html">linux-mod.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="llvm.eclass/index.html">llvm.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="llvm.org.eclass/index.html">llvm.org.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="ltprune.eclass/index.html">ltprune.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="lua.eclass/index.html">lua.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="lua-single.eclass/index.html">lua-single.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="lua-utils.eclass/index.html">lua-utils.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="make.conf/index.html">make.conf</a></li>
+<li class="list-group-item"><a class="list-group-item" href="mate-desktop.org.eclass/index.html">mate-desktop.org.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="mate.eclass/index.html">mate.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="mercurial.eclass/index.html">mercurial.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="meson.eclass/index.html">meson.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="mono.eclass/index.html">mono.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="mono-env.eclass/index.html">mono-env.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="mount-boot.eclass/index.html">mount-boot.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="mozcoreconf-v5.eclass/index.html">mozcoreconf-v5.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="mozcoreconf-v6.eclass/index.html">mozcoreconf-v6.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="mozextension.eclass/index.html">mozextension.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="mozlinguas-v2.eclass/index.html">mozlinguas-v2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="multibuild.eclass/index.html">multibuild.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="multilib-build.eclass/index.html">multilib-build.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="multilib.eclass/index.html">multilib.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="multilib-minimal.eclass/index.html">multilib-minimal.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="multiprocessing.eclass/index.html">multiprocessing.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="myspell-r2.eclass/index.html">myspell-r2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="netsurf.eclass/index.html">netsurf.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="ninja-utils.eclass/index.html">ninja-utils.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="nsplugins.eclass/index.html">nsplugins.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="nvidia-driver.eclass/index.html">nvidia-driver.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="oasis.eclass/index.html">oasis.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="office-ext-r1.eclass/index.html">office-ext-r1.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="opam.eclass/index.html">opam.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="openib.eclass/index.html">openib.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="optfeature.eclass/index.html">optfeature.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="out-of-source.eclass/index.html">out-of-source.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="pam.eclass/index.html">pam.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="pax-utils.eclass/index.html">pax-utils.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="perl-functions.eclass/index.html">perl-functions.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="perl-module.eclass/index.html">perl-module.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="php-ext-pecl-r3.eclass/index.html">php-ext-pecl-r3.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="php-ext-source-r3.eclass/index.html">php-ext-source-r3.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="php-pear-r2.eclass/index.html">php-pear-r2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="portability.eclass/index.html">portability.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="postgres.eclass/index.html">postgres.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="postgres-multi.eclass/index.html">postgres-multi.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="prefix.eclass/index.html">prefix.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="preserve-libs.eclass/index.html">preserve-libs.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="python-any-r1.eclass/index.html">python-any-r1.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="python-r1.eclass/index.html">python-r1.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="python-single-r1.eclass/index.html">python-single-r1.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="python-utils-r1.eclass/index.html">python-utils-r1.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="qmail.eclass/index.html">qmail.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="qmake-utils.eclass/index.html">qmake-utils.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="qt5-build.eclass/index.html">qt5-build.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="readme.gentoo.eclass/index.html">readme.gentoo.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="readme.gentoo-r1.eclass/index.html">readme.gentoo-r1.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="rebar.eclass/index.html">rebar.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="ros-catkin.eclass/index.html">ros-catkin.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="rpm.eclass/index.html">rpm.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="ruby-fakegem.eclass/index.html">ruby-fakegem.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="ruby-ng.eclass/index.html">ruby-ng.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="ruby-ng-gnome2.eclass/index.html">ruby-ng-gnome2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="ruby-single.eclass/index.html">ruby-single.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="ruby-utils.eclass/index.html">ruby-utils.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="rust-toolchain.eclass/index.html">rust-toolchain.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="s6.eclass/index.html">s6.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="savedconfig.eclass/index.html">savedconfig.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="scons-utils.eclass/index.html">scons-utils.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="selinux-policy-2.eclass/index.html">selinux-policy-2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="sgml-catalog-r1.eclass/index.html">sgml-catalog-r1.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="ssl-cert.eclass/index.html">ssl-cert.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="subversion.eclass/index.html">subversion.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="sword-module.eclass/index.html">sword-module.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="systemd.eclass/index.html">systemd.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="texlive-common.eclass/index.html">texlive-common.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="texlive-module.eclass/index.html">texlive-module.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="tmpfiles.eclass/index.html">tmpfiles.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="toolchain-autoconf.eclass/index.html">toolchain-autoconf.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="toolchain-funcs.eclass/index.html">toolchain-funcs.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="toolchain-glibc.eclass/index.html">toolchain-glibc.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="udev.eclass/index.html">udev.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="unpacker.eclass/index.html">unpacker.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="user.eclass/index.html">user.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="user-info.eclass/index.html">user-info.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="usr-ldscript.eclass/index.html">usr-ldscript.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="vala.eclass/index.html">vala.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="vcs-clean.eclass/index.html">vcs-clean.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="vcs-snapshot.eclass/index.html">vcs-snapshot.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="vdr-plugin-2.eclass/index.html">vdr-plugin-2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="verify-sig.eclass/index.html">verify-sig.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="versionator.eclass/index.html">versionator.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="vim-plugin.eclass/index.html">vim-plugin.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="vim-spell.eclass/index.html">vim-spell.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="virtualx.eclass/index.html">virtualx.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="waf-utils.eclass/index.html">waf-utils.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="webapp.eclass/index.html">webapp.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="wrapper.eclass/index.html">wrapper.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="wxwidgets.eclass/index.html">wxwidgets.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="xdg.eclass/index.html">xdg.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="xdg-utils.eclass/index.html">xdg-utils.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="xemacs-packages.eclass/index.html">xemacs-packages.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="xorg-2.eclass/index.html">xorg-2.eclass</a></li>
+<li class="list-group-item"><a class="list-group-item" href="xorg-3.eclass/index.html">xorg-3.eclass</a></li>
+</ul>
+</div>
+</div></main><footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+                Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+              </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script><script src="/assets.gentoo.org/lunr/lunr.min.js"></script><script>var documentsSrc = "../documents.js"</script><script src="../search.js"></script>
+</body>
+</html>

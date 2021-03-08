@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>verify-sig.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>VERIFY-SIG.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+verify-sig.eclass - Eclass to verify upstream signatures on distfiles
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+verify-sig eclass provides a streamlined approach to verifying
+upstream signatures on distfiles.  Its primary purpose is to permit
+developers to easily verify signatures while bumping packages.
+The eclass removes the risk of developer forgetting to perform
+the verification, or performing it incorrectly, e.g. due to additional
+keys in the local keyring.  It also permits users to verify
+the developer's work.
+<P>
+To use the eclass, start by packaging the upstream's key
+as app-crypt/openpgp-keys-*.  Then inherit the eclass, add detached
+signatures to SRC_URI and set VERIFY_SIG_OPENPGP_KEY_PATH.  The eclass
+provides verify-sig USE flag to toggle the verification.
+<P>
+Example use:
+<PRE>
+inherit verify-sig
+
+SRC_URI=&quot;https://example.org/${P}.tar.gz
+  verify-sig? ( https://example.org/${P}.tar.gz.sig )&quot;
+BDEPEND=&quot;
+  verify-sig? ( app-crypt/openpgp-keys-example )&quot;
+
+VERIFY_SIG_OPENPGP_KEY_PATH=/usr/share/openpgp-keys/example.asc
+</PRE>
+
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+7
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>verify-sig_verify_detached</B> &lt;file&gt; &lt;sig-file&gt; [&lt;key-file&gt;]<DD>
+Read the detached signature from &lt;sig-file&gt; and verify &lt;file&gt; against
+it.  &lt;key-file&gt; can either be passed directly, or it defaults
+to VERIFY_SIG_OPENPGP_KEY_PATH.  The function dies if verification
+fails.
+<DT><B>verify-sig_verify_message</B> &lt;file&gt; &lt;output-file&gt; [&lt;key-file&gt;]<DD>
+Verify that the file ('-' for stdin) contains a valid, signed PGP
+message and write the message into &lt;output-file&gt; ('-' for stdout).
+&lt;key-file&gt; can either be passed directly, or it defaults
+to VERIFY_SIG_OPENPGP_KEY_PATH.  The function dies if verification
+fails.  Note that using output from &lt;output-file&gt; is important as it
+prevents the injection of unsigned data.
+<DT><B>verify-sig_verify_signed_checksums</B> &lt;checksum-file&gt; &lt;algo&gt; &lt;files&gt; [&lt;key-file&gt;]<DD>
+Verify the checksums for all files listed in the space-separated list
+&lt;files&gt; (akin to ${A}) using a PGP-signed &lt;checksum-file&gt;.  &lt;algo&gt;
+specified the checksum algorithm (e.g. sha256).  &lt;key-file&gt; can either
+be passed directly, or it defaults to VERIFY_SIG_OPENPGP_KEY_PATH.
+<P>
+The function dies if PGP verification fails, the checksum file
+contains unsigned data, one of the files do not match checksums
+or are missing from the checksum file.
+<DT><B>verify-sig_src_unpack</B> <DD>
+Default src_unpack override that verifies signatures for all
+distfiles if 'verify-sig' flag is enabled.  The function dies if any
+of the signatures fails to verify or if any distfiles are not signed.
+Please write src_unpack() yourself if you need to perform partial
+verification.
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>VERIFY_SIG_OPENPGP_KEY_PATH</B><DD>
+Path to key bundle used to perform the verification.  This is required
+when using default src_unpack.  Alternatively, the key path can be
+passed directly to the verification functions.
+<DT><B>VERIFY_SIG_OPENPGP_KEYSERVER</B><DD>
+Keyserver used to refresh keys.  If not specified, the keyserver
+preference from the key will be respected.  If no preference
+is specified by the key, the GnuPG default will be used.
+<DT><B>VERIFY_SIG_OPENPGP_KEY_REFRESH</B> ?= <I>no</I> (USER VARIABLE)<DD>
+Attempt to refresh keys via WKD/keyserver.  Set it to &quot;yes&quot;
+in make.conf to enable.  Note that this requires working Internet
+connection.
+</DL>
+
+<H2 ID="lbAG">MAINTAINERS</H2>
+
+Michał Górny &lt;<A HREF="mailto:mgorny@gentoo.org">mgorny@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAI">FILES</H2>
+
+<B>verify-sig.eclass</B>
+
+
+<H2 ID="lbAJ">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/verify-sig.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/verify-sig.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAH">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAI">FILES</A><DD>
+<DT><A HREF="index.html#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

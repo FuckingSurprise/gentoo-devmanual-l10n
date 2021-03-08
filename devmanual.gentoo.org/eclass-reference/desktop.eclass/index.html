@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>desktop.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>DESKTOP.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+desktop.eclass - support for desktop files, menus, and icons
+
+<H2 ID="lbAC">FUNCTIONS</H2>
+
+<DL>
+<DT><B>make_desktop_entry</B> &lt;command&gt; [name] [icon] [type] [fields]<DD>
+Make a .desktop file.
+<P>
+<PRE>
+binary:   what command does the app run with ?
+name:     the name that will show up in the menu
+icon:     the icon to use in the menu entry
+          this can be relative (to /usr/share/pixmaps) or
+          a full path to an icon
+type:     what kind of application is this?
+          for categories:
+          <A HREF="https://specifications.freedesktop.org/menu-spec/latest/apa.html">https://specifications.freedesktop.org/menu-spec/latest/apa.html</A>
+          if unset, function tries to guess from package's category
+fields: extra fields to append to the desktop file; a printf string
+</PRE>
+
+<DT><B>make_session_desktop</B> &lt;title&gt; &lt;command&gt; [command args...]<DD>
+Make a GDM/KDM Session file.  The title is the file to execute to start the
+Window Manager.  The command is the name of the Window Manager.
+<P>
+You can set the name of the file via the ${wm} variable.
+<DT><B>domenu</B> &lt;menus&gt;<DD>
+Install the list of .desktop menu files into the appropriate directory
+(/usr/share/applications).
+<DT><B>newmenu</B> &lt;menu&gt; &lt;newname&gt;<DD>
+Like all other new* functions, install the specified menu as newname.
+<DT><B>doicon</B> [options] &lt;icons&gt;<DD>
+Install icon into the icon directory /usr/share/icons or into
+/usr/share/pixmaps if &quot;--size&quot; is not set.
+This is useful in conjunction with creating desktop/menu files.
+<P>
+<PRE>
+ options:
+ -s, --size
+   !!! must specify to install into /usr/share/icons/... !!!
+   size of the icon, like 48 or 48x48
+   supported icon sizes are:
+   16 22 24 32 36 48 64 72 96 128 192 256 512 scalable
+ -c, --context
+   defaults to &quot;apps&quot;
+ -t, --theme
+   defaults to &quot;hicolor&quot;
+
+icons: list of icons
+
+example 1: doicon foobar.png fuqbar.svg suckbar.png
+results in: insinto /usr/share/pixmaps
+            doins foobar.png fuqbar.svg suckbar.png
+
+example 2: doicon -s 48 foobar.png fuqbar.png blobbar.png
+results in: insinto /usr/share/icons/hicolor/48x48/apps
+            doins foobar.png fuqbar.png blobbar.png
+</PRE>
+
+<DT><B>newicon</B> [options] &lt;icon&gt; &lt;newname&gt;<DD>
+Like doicon, install the specified icon as newname.
+<P>
+<PRE>
+example 1: newicon foobar.png NEWNAME.png
+results in: insinto /usr/share/pixmaps
+            newins foobar.png NEWNAME.png
+
+example 2: newicon -s 48 foobar.png NEWNAME.png
+results in: insinto /usr/share/icons/hicolor/48x48/apps
+            newins foobar.png NEWNAME.png
+</PRE>
+
+</DL>
+
+<H2 ID="lbAD">MAINTAINERS</H2>
+
+<A HREF="mailto:base-system@gentoo.org">base-system@gentoo.org</A>
+
+<H2 ID="lbAE">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAF">FILES</H2>
+
+<B>desktop.eclass</B>
+
+
+<H2 ID="lbAG">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/desktop.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/desktop.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAD">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAE">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAF">FILES</A><DD>
+<DT><A HREF="index.html#lbAG">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

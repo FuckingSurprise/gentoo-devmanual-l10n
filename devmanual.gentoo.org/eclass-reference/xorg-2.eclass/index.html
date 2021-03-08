@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>xorg-2.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>XORG-2.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+xorg-2.eclass - Reduces code duplication in the modularized X11 ebuilds.
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+This eclass makes trivial X ebuilds possible for apps, fonts, drivers,
+and more. Many things that would normally be done in various functions
+can be accessed by setting variables instead, such as patching,
+running eautoreconf, passing options to configure and installing docs.
+<P>
+All you need to do in a basic ebuild is inherit this eclass and set
+DESCRIPTION, KEYWORDS and RDEPEND/DEPEND. If your package is hosted
+with the other X packages, you don't need to set SRC_URI. Pretty much
+everything else should be automatic.
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+4 5
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>xorg-2_pkg_setup</B> <DD>
+Setup prefix compat
+<DT><B>xorg-2_src_unpack</B> <DD>
+Simply unpack source code.
+<DT><B>xorg-2_patch_source</B> <DD>
+Apply all patches
+<DT><B>xorg-2_reconf_source</B> <DD>
+Run eautoreconf if necessary, and run elibtoolize.
+<DT><B>xorg-2_src_prepare</B> <DD>
+Prepare a package after unpacking, performing all X-related tasks.
+<DT><B>xorg-2_font_configure</B> <DD>
+If a font package, perform any necessary configuration steps
+<DT><B>xorg-2_flags_setup</B> <DD>
+Set up CFLAGS for a debug build
+<DT><B>xorg-2_src_configure</B> <DD>
+Perform any necessary pre-configuration steps, then run configure
+<DT><B>xorg-2_src_compile</B> <DD>
+Compile a package, performing all X-related tasks.
+<DT><B>xorg-2_src_install</B> <DD>
+Install a built package to ${D}, performing any necessary steps.
+Creates a ChangeLog from git if using live ebuilds.
+<DT><B>xorg-2_pkg_postinst</B> <DD>
+Run X-specific post-installation tasks on the live filesystem. The
+only task right now is some setup for font packages.
+<DT><B>xorg-2_pkg_postrm</B> <DD>
+Run X-specific post-removal tasks on the live filesystem. The only
+task right now is some cleanup for font packages.
+<DT><B>remove_font_metadata</B> <DD>
+Don't let the package install generated font files that may overlap
+with other packages. Instead, they're generated in pkg_postinst().
+<DT><B>create_fonts_scale</B> <DD>
+Create fonts.scale file, used by the old server-side fonts subsystem.
+<DT><B>create_fonts_dir</B> <DD>
+Create fonts.dir file, used by the old server-side fonts subsystem.
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>XORG_MULTILIB</B> ?= <I>&quot;no&quot;</I><DD>
+If set to 'yes', the multilib support for package will be enabled. Set
+before inheriting this eclass.
+<DT><B>XORG_EAUTORECONF</B> ?= <I>&quot;no&quot;</I><DD>
+If set to 'yes' and configure.ac exists, eautoreconf will run. Set
+before inheriting this eclass.
+<DT><B>XORG_BASE_INDIVIDUAL_URI</B> = <I>&quot;<A HREF="https://www.x.org/releases/individual">https://www.x.org/releases/individual</A>&quot;}</I><DD>
+Set up SRC_URI for individual modular releases. If set to an empty
+string, no SRC_URI will be provided by the eclass.
+<DT><B>XORG_MODULE</B> ?= <I>&quot;auto&quot;</I><DD>
+The subdirectory to download source from. Possible settings are app,
+doc, data, util, driver, font, lib, proto, xserver. Set above the
+inherit to override the default autoconfigured module.
+<DT><B>XORG_PACKAGE_NAME</B> ?= <I>${PN}</I><DD>
+For git checkout the git repository might differ from package name.
+This variable can be used for proper directory specification
+<DT><B>XORG_DRI</B> ?= <I>&quot;no&quot;</I><DD>
+Possible values are &quot;always&quot; or the value of the useflag DRI capabilities
+are required for. Default value is &quot;no&quot;
+<P>
+Eg. XORG_DRI=&quot;opengl&quot; will pull all dri dependant deps for opengl useflag
+<DT><B>XORG_DOC</B> ?= <I>&quot;no&quot;</I><DD>
+Possible values are &quot;always&quot; or the value of the useflag doc packages
+are required for. Default value is &quot;no&quot;
+<P>
+Eg. XORG_DOC=&quot;manual&quot; will pull all doc dependant deps for manual useflag
+</DL>
+
+<H2 ID="lbAG">AUTHORS</H2>
+
+Author: Tomáš Chvátal &lt;<A HREF="mailto:scarabeus@gentoo.org">scarabeus@gentoo.org</A>&gt;
+<BR>
+
+Author: Donnie Berkholz &lt;<A HREF="mailto:dberkholz@gentoo.org">dberkholz@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">MAINTAINERS</H2>
+
+<A HREF="mailto:x11@gentoo.org">x11@gentoo.org</A>
+
+<H2 ID="lbAI">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAJ">FILES</H2>
+
+<B>xorg-2.eclass</B>
+
+
+<H2 ID="lbAK">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/xorg-2.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/xorg-2.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAH">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAI">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAJ">FILES</A><DD>
+<DT><A HREF="index.html#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

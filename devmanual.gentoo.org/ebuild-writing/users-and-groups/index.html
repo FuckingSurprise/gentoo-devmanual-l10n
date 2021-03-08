@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Users and Groups – Gentoo Development Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span> Home</a></li>
+<li class="dropdown">
+<a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></a><ul class="dropdown-menu">
+<li><a class="reference" href="index.html#group-ebuilds">Group ebuilds</a></li>
+<li><a class="reference" href="index.html#user-ebuilds">User ebuilds</a></li>
+<li><a class="reference" href="index.html#utilizing-users-and-groups-in-packages">Utilizing users and groups in packages</a></li>
+</ul>
+</li>
+<li><a class="w-250 text-center" href="../error-handling/index.html"><span class="fa fa-arrow-left"></span><span class="truncated-text d-inline-block max-w-200 ml-2">Error Handling</span></a></li>
+<li><a class="w-250 text-center" href="../messages/index.html"><span class="truncated-text d-inline-block max-w-200 mr-2">Messages</span><span class="fa fa-arrow-right"></span></a></li>
+</ul></div>
+</div></div></nav><nav class="navbar navbar-grey navbar-stick" id="devmanual-actions" role="navigation"><div class="container"><div class="row"><div class="input-group">
+<input type="search" name="search" placeholder="Search" title="Search Gentoo Developer Manual [f]" accesskey="f" id="searchInput" class="form-control" onclick="fetchDocuments()"><div class="input-group-btn"><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton btn btn-default" onclick="search()"></div>
+</div></div></div></nav><div id="searchResults" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Search Results</h4>
+</div>
+<div class="modal-body"><p>No results found.</p></div>
+<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+</div></div></div>
+<div class="container"><div class="row"><div class="col-md010"><ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Ebuild Writing</a></li>
+</ol></div></div></div></header><main><div class="container">
+<h1 class="first-header">Users and Groups</h1>
+<p>
+Creating users and groups is governed by <a class="" href="https://gentoo.org/glep/glep-0081.html">GLEP 81</a>. It is implemented
+via <code class="docutils literal"><span class="pre">acct-user</span></code> and <code class="docutils literal"><span class="pre">acct-group</span></code> eclasses. New users and groups
+are created as packages respectively in <code class="docutils literal"><span class="pre">acct-user</span></code> and <code class="docutils literal"><span class="pre">acct-group</span></code>
+categories.
+</p>
+
+<p>
+First, check the <a class="" href="https://api.gentoo.org/uid-gid.txt">UID/GID
+assignment list</a> and choose a free UID/GID in the range between
+101 and 499. If you are adding a user and a group with the same name,
+use the same number for their UID and GID, respectively. When in doubt,
+take the next free number from 499 downwards. The helper script
+<code class="docutils literal"><span class="pre">./bin/used_free_uidgids.sh</span></code> available in the data/api.git repository can
+be used to find the next available UID or GID.
+</p>
+
+<p>
+Add your new user(s) and group(s) to the <code class="docutils literal"><span class="pre">uid-gid.txt</span></code> file
+located in the
+<a class="" href="https://gitweb.gentoo.org/data/api.git">data/api.git</a>
+repository and push them before adding the actual packages.
+This counts as reserving the identifiers and will prevent collisions.
+Afterwards, you can push the new ebuilds.
+</p>
+
+<p>
+The historical way of using <code class="docutils literal"><span class="pre">user.eclass</span></code> directly is now deprecated
+and must not be used for new packages.
+</p>
+<div class="section">
+<h2 id="group-ebuilds">Group ebuilds</h2>
+
+<p>
+Group ebuilds are placed in <code class="docutils literal"><span class="pre">acct-group</span></code> category, with the package name
+matching the group name. The following ebuild for <code class="docutils literal"><span class="pre">acct-group/suricata</span></code>
+can be used as a template for writing group ebuilds:
+</p>
+
+<pre>
+# Copyright 2019-2021 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=7
+
+inherit acct-group
+
+DESCRIPTION="Group for Suricata IDS"
+ACCT_GROUP_ID=477
+</pre>
+
+<p>
+<code class="docutils literal"><span class="pre">ACCT_GROUP_ID</span></code> must be set to the requested GID.
+</p>
+
+</div>
+<div class="section">
+<h2 id="user-ebuilds">User ebuilds</h2>
+
+<p>
+User ebuilds are placed in <code class="docutils literal"><span class="pre">acct-user</span></code> category, with the package name
+matching the user name. The following ebuild for <code class="docutils literal"><span class="pre">acct-user/suricata</span></code>
+can be used as a template for writing user ebuilds:
+</p>
+
+<pre>
+# Copyright 2019-2021 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=7
+
+inherit acct-user
+
+DESCRIPTION="User for Suricata IDS"
+ACCT_USER_ID=477
+ACCT_USER_GROUPS=( ${PN} )
+
+acct-user_add_deps
+</pre>
+
+<p>
+<code class="docutils literal"><span class="pre">ACCT_USER_ID</span></code> must be set to the requested GID.  <code class="docutils literal"><span class="pre">ACCT_USER_GROUPS</span></code>
+should list all the groups user belongs to, the primary group first.  All
+the other keys are optional.
+</p>
+
+<p>
+<code class="docutils literal"><span class="pre">ACCT_USER_SHELL</span></code> can be used to set the shell for the user.  If unset,
+the best system equivalent of nologin is used.  <code class="docutils literal"><span class="pre">ACCT_USER_HOME</span></code> specifies
+the home directory, with <code class="docutils literal"><span class="pre">/dev/null</span></code> being the default.
+<code class="docutils literal"><span class="pre">ACCT_USER_HOME_OWNER</span></code> can be used to override the ownership of the home
+directory, and <code class="docutils literal"><span class="pre">ACCT_USER_HOME_PERMS</span></code> to override the default permissions.
+The defaults are the user and primary group for the owner, and 0755 for the
+permissions.
+</p>
+
+<div class="alert alert-warning" role="alert">
+<strong>Important:</strong>
+Whenever possible, the default shell and home directory should be
+used. The rationale for this is explained below.
+</div>
+
+<p>
+You should embark upon a GLEP81 migration like an EAPI
+update. Rather than simply copy your user's settings into an
+<code class="docutils literal"><span class="pre">acct-user</span></code> package, you should take the opportunity to
+re-evaluate your user's name, shell, home directory, and its
+permissions. Our GLEP 81 implementation will reveal many user
+management issues that were allowed to fester in the past.
+</p>
+<div class="section">
+<h3 id="choosing-a-shell">Choosing a shell</h3>
+<p>
+In most cases, the default shell (that is, no shell) should be
+used. Services can still be started as a user who has no shell, and
+daemons are able to drop privileges to a user who has no shell. If
+necessary, the administrator can override a user's default shell with
+<code class="docutils literal"><span class="pre">su -s &lt;shell&gt; &lt;username&gt;</span></code>. This is sufficient for
+testing, management of SSH credentials, and for initial configuration
+in an ebuild's <code class="docutils literal"><span class="pre">pkg_config</span></code> phase.
+</p>
+<p>
+An obvious exception to this rule is if a human being will need to log
+into the account interactively, as is the case with the <code class="docutils literal"><span class="pre">root</span></code>
+user. Other exceptions certainly exist, but should be evaluated
+case-by-case. In other words, if you haven't checked, don't set your
+user's shell to <code class="docutils literal"><span class="pre">/bin/bash</span></code> because you think he <i>might</i>
+need it.
+</p>
+<p>
+The goal here is twofold. First, the principle of least privilege says
+that if a user doesn't need a real shell, he shouldn't have one. And
+along those same lines, not having a shell gives the system
+administrator some peace of mind: he doesn't have to be as concerned
+with whether or not that user has a password (and how strong it is),
+or whether or not its filesystem permissions are all set correctly, or
+whether or not it can log in via SSH, et cetera.
+</p>
+</div>
+<div class="section">
+<h3 id="choosing-a-home-directory">Choosing a home directory</h3>
+<p>
+In most cases, the default home directory (that is, no home directory)
+should be used. GLEP81 changed two aspects of user management with
+respect to home directories:
+</p>
+
+<ol>
+  <li>
+    Creating a user can now modify the permissions on an existing
+    directory. Should the need arise, this is necessary for a new
+    version of an <code class="docutils literal"><span class="pre">acct-user</span></code> package to be able to fix the
+    ownership and permissions of its home directory.
+  </li>
+  <li>
+    All user data aside from the username became non-local to ebuilds
+    that depend on that user. This is merely a side-effect of moving
+    the user creation out of the client package, and into a separate
+    <code class="docutils literal"><span class="pre">acct-user</span></code> package.
+  </li>
+</ol>
+
+<p>
+The first item means that you should be conservative when choosing a
+home directory. If at all possible, avoid choosing a home directory
+that is used by another package. In particular, no two
+<code class="docutils literal"><span class="pre">acct-user</span></code> packages should use the same home directory. At best,
+the ownership and permissions on a shared home directory would need to
+be kept synchronized between all packages that share it. At worst, one
+package goes out-of-sync and introduces a security hole for the others
+who no longer have the expected permissions.
+</p>
+<p>
+The second item means that if your package requires a user, you can
+no longer be sure of that user's home directory or its ownership and
+permissions. If your package requires a directory to be owned and
+writable by some user, then your package's ebuild should create that
+directory and ensure that it is writable by the user. In other
+words, you should not rely on the directory being created
+"transitively" by a dependency, even if that dependency is an
+<code class="docutils literal"><span class="pre">acct-user</span></code> package.
+</p>
+<p>
+In summary,
+</p>
+<ul>
+  <li>
+    Avoid using an <code class="docutils literal"><span class="pre">ACCT_USER_HOME</span></code> that belongs to another
+    package.
+  </li>
+  <li>
+    No two acct-user packages should define the same
+    <code class="docutils literal"><span class="pre">ACCT_USER_HOME</span></code>.
+  </li>
+
+  <li>
+    If for example your package's configuration needs &lt;username&gt;
+    to be able to write to <code class="docutils literal"><span class="pre">/var/lib/&lt;username&gt;</span></code>, then your
+    package's ebuild should create that directory and set its
+    ownership and permissions. Barring any other considerations, the
+    corresponding <code class="docutils literal"><span class="pre">acct-user</span></code> package should leave
+    <code class="docutils literal"><span class="pre">ACCT_USER_HOME</span></code> at its default (empty) value; setting
+    <code class="docutils literal"><span class="pre">ACCT_USER_HOME=/var/lib/&lt;username&gt;</span></code> creates
+    unnecessary duplication and risks desynchronizing the permissions.
+  </li>
+</ul>
+</div>
+<div class="section">
+<h3 id="choosing-home-directory-ownership">Choosing home directory ownership</h3>
+<p>
+In most cases, the default home directory ownership is correct.  If a
+non-default home directory is needed at all, then it should be
+writable by its user and giving ownership of it to someone else would
+prevent that. Being unwritable indicates that a shared and potentially
+sensitive location was chosen. Moreover, the fact that the home
+directory is not writable suggests that the default home directory
+(which is also not writable) would suffice instead; the home directory
+guidelines explain why the default is preferable in that case. For
+example, setting <code class="docutils literal"><span class="pre">ACCT_USER_HOME_OWNER="root:root"</span></code> is suspicious
+because it appears intended to "undo" the ownership changed by your
+user package, and that would only be necessary if the path in question
+is used by some other package.
+</p>
+</div>
+<div class="section">
+<h3 id="choosing-home-directory-permissions">Choosing home directory permissions</h3>
+<p>
+In many cases, the default home directory permissions (0755) will
+suffice. But, if your package will work with mode 0700 or 0750, then
+those are preferable. This is the principle of least privilege
+again. If your package works with a non-writable home directory, then
+you should probably be using the default of <i>no</i> home directory!
+</p>
+<div class="alert alert-danger" role="alert">
+<strong>Warning:</strong>
+The world-writable bit should never be set in
+<code class="docutils literal"><span class="pre">ACCT_USER_HOME_PERMS</span></code>. This should never be necessary, and is
+usually exploitable.
+</div>
+</div>
+<div class="section">
+<h3 id="epilogue">Epilogue</h3>
+<p>
+These suggestions are not rules and are not written in stone, except
+perhaps for the world-writable warning. There are packages in the tree
+that <code class="docutils literal"><span class="pre">chroot()</span></code> to <code class="docutils literal"><span class="pre">$HOME</span></code>, and require that directory to be
+owned by <code class="docutils literal"><span class="pre">root:root</span></code> for security reasons. In cases like that,
+it's impossible to avoid implicitly tying the user to the package that
+needs it via the home directory, and the best you can do is attempt to
+ensure that the users and paths are unique so that no conflicts arise.
+</p>
+
+<p>
+Unless your package is exceptional, though, following these guidelines
+will minimize the potential for problems down the road.
+</p>
+</div>
+</div>
+<div class="section">
+<h2 id="utilizing-users-and-groups-in-packages">Utilizing users and groups in packages</h2>
+
+<p>
+In order to make your package install specific users and groups, specify them
+as dependencies.  Accounts needed at build time must be included
+in <code class="docutils literal"><span class="pre">DEPEND</span></code>, and accounts needed at runtime must be included
+in <code class="docutils literal"><span class="pre">RDEPEND</span></code>.
+</p>
+
+<p>
+For example, an ebuild requiring the user and group <code class="docutils literal"><span class="pre">foo</span></code> at runtime would
+specify:
+</p>
+
+<pre>
+RDEPEND="
+    acct-user/foo
+    acct-group/foo"
+</pre>
+
+<p>
+This would also be sufficient if ownership of installed files were set
+in <code class="docutils literal"><span class="pre">pkg_preinst</span></code>.  However, if the ebuild needs the user and group
+to be present at build-time already, it would specify:
+</p>
+
+<pre>
+RDEPEND="
+    acct-user/foo
+    acct-group/foo"
+DEPEND="${RDEPEND}"
+</pre>
+
+</div>
+</div></main><footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+                Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+              </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script><script src="/assets.gentoo.org/lunr/lunr.min.js"></script><script>var documentsSrc = "../../documents.js"</script><script src="../../search.js"></script>
+</body>
+</html>

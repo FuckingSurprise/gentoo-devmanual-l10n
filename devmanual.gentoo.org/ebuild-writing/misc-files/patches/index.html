@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Patches – Gentoo Development Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../../../devmanual.css" type="text/css">
+<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../../index.html"><span class="fa fa-home"></span> Home</a></li>
+<li class="dropdown">
+<a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></a><ul class="dropdown-menu">
+<li><a class="reference" href="index.html#patch-descriptions">Patch Descriptions</a></li>
+<li><a class="reference" href="index.html#clean-patch-howto">Clean Patch Howto</a></li>
+</ul>
+</li>
+<li><a class="w-250 text-center" href="../metadata/index.html"><span class="fa fa-arrow-left"></span><span class="truncated-text d-inline-block max-w-200 ml-2">Package and Category metadata.xml</span></a></li>
+<li><a class="w-250 text-center" href="../../user-submitted/index.html"><span class="truncated-text d-inline-block max-w-200 mr-2">User-submitted Ebuilds</span><span class="fa fa-arrow-right"></span></a></li>
+</ul></div>
+</div></div></nav><nav class="navbar navbar-grey navbar-stick" id="devmanual-actions" role="navigation"><div class="container"><div class="row"><div class="input-group">
+<input type="search" name="search" placeholder="Search" title="Search Gentoo Developer Manual [f]" accesskey="f" id="searchInput" class="form-control" onclick="fetchDocuments()"><div class="input-group-btn"><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton btn btn-default" onclick="search()"></div>
+</div></div></div></nav><div id="searchResults" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Search Results</h4>
+</div>
+<div class="modal-body"><p>No results found.</p></div>
+<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+</div></div></div>
+<div class="container"><div class="row"><div class="col-md010"><ol class="breadcrumb">
+<li><a href="../../../index.html">Master Index</a></li>
+<li><a href="../../index.html">Ebuild Writing</a></li>
+<li><a href="../index.html">Miscellaneous Files</a></li>
+</ol></div></div></div></header><main><div class="container">
+<h1 class="first-header">Patches</h1>
+<p>
+There is no fixed rule for patch naming. The following are guidelines
+only.
+</p>
+
+<p>
+Small patches (less than, say, a few KBytes) should be added to
+<code class="docutils literal"><span class="pre">${FILESDIR}</span></code>. If you anticipate having several patches, it often
+helps to create version numbered subdirectories — <code class="docutils literal"><span class="pre">${FILESDIR}/${PV}/</span></code>
+is conventional. Patches are best named <code class="docutils literal"><span class="pre">${P}-what-it-does.patch</span></code> (or
+<code class="docutils literal"><span class="pre">.diff</span></code>), where <code class="docutils literal"><span class="pre">what-it-does</span></code> is a two or three word
+description of what the patch is for. If the patch is to fix a
+specific bug, it is often useful to add in the bug number — for
+example, <code class="docutils literal"><span class="pre">vim-7.0-cron-vars-79981.patch</span></code>. If the patch is pulled from
+upstream's VCS repository, it can help to include the revision
+number in the patch name as a suffix to the version part —
+<code class="docutils literal"><span class="pre">fluxbox-0.9.12-3860-menu-backups.patch</span></code>.
+</p>
+
+<p>
+Larger patches should be
+<a class="" href="../../../general-concepts/mirrors/index.html#suitable-download-hosts">
+mirrored</a>, preferably on the Gentoo Infrastructure. When
+mirroring patches, choosing a name that will not cause conflicts is
+important — the <code class="docutils literal"><span class="pre">${P}</span></code> prefix is highly recommended
+here. Mirrored patches are often compressed with <code class="docutils literal"><span class="pre">xz</span></code> or
+<code class="docutils literal"><span class="pre">bzip2</span></code>. Remember to list these patches in <code class="docutils literal"><span class="pre">SRC_URI</span></code>.
+</p>
+
+<div class="alert alert-info" role="alert">
+<strong>Note:</strong>
+Patches included in <code class="docutils literal"><span class="pre">${FILESDIR}</span></code> should never be compressed.
+</div>
+
+<div class="alert alert-danger" role="alert">
+<strong>Warning:</strong>
+Starting from EAPI=6 a strip patch level was limited to the <code class="docutils literal"><span class="pre">-p1</span></code>.
+Although it can be overridden with a <code class="docutils literal"><span class="pre">eapply -p&lt;strip_level&gt;</span></code>
+command, it is highly recommended to adapt the patch itself to work
+with the <code class="docutils literal"><span class="pre">-p1</span></code> default.
+</div>
+
+<p>
+If a package requires many patches, even if they are individually
+small, it is often best to create a patch tarball to avoid cluttering
+up the tree too much.
+</p>
+<div class="section">
+<h2 id="patch-descriptions">Patch Descriptions</h2>
+<p>
+It is possible to include a description with a patch. This is often
+helpful when others come to work with your packages, or, indeed when
+you come back to take a look at your own package a few months
+later. Good things to include in comments are:
+</p>
+
+<ul>
+  <li>
+    What the patch actually does. Bug numbers are good here.
+  </li>
+  <li>
+    Where the patch came from. Is it an upstream VCS pull,
+    something from Bugzilla, something you wrote?
+  </li>
+  <li>
+    Whether the patch has been sent upstream, if applicable.
+  </li>
+</ul>
+
+<p>
+To include the description, simply insert it at the top of the patch
+file. The <code class="docutils literal"><span class="pre">patch</span></code> tool will ignore leading text until it finds
+something that looks like it might be a 'start patching' instruction,
+so as long as each description line starts with letters (rather than
+numbers, symbols or whitespace) there shouldn't be a
+problem. Alternatively, prefix each description line with a hash
+(that's <code class="docutils literal"><span class="pre">#</span></code>, or 'pound' to the USians) sign. It's also best to
+leave a single blank line after the description and before the main
+patch.
+</p>
+
+<p>
+Here's a simple example (<code class="docutils literal"><span class="pre">023_all_vim-6.3-apache-83565.patch</span></code>)
+from the <code class="docutils literal"><span class="pre">vim</span></code> patch tarball:
+</p>
+
+<pre>
+# Detect Gentoo apache files properly. Gentoo bug 83565.
+
+--- runtime/filetype.vim.orig   2005-03-25 01:44:12.000000000 +0000
++++ runtime/filetype.vim        2005-03-25 01:45:15.000000000 +0000
+@@ -93,6 +93,9 @@
+ " Gentoo apache config file locations (Gentoo bug #76713)
+ au BufNewFile,BufRead /etc/apache2/conf/*/* setf apache
+
++" More Gentoo apache config file locations (Gentoo bug #83565)
++au BufNewFile,BufRead /etc/apache2/{modules,vhosts}.d/*.conf setf apache
++
+ " XA65 MOS6510 cross assembler
+ au BufNewFile,BufRead *.a65                    setf a65
+</pre>
+
+</div>
+<div class="section">
+<h2 id="clean-patch-howto">Clean Patch Howto</h2>
+
+<p>
+"Clean patch" does not refer to the patch itself (as in the changes it makes to
+the source code). It refers to all the metadata that exists in the patch to
+make it "maintainable".
+</p>
+
+<div class="section">
+<h3 id="why">Why</h3>
+
+<p>
+This may take more effort "up front", but the amount of effort that it saves
+for everyone else in the future more than makes up for it. This refers to other
+distributions or upstream maintainers who read the patch, or future Gentoo
+maintainers. By keeping all patches "clean", people can quickly and easily
+assess a patch without searching through many other files.
+</p>
+
+</div>
+<div class="section">
+<h3 id="file-naming">File Naming</h3>
+
+<p>
+Your patch name should be short and to the point. When doing a file listing
+(e.g., <code class="docutils literal"><span class="pre">ls files/</span></code>), it's a lot easier to be able to scan for relevant
+patches when they have good keywords in their file names.
+</p>
+
+<p>
+It should also include the package name and the version it was written against.
+This way, people searching for patches or who happen to just stumble across the
+file itself have a clue as to what it's for. Stripping out the <code class="docutils literal"><span class="pre">${PN}</span></code>
+(and to a lesser extent, the <code class="docutils literal"><span class="pre">${PV}</span></code>) makes the filename significantly
+less useful. The fact the files are typically stored in
+<code class="docutils literal"><span class="pre">${CATEGORY}/${PN}/files/</span></code> is irrelevant, because the patch may be used
+outside Gentoo.
+</p>
+
+</div>
+<div class="section">
+<h3 id="how">How</h3>
+
+<p>
+Here's a check list of things to keep in the patch header:
+</p>
+
+<ul>
+  <li>
+    External references
+    <ul>
+      <li>Upstream mailing archives</li>
+      <li>Upstream bug reports</li>
+      <li>Upstream commit links</li>
+      <li>Upstream ChangeLog entries</li>
+      <li>Gentoo bug reports</li>
+    </ul>
+  </li>
+  <li>
+    Short/medium explanation
+    <ul>
+      <li>Why is the patch needed?</li>
+      <li>What is it fixing?</li>
+      <li>Why is it fixing it the way it is?</li>
+      <li>Proposal for better fixes in the future?</li>
+      <li>Is it a stop gap measure (workaround)?</li>
+      <li>How was it regression tested?</li>
+      <li>
+        Examples of before/after behaviour
+        <ul>
+          <li>How to reproduce bug without patch</li>
+          <li>How to show bug is fixed after patch</li>
+          <li>
+            Maybe upstream fixed it in a different way, so this test can be
+            used to show that the patch is no longer needed with newer versions
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    Status
+    <ul>
+      <li>Was it merged/rejected/postponed/etc. upstream?</li>
+      <li>Is it distribution-specific?</li>
+    </ul>
+  </li>
+  <li>
+    Attribution
+    <ul>
+      <li>Who found the bug?</li>
+      <li>Who fixed the bug?</li>
+      <li>Who wrote the patch?</li>
+      <li>Who tested the patch?</li>
+      <li>Who gave advice on the patch?</li>
+    </ul>
+  </li>
+</ul>
+
+<p>
+All this information should be <i>in the patch itself</i>. It should never be
+found in something like the ebuild. If you really want to put a comment next
+to a patch in an ebuild, then this is about the only thing that is OK
+(where 93671 is the Gentoo bug number):
+</p>
+
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">PATCHES</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span>
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">${FILESDIR}</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">/${P}-dont-umask.patch</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#93671</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span>
+</span></pre>
+
+<p>
+When documenting these things, it might be useful to use RFC822/Git-style tags
+to format the metadata. So when documenting the author, use:
+</p>
+
+<pre>
+From: Nice Person &lt;foo@cow.example.com&gt;
+</pre>
+
+<p>
+Or when documenting relevant URLs, use something like:
+</p>
+
+<pre>
+Bug: https://upstream.example.com/12345
+Bug: https://bugs.gentoo.org/9889
+</pre>
+
+<p>
+And if you want to note your copyright signoff, slap on a Signed-off-by tag:
+</p>
+
+<pre>
+Signed-off-by: Diligent Developer &lt;larry@gentoo.org&gt;
+</pre>
+
+<p>
+Finally, your patch should be clear of useless cruft. If it was not taken
+straight from an upstream SCM (<code class="docutils literal"><span class="pre">git format-patch</span></code> or <code class="docutils literal"><span class="pre">svn diff -r #</span></code>
+or <code class="docutils literal"><span class="pre">cvs diff -r 1.123 -r 1.124</span></code>), then the metadata is useless. So delete
+it. This refers to things like the diff command used to produce the patch,
+or the timestamps on the files, local revision info, or other similar spam.
+Note that the context info (the stuff that comes after the <code class="docutils literal"><span class="pre">@@</span></code>) should
+be left, as that can be invaluable when applying patches to later versions.
+For example:
+</p>
+
+<pre>
+@@ -80,6 +82,7 @@ case $sys in
+                  ^^^^^^^^^^^^ keep this part
+</pre>
+
+<p>
+Extra points if you make the filename in the <code class="docutils literal"><span class="pre">---</span></code>/<code class="docutils literal"><span class="pre">+++</span></code> section
+consistent and sane. That is, remove different leading <code class="docutils literal"><span class="pre">backup/paths/</span></code>
+and <code class="docutils literal"><span class="pre">.orig</span></code>/<code class="docutils literal"><span class="pre">.new</span></code> suffixes. Your patch should be in the <code class="docutils literal"><span class="pre">-p1</span></code>
+format because this tends to be much more standard than any other <code class="docutils literal"><span class="pre">-p#</span></code>.
+It is also what <code class="docutils literal"><span class="pre">eapply</span></code> understands by default. A good suggestion is to
+use either <code class="docutils literal"><span class="pre">a/</span></code> and <code class="docutils literal"><span class="pre">b/</span></code> (as in <code class="docutils literal"><span class="pre">git format-patch</span></code>) or the
+package name/version as the leading portion that gets stripped.
+</p>
+
+<p>
+Also note that <code class="docutils literal"><span class="pre">patch</span></code> uses the timestamp info in order to remove empty
+files automatically. Alternatively, you can specify the <code class="docutils literal"><span class="pre">-E</span></code> option with
+<code class="docutils literal"><span class="pre">eapply</span></code> if you want to remove an empty file.
+</p>
+
+<p>
+The following function (for your interactive shell, not for the ebuild) will
+help deleting these things:
+</p>
+
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Special">scrub_patch()</span> <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">{</span>
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">sed</span> -i <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">\</span>
+		-e '/^index /d' <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">\</span>
+		-e '/^new file mode /d' <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">\</span>
+		-e '/^Index:/d' <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">\</span>
+		-e <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">'/^</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span>========/d' <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">\</span>
+		-e '/^RCS file:/d' <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">\</span>
+		-e '/^retrieving/d' <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">\</span>
+		-e '/^diff/d' <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">\</span>
+		-e '/^Files .* differ$/d' <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">\</span>
+		-e '/^Only <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">in</span> /d' <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">\</span>
+		-e '/^Common subdirectories/d' <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">\</span>
+		-e '/^deleted file mode [0-9]*$/d' <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">\</span>
+		-e '/^+++/s:\t.*::' <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">\</span>
+		-e '/^<span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">--</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">-/s:\t.*::'</span> <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">\</span>
+		<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">$@</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">}</span>
+
+scrub_patch some-patch-you-found.patch
+</span></pre>
+
+</div>
+<div class="section">
+<h3 id="examples">Examples</h3>
+
+<p>
+This shows a simple explanation and a URL for more info (this patch could do
+with some attribution however). No metadata exists from running the <code class="docutils literal"><span class="pre">diff</span></code>
+command (timestamps, etc.).
+</p>
+
+<pre>
+Fixes compilation in FreeBSD.
+https://bugs.gentoo.org/138123
+
+--- man-1.6d/gencat/genlib.c
++++ man-1.6d/gencat/genlib.c
+@@ -54,7 +54,7 @@
+ #include &lt;unistd.h&gt;
+ #endif
+
+-#ifndef __linux__
++#if !defined(__linux__) &amp;&amp; !defined(__FreeBSD__)
+ #include &lt;memory.h&gt;
+ static int bcopy(src, dst, length)
+ char *src, *dst;
+</pre>
+
+<pre>
+Don't force umask to 022 or the -o umask option doesn't work.
+Patch by Daniel Drake.
+https://bugs.gentoo.org/93671
+
+--- mount/mount.c
++++ mount/mount.c
+@@ -1491,8 +1491,6 @@ main(int argc, char *argv[]) {
+    if ((p = strrchr(progname, '/')) != NULL)
+        progname = p+1;
+
+-   umask(022);
+-
+    /* People report that a mount called from init without console
+       writes error messages to /etc/mtab
+       Let us try to avoid getting fd's 0,1,2 */
+</pre>
+
+<pre>
+Don't let target flags bleed into build flags.
+Fix by Bertrand Jacquin.
+https://bugs.gentoo.org/226035
+
+--- netem/Makefile
++++ netem/Makefile
+@@ -2,6 +2,7 @@ DISTGEN = maketable normal pareto paretonormal
+ DISTDATA = normal.dist pareto.dist paretonormal.dist experimental.dist
+
+ HOSTCC ?= $(CC)
++CCOPTS  = $(CBUILD_CFLAGS)
+ LDLIBS += -lm
+
+ all: $(DISTGEN) $(DISTDATA)
+</pre>
+
+</div>
+</div>
+</div></main><footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+                Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+              </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script><script src="/assets.gentoo.org/lunr/lunr.min.js"></script><script>var documentsSrc = "../../../documents.js"</script><script src="../../../search.js"></script>
+</body>
+</html>

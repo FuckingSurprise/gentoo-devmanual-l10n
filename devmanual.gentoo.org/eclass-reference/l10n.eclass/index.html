@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>l10n.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>L10N.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+l10n.eclass - convenience functions to handle localizations
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+The l10n (localization) eclass offers a number of functions to more
+conveniently handle localizations (translations) offered by packages.
+These are meant to prevent code duplication for such boring tasks as
+determining the cross-section between the user's set LINGUAS and what
+is offered by the package.
+
+<H2 ID="lbAD">FUNCTIONS</H2>
+
+<DL>
+<DT><B>l10n_for_each_locale_do</B> &lt;function&gt;<DD>
+Convenience function for processing localizations. The parameter should
+be a function (defined in the consuming eclass or ebuild) which takes
+an individual localization as (last) parameter.
+<P>
+Example: l10n_for_each_locale_do install_locale
+<DT><B>l10n_for_each_disabled_locale_do</B> &lt;function&gt;<DD>
+Complementary to l10n_for_each_locale_do, this function will process
+locales that are disabled. This could be used for example to remove
+locales from a Makefile, to prevent them from being built needlessly.
+<DT><B>l10n_find_plocales_changes</B> &lt;translations dir&gt; &lt;filename pre pattern&gt; &lt;filename post pattern&gt;<DD>
+Ebuild maintenance helper function to find changes in package offered
+locales when doing a version bump. This could be added for example to
+src_prepare
+<P>
+Example: l10n_find_plocales_changes &quot;${S}/src/translations&quot; &quot;${PN}_&quot; '.ts'
+<DT><B>l10n_get_locales</B> [disabled]<DD>
+Determine which LINGUAS the user has enabled that are offered by the
+package, as listed in PLOCALES, and return them.  In case no locales
+are selected, fall back on PLOCALE_BACKUP.  When the disabled argument
+is given, return the disabled locales instead of the enabled ones.
+<DT><B>strip-linguas</B> [&lt;allow LINGUAS&gt;|&lt;-i|-u&gt; &lt;directories of .po files&gt;]<DD>
+Make sure that LINGUAS only contains languages that a package can
+support.  The first form allows you to specify a list of LINGUAS.
+The -i builds a list of po files found in all the directories and uses
+the intersection of the lists.  The -u builds a list of po files found
+in all the directories and uses the union of the lists.
+</DL>
+
+<H2 ID="lbAE">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>PLOCALES</B><DD>
+Variable listing the locales for which localizations are offered by
+the package.
+<P>
+Example: PLOCALES=&quot;cy de el_GR en_US pt_BR vi zh_CN&quot;
+<DT><B>PLOCALE_BACKUP</B><DD>
+In some cases the package fails when none of the offered PLOCALES are
+selected by the user. In that case this variable should be set to a
+default locale (usually 'en' or 'en_US') as backup.
+<P>
+Example: PLOCALE_BACKUP=&quot;en_US&quot;
+</DL>
+
+<H2 ID="lbAF">AUTHORS</H2>
+
+Ben de Groot &lt;<A HREF="mailto:yngwin@gentoo.org">yngwin@gentoo.org</A>&gt;
+
+<H2 ID="lbAG">MAINTAINERS</H2>
+
+Ulrich Müller &lt;<A HREF="mailto:ulm@gentoo.org">ulm@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAI">FILES</H2>
+
+<B>l10n.eclass</B>
+
+
+<H2 ID="lbAJ">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/l10n.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/l10n.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAE">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAF">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAG">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAH">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAI">FILES</A><DD>
+<DT><A HREF="index.html#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

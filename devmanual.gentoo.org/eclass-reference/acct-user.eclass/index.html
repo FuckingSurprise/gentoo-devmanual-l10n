@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>acct-user.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>ACCT-USER.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+acct-user.eclass - Eclass used to create and maintain a single user entry
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+This eclass represents and creates a single user entry.  The name
+of the user is derived from ${PN}, while (preferred) UID needs to
+be specified via ACCT_USER_ID.  Additional variables are provided
+to override the default home directory, shell and add group
+membership.  Packages needing the user in question should depend
+on the package providing it.
+<P>
+The ebuild needs to call acct-user_add_deps after specifying
+ACCT_USER_GROUPS.
+<P>
+Example:
+If your package needs user 'foo' belonging to same-named group, you
+create 'acct-user/foo' package and add an ebuild with the following
+contents:
+<P>
+<PRE>
+EAPI=7
+inherit acct-user
+ACCT_USER_ID=200
+ACCT_USER_GROUPS=( foo )
+acct-user_add_deps
+</PRE>
+
+<P>
+Then you add appropriate dependency to your package.  The dependency
+type(s) should be:
+- DEPEND (+ RDEPEND) if the user is already needed at build time,
+- RDEPEND if it is needed at install time (e.g. you 'fowners' files
+<BR>&nbsp;&nbsp;in&nbsp;pkg_preinst)&nbsp;or&nbsp;run&nbsp;time.
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+7
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>acct-user_add_deps</B> <DD>
+Generate appropriate RDEPEND from ACCT_USER_GROUPS.  This must be
+called if ACCT_USER_GROUPS are set.
+<DT><B>acct-user_pkg_pretend</B> <DD>
+Performs sanity checks for correct eclass usage, and early-checks
+whether requested UID can be enforced.
+<DT><B>acct-user_src_install</B> <DD>
+Installs a keep-file into the user's home directory to ensure it is
+owned by the package, and sysusers.d file.
+<DT><B>acct-user_pkg_preinst</B> <DD>
+Creates the user if it does not exist yet.  Sets permissions
+of the home directory in install image.
+<DT><B>acct-user_pkg_postinst</B> <DD>
+Updates user properties if necessary.  This needs to be done after
+new home directory is installed.
+<DT><B>acct-user_pkg_prerm</B> <DD>
+Ensures that the user account is locked out when it is removed.
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>ACCT_USER_ID</B> (REQUIRED)<DD>
+Preferred UID for the new user.  This variable is obligatory, and its
+value must be unique across all user packages.  This can be overriden
+in make.conf through ACCT_USER_&lt;UPPERCASE_USERNAME&gt;_ID variable.
+<P>
+Overlays should set this to -1 to dynamically allocate UID.  Using -1
+in ::gentoo is prohibited by policy.
+<DT><B>ACCT_USER_ENFORCE_ID</B><DD>
+If set to a non-null value, the eclass will require the user to have
+specified UID.  If the user already exists with another UID, or
+the UID is taken by another user, the install will fail.
+<DT><B>ACCT_USER_NO_MODIFY</B><DD>
+If set to a non-null value, the eclass will not make any changes
+to an already existing user.
+<DT><B>ACCT_USER_SHELL</B> ?= <I>-1</I><DD>
+The shell to use for the user.  If not specified, a 'nologin' variant
+for the system is used.  This can be overriden in make.conf through
+ACCT_USER_&lt;UPPERCASE_USERNAME&gt;_SHELL variable.
+<DT><B>ACCT_USER_HOME</B> ?= <I>/dev/null</I><DD>
+The home directory for the user.  If not specified, /dev/null is used.
+The directory will be created with appropriate permissions if it does
+not exist.  When updating, existing home directory will not be moved.
+This can be overriden in make.conf through
+ACCT_USER_&lt;UPPERCASE_USERNAME&gt;_HOME variable.
+<DT><B>ACCT_USER_HOME_OWNER</B><DD>
+The ownership to use for the home directory, in chown ([user][:group])
+syntax.  Defaults to the newly created user, and its primary group.
+This can be overriden in make.conf through
+ACCT_USER_&lt;UPPERCASE_USERNAME&gt;_HOME_OWNER variable.
+<DT><B>ACCT_USER_HOME_PERMS</B> ?= <I>0755</I><DD>
+The permissions to use for the home directory, in chmod (octal
+or verbose) form.  This can be overriden in make.conf through
+ACCT_USER_&lt;UPPERCASE_USERNAME&gt;_HOME_PERMS variable.
+<DT><B>ACCT_USER_GROUPS</B> (REQUIRED)<DD>
+List of groups the user should belong to.  This must be a bash
+array.  The first group specified is the user's primary group, while
+the remaining groups (if any) become supplementary groups.
+<P>
+This can be overriden in make.conf through
+ACCT_USER_&lt;UPPERCASE_USERNAME&gt;_GROUPS variable, or appended to
+via ACCT_USER_&lt;UPPERCASE_USERNAME&gt;_GROUPS_ADD.  Please note that
+due to technical limitations, the override variables are not arrays
+but space-separated lists.
+</DL>
+
+<H2 ID="lbAG">AUTHORS</H2>
+
+Michael Orlitzky &lt;<A HREF="mailto:mjo@gentoo.org">mjo@gentoo.org</A>&gt;
+<BR>
+
+Michał Górny &lt;<A HREF="mailto:mgorny@gentoo.org">mgorny@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">MAINTAINERS</H2>
+
+Michał Górny &lt;<A HREF="mailto:mgorny@gentoo.org">mgorny@gentoo.org</A>&gt;
+
+<H2 ID="lbAI">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAJ">FILES</H2>
+
+<B>acct-user.eclass</B>
+
+
+<H2 ID="lbAK">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/acct-user.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/acct-user.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAH">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAI">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAJ">FILES</A><DD>
+<DT><A HREF="index.html#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

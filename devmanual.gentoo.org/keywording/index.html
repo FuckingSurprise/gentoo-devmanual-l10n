@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Keywording and Stabilization – Gentoo Development Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../devmanual.css" type="text/css">
+<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../index.html"><span class="fa fa-home"></span> Home</a></li>
+<li class="dropdown">
+<a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></a><ul class="dropdown-menu">
+<li><a class="reference" href="index.html#equal-visibility-requirement">Equal Visibility Requirement</a></li>
+<li><a class="reference" href="index.html#hard-masks">Hard Masks</a></li>
+<li><a class="reference" href="index.html#keywording-new-packages">Keywording New Packages</a></li>
+<li><a class="reference" href="index.html#keywording-on-upgrades">Keywording on Upgrades</a></li>
+<li><a class="reference" href="index.html#moving-from-arch-to-arch">Moving from ~arch to arch</a></li>
+<li><a class="reference" href="index.html#removing-package-versions">Removing Package Versions</a></li>
+</ul>
+</li>
+<li><a class="w-250 text-center" href="../profiles/use.mask/index.html"><span class="fa fa-arrow-left"></span><span class="truncated-text d-inline-block max-w-200 ml-2">Profiles use.mask File</span></a></li>
+<li><a class="w-250 text-center" href="../tasks-reference/index.html"><span class="truncated-text d-inline-block max-w-200 mr-2">Tasks Reference</span><span class="fa fa-arrow-right"></span></a></li>
+</ul></div>
+</div></div></nav><nav class="navbar navbar-grey navbar-stick" id="devmanual-actions" role="navigation"><div class="container"><div class="row"><div class="input-group">
+<input type="search" name="search" placeholder="Search" title="Search Gentoo Developer Manual [f]" accesskey="f" id="searchInput" class="form-control" onclick="fetchDocuments()"><div class="input-group-btn"><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton btn btn-default" onclick="search()"></div>
+</div></div></div></nav><div id="searchResults" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Search Results</h4>
+</div>
+<div class="modal-body"><p>No results found.</p></div>
+<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+</div></div></div>
+<div class="container"><div class="row"><div class="col-md010"><ol class="breadcrumb"><li><a href="../index.html">Master Index</a></li></ol></div></div></div></header><main><div class="container">
+<h1 class="first-header">Keywording and Stabilization</h1>
+
+<div class="alert alert-info" role="alert">
+<strong>Note:</strong>
+<i>Terminology</i>: The term 'package' refers to an entire directory, for example
+<code class="docutils literal"><span class="pre">app-editors/vim</span></code> — it does <i>not</i> refer to a specific version. The terms
+'ebuild' or 'package version' are used when this meaning is intended. This
+distinction is important.
+</div>
+
+<p>
+Most ebuilds specify a <code class="docutils literal"><span class="pre">KEYWORDS</span></code> variable. This variable is used to
+indicate the suitability and stability of both the package and the ebuild on
+each given arch (<code class="docutils literal"><span class="pre">sparc</span></code>, <code class="docutils literal"><span class="pre">ppc</span></code>, <code class="docutils literal"><span class="pre">x64-macos</span></code>, ...).
+</p>
+
+<div class="alert alert-info" role="alert">
+<strong>Note:</strong>
+The term 'arch' is used in this sense for historical reasons. As a result
+of <a class="" href="https://www.gentoo.org/glep/glep-0022.html">GLEP 22</a>
+and the various non-Linux ports, this is no longer a particularly
+accurate term.
+</div>
+
+<p>
+A sample <code class="docutils literal"><span class="pre">KEYWORDS</span></code> entry might look like:
+</p>
+
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">KEYWORDS</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>-ia64 ~mips ~ppc sparc x86 ~ppc-macos<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+</span></pre>
+
+<p>
+The different levels of keyword are:
+</p>
+
+<dl>
+  <dt>
+    <code class="docutils literal"><span class="pre">arch</span></code> (<code class="docutils literal"><span class="pre">x86</span></code>, <code class="docutils literal"><span class="pre">ppc-macos</span></code>)
+  </dt>
+  <dd>
+    Both the package version <i>and</i> the ebuild are widely tested, known to work
+    and not have any serious issues on the indicated platform.
+  </dd>
+  <dt>
+    <code class="docutils literal"><span class="pre">~arch</span></code> (<code class="docutils literal"><span class="pre">~x86</span></code>, <code class="docutils literal"><span class="pre">~ppc-macos</span></code>)
+  </dt>
+  <dd>
+    The package version and the ebuild are believed to work and do not have any
+    known serious bugs, but more testing is required before the package version
+    is considered suitable for <code class="docutils literal"><span class="pre">arch</span></code>.
+  </dd>
+  <dt>
+    No keyword
+  </dt>
+  <dd>
+    If a package has no keyword for a given arch, it means it is not known
+    whether the package will work, or that insufficient testing has occurred for
+    <code class="docutils literal"><span class="pre">~arch</span></code>.
+  </dd>
+  <dt>
+    <code class="docutils literal"><span class="pre">-arch</span></code> (<code class="docutils literal"><span class="pre">-x86</span></code>, <code class="docutils literal"><span class="pre">-ppc-macos</span></code>)
+  </dt>
+  <dd>
+    The package version will not work on the arch. This could be caused by badly
+    written code (for example, non-64-bit or endian clean code), relying upon
+    particular hardware (for example, a BIOS querying tool would not work on
+    non-BIOS architectures) or binary only packages.
+  </dd>
+</dl>
+
+<p>
+The <code class="docutils literal"><span class="pre">-*</span></code> keyword is special. It is used to indicate package versions which are
+not worth trying to test on unlisted archs. For example, a binary-only package
+which is only supported upstream on <code class="docutils literal"><span class="pre">ppc</span></code> and <code class="docutils literal"><span class="pre">x86</span></code> might use:
+</p>
+
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">KEYWORDS</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>-* ppc x86<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+</span></pre>
+
+<p>
+This is different in implication from <code class="docutils literal"><span class="pre">"ppc x86"</span></code> — the former implies that
+it will not work on other archs, whereas the latter implies that it has not been
+tested.
+</p>
+
+<p>
+Do <b>not</b> use the <code class="docutils literal"><span class="pre">*</span></code> or <code class="docutils literal"><span class="pre">~*</span></code> special keywords in ebuilds.
+</p>
+
+<div class="alert alert-info" role="alert">
+<strong>Note:</strong>
+Usually, "live" ebuilds
+(see <a class="" href="../ebuild-writing/functions/src_unpack/vcs-sources/index.html">Version Control System (VCS) Sources</a>)
+do not specify a <code class="docutils literal"><span class="pre">KEYWORDS</span></code> variable, or assign the empty string to it.
+</div>
+<div class="section">
+<h2 id="equal-visibility-requirement">Equal Visibility Requirement</h2>
+
+<p>
+An ebuild <b>must not</b> depend upon any package that is of a lower keyword level
+than itself. For example, if <code class="docutils literal"><span class="pre">foo-1.2</span></code> depends upon <code class="docutils literal"><span class="pre">bar-1.2</span></code>, and
+<code class="docutils literal"><span class="pre">bar-1.2</span></code> is <code class="docutils literal"><span class="pre">~x86</span></code>, then <code class="docutils literal"><span class="pre">foo-1.2</span></code> must <b>not</b> be marked stable on
+<code class="docutils literal"><span class="pre">x86</span></code> unless <code class="docutils literal"><span class="pre">bar-1.2</span></code> is also stabilised.
+</p>
+
+<p>
+You may assume that if a user accepts <code class="docutils literal"><span class="pre">~arch</span></code> for a given arch then they also
+accept <code class="docutils literal"><span class="pre">arch</span></code>.
+</p>
+
+<p>
+For optional dependencies, all <i>possible</i> dependencies must satisfy the above.
+Note that certain <code class="docutils literal"><span class="pre">USE</span></code> flags can be forcibly disabled on a per-profile basis
+— talk to the arch teams if you require this. For either-or dependencies, <i>at
+least one</i> of the options must be of equal or better visibility than the
+package in question.
+</p>
+
+</div>
+<div class="section">
+<h2 id="hard-masks">Hard Masks</h2>
+
+<p>
+The <code class="docutils literal"><span class="pre">package.mask</span></code> file can be used to 'hard mask' individual or groups of
+ebuilds. This should be used for testing ebuilds or beta releases of software,
+and may also be used if a package has serious compatibility problems. Packages
+which are not hard masked must <b>not</b> have a dependency upon hard masked
+packages.
+</p>
+
+<p>
+The only time it is acceptable for a user to see the <code class="docutils literal"><span class="pre">Possibly a DEPEND
+problem</span></code> error message is if they have manually changed visibility levels for a
+package (for example, through <code class="docutils literal"><span class="pre">/etc/portage/</span></code>) and have missed a dependency.
+<b>You should never commit a change which could cause this error to appear on a
+user system</b>.
+</p>
+
+</div>
+<div class="section">
+<h2 id="keywording-new-packages">Keywording New Packages</h2>
+
+<div class="alert alert-warning" role="alert">
+<strong>Important:</strong>
+New packages should be marked as <code class="docutils literal"><span class="pre">~arch</span></code> only upon
+architectures for which the committing developer has tested.
+</div>
+
+<p>
+Do <b>not</b> assume that your package works on all architectures. Do <b>not</b>
+assume that user submitted ebuilds will have correct <code class="docutils literal"><span class="pre">KEYWORDS</span></code> — chances are
+they just copied from somewhere else. Do <b>not</b> assume that upstream's
+'supported architectures' list is correct. Do <b>not</b> assume that because your
+code is written in Perl / Python / Java / whatever that it will run on other
+archs (there is at least one case of a <code class="docutils literal"><span class="pre">vim</span></code> script which only worked on
+<code class="docutils literal"><span class="pre">x86</span></code>).
+</p>
+
+<p>
+Note that most (non-x86) archs expect you to be on the arch team and bugzilla
+alias if you are committing packages with keywords for that arch, and may have
+additional requirements of which you should be aware (on <code class="docutils literal"><span class="pre">mips</span></code>, for example,
+there are multiple ABIs and byte orders to consider — a package working on your
+<code class="docutils literal"><span class="pre">o32</span></code> box may not work on <code class="docutils literal"><span class="pre">o64</span></code> or <code class="docutils literal"><span class="pre">n32</span></code>). Contact the individual arch
+teams for details.
+</p>
+
+<p>
+It's important to note that alternative arches (like alpha, ia64, s390, sparc,
+hppa, ppc*) are mainly undermanned arches, some of them are slow, they have
+more basic problems and have a small userbase. Just file bugs for these
+architectures when a package is going to be a dependency of a package already
+keyworded.
+</p>
+
+<p>
+Do <b>not</b> commit straight to <code class="docutils literal"><span class="pre">arch</span></code>.
+</p>
+
+</div>
+<div class="section">
+<h2 id="keywording-on-upgrades">Keywording on Upgrades</h2>
+
+<p>
+When upgrading, drop all existing keywords from <code class="docutils literal"><span class="pre">arch</span></code> to <code class="docutils literal"><span class="pre">~arch</span></code>, and leave
+any existing <code class="docutils literal"><span class="pre">~arch</span></code> keywords intact. This must be done even if you <i>think</i>
+you're just making a trivial fix — there have been several examples of the
+stable tree getting broken this way.
+</p>
+
+<p>
+This also applies to revision bumps, not just to upstream version changes.
+</p>
+
+<p>
+If a new version introduces new dependencies which are not available on some
+architectures, then you should file a bug or ask on IRC before you upgrade the
+ebuild. If you really need to get the ebuild added in a hurry, for example,
+for a security fix, then you should drop any <code class="docutils literal"><span class="pre">KEYWORDS</span></code> which are causing
+problems and CC the relevant architectures on the bug — you <b>must</b> file
+a new bug to the architecture in question regarding this if no bug is already
+available.
+</p>
+
+<p>
+If there are no new dependencies, do not remove keywords if your commit fails
+with repoman — please try a full <code class="docutils literal"><span class="pre">git pull</span></code> and if you still have
+problems, then commit with <code class="docutils literal"><span class="pre">repoman -I</span></code> and file a bug to the broken
+architecture, noting it in your git commit message.
+</p>
+
+<div class="alert alert-warning" role="alert">
+<strong>Important:</strong>
+When committing, make sure that you reference any bugs in the commit message.
+See <a class="" href="../ebuild-maintenance/git/index.html#git-commit-message-format">Git Commit Message Format</a> for how
+to do this.
+</div>
+
+</div>
+<div class="section">
+<h2 id="moving-from-arch-to-arch">Moving from <code class="docutils literal"><span class="pre">~arch</span></code> to <code class="docutils literal"><span class="pre">arch</span></code>
+</h2>
+
+<p>
+Stabilization, i.e., moving an ebuild from <code class="docutils literal"><span class="pre">~arch</span></code> to <code class="docutils literal"><span class="pre">arch</span></code>, is done
+by the relevant architecture teams. If you have access to exotic hardware but
+are not on the arch teams, you may wish to make individual arrangements —
+the arch teams are happy for help, so long as they know what is going on.
+</p>
+
+<p>
+In order to request stabilization of an ebuild, file a bug to the package's
+maintainer (which may be yourself) in the Stabilization component, and list
+all secondary maintainers in the bug's CC. When the maintainers consider the
+ebuild to be ready for stabilization, they will add the relevant architecture
+teams to the CC list. They can do it manually, or they can fill the package
+list field, add the <code class="docutils literal"><span class="pre">CC-ARCHES</span></code> keyword, and let
+<a class="" href="https://dev.gentoo.org/~mgorny/doc/nattka/">NATTkA</a>
+automatically add arch teams to CC.
+That way teams can remove themselves from the list when they are done, giving
+a clear indication of which teams still have to stabilize a package.
+</p>
+
+<p>
+For an ebuild to move to stable, the following guidelines must be met
+(see <a class="" href="https://www.gentoo.org/glep/glep-0040.html">GLEP 40</a>
+for further details):
+</p>
+
+<ul>
+  <li>
+    The ebuild has spent a reasonable amount of time in <code class="docutils literal"><span class="pre">~arch</span></code> first.
+    Thirty days is the usual figure, although this is clearly only a guideline.
+    For critical packages, a much longer duration is expected. For small
+    packages that have only minor changes between versions, a shorter period is
+    sometimes appropriate.
+  </li>
+  <li>
+    The ebuild must not have any non-<code class="docutils literal"><span class="pre">arch</span></code> dependencies.
+  </li>
+  <li>
+    The package version (and the ebuild) must not have any severe outstanding
+    bugs or issues.
+  </li>
+  <li>
+    The package version must be widely tested.
+  </li>
+  <li>
+    If the package is a library, it should be known not to break any package which
+    depends upon it.
+  </li>
+</ul>
+
+<p>
+For security fixes, the "reasonable amount of time" guideline may be relaxed.
+See the <a class="" href="https://www.gentoo.org/support/security/vulnerability-treatment-policy.html">
+Vulnerability Treatment Policy</a>
+</p>
+
+<div class="section">
+<h3 id="stabilization-rules">Stabilization rules</h3>
+
+<p>
+AMD64, X86: If you are the maintainer of a package and own the respective amd64
+or x86 hardware, you can do your own testing (stabilization and keywording) of
+your packages; as long as it is not a core system set dependency. Note that
+it is acceptable to test x86 using a
+<a class="" href="https://wiki.gentoo.org/wiki/Project:AMD64/32-bit_Chroot_Guide">
+specialized environment on amd64</a>.
+</p>
+
+<p>
+SPARC: You must have prior permission from the arch lead. Usually we expect
+you to be on the sparc alias for QA reasons, although other arrangements
+can be made if you will only be working with a small group of packages.
+</p>
+
+<p>
+ALPHA: Maintainers may keyword their own packages but are reminded to inform
+the Alpha team if they can help out with testing and keywording packages so
+the team can keep an eye out for possible keywording mistakes.
+</p>
+
+<p>
+Exotic architectures (like hppa, ia64, ppc*, sparc) are short on manpower,
+so it's best if you avoid opening bugs for stabilization of new packages
+for them, unless it is absolutely necessary (e.g., a reverse dependency
+for your package).
+</p>
+
+<p>
+Some architectures (like mips, riscv) do not maintain a stable keyword.
+So packages are not to be marked stable for one of these architectures.
+</p>
+
+</div>
+<div class="section">
+<h3 id="simultaneous-stabilization-on-all-architectures">Simultaneous stabilization on all architectures</h3>
+
+<p>
+If you maintain an architecture-independent package (data files, icons, pure
+Python, ...) then you may request that your package be stabilized on all arches
+at once. To do this — when you are filing the stabilization bug — please
+add the keyword <code class="docutils literal"><span class="pre">ALLARCHES</span></code> in addition to <code class="docutils literal"><span class="pre">STABLEREQ</span></code> and CC the
+arches that you would like to stabilize.
+</p>
+
+<p>
+If your package is architecture-independent, you should add the
+<code class="docutils literal"><span class="pre">&lt;stabilize-allarches&gt;</span></code> tag to metadata.xml. This allows consistency
+in future stabilizations and saves arch teams considerable work.
+</p>
+
+<p>
+The arch teams, when encountering the <code class="docutils literal"><span class="pre">ALLARCHES</span></code> keyword, should perform
+their usual set of tests on a single convenient architecture. Then, if
+everything works, stabilize not only the arch that was used during testing,
+but also all of the other arches in CC on the bug. Afterwards, the CC field can
+be cleared and the bug closed if appropriate.
+</p>
+
+</div>
+</div>
+<div class="section">
+<h2 id="removing-package-versions">Removing Package Versions</h2>
+
+<p>
+When removing ebuild, ensure that you do not remove the most recent version at
+any given keyword level on any profile. The aim here is:
+</p>
+
+<ul>
+  <li>
+    Never to force a downgrade. (Exception: occasionally you really do want to
+    force a downgrade, for example if the newly committed <code class="docutils literal"><span class="pre">foo-1.3</span></code> turns out
+    to be badly broken and that making everyone downgrade to <code class="docutils literal"><span class="pre">foo-1.2</span></code> is the
+    better option. This is rare.)
+  </li>
+  <li>
+    Do not break any existing dependencies.
+  </li>
+</ul>
+
+<p>
+If you would like a particular package version moved to stable on certain archs
+so that you can tidy up, file a bug.
+</p>
+
+</div>
+</div></main><footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+                Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+              </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script><script src="/assets.gentoo.org/lunr/lunr.min.js"></script><script>var documentsSrc = "../documents.js"</script><script src="../search.js"></script>
+</body>
+</html>

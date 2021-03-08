@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Adding a New Ebuild – Gentoo Development Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span> Home</a></li>
+<li class="dropdown">
+<a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></a><ul class="dropdown-menu">
+<li><a class="reference" href="index.html#what-not-to-put-in-the-gentoo-repository">What (not) to put in the Gentoo repository</a></li>
+<li><a class="reference" href="index.html#initial-architecture-keywords">Initial Architecture Keywords</a></li>
+<li><a class="reference" href="index.html#the-files-directory">The files Directory</a></li>
+</ul>
+</li>
+<li><a class="w-250 text-center" href="../index.html"><span class="fa fa-arrow-left"></span><span class="truncated-text d-inline-block max-w-200 ml-2">Ebuild Maintenance</span></a></li>
+<li><a class="w-250 text-center" href="../git/index.html"><span class="truncated-text d-inline-block max-w-200 mr-2">Git for Gentoo Developers</span><span class="fa fa-arrow-right"></span></a></li>
+</ul></div>
+</div></div></nav><nav class="navbar navbar-grey navbar-stick" id="devmanual-actions" role="navigation"><div class="container"><div class="row"><div class="input-group">
+<input type="search" name="search" placeholder="Search" title="Search Gentoo Developer Manual [f]" accesskey="f" id="searchInput" class="form-control" onclick="fetchDocuments()"><div class="input-group-btn"><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton btn btn-default" onclick="search()"></div>
+</div></div></div></nav><div id="searchResults" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Search Results</h4>
+</div>
+<div class="modal-body"><p>No results found.</p></div>
+<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+</div></div></div>
+<div class="container"><div class="row"><div class="col-md010"><ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Ebuild Maintenance</a></li>
+</ol></div></div></div></header><main><div class="container">
+<h1 class="first-header">Adding a New Ebuild</h1>
+<div class="section">
+<h2 id="what-not-to-put-in-the-gentoo-repository">What (not) to put in the Gentoo repository</h2>
+
+<p>
+Before writing a new ebuild, check
+<a class="" href="https://bugs.gentoo.org/">bugs.gentoo.org</a>
+to see if an ebuild has already been written for the package, but has not yet
+been added to the Gentoo repository.  Go to <a class="" href="https://bugs.gentoo.org/">bugs.gentoo.org</a>, choose query and select
+Advanced Search; as product select <i>Gentoo Linux</i>, as component select
+<i>ebuilds</i>.  In the search field put the name of the ebuild and as status
+select all possible fields, then submit the query. For you lazy people, click
+<a class="" href="https://bugs.gentoo.org/query.cgi?format=advanced&amp;product=Gentoo%20Linux&amp;component=New%20Ebuilds&amp;bug_Status=UNCONFIRMED&amp;bug_status=CONFIRMED&amp;bug_status=IN_PROGRESS&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED">here</a>.
+</p>
+
+<p>
+The Gentoo repository should only be used for storing <code class="docutils literal"><span class="pre">.ebuild</span></code> files,
+as well as any small companion files, such as patches or sample configuration
+files. These files should have a size of at most 20 KiB and must be placed
+in the <code class="docutils literal"><span class="pre">mycat/mypkg/files</span></code> directory, which can be referenced as
+<code class="docutils literal"><span class="pre">${FILESDIR}</span></code> from within ebuilds. Larger patch files should be placed
+in your developer space on <code class="docutils literal"><span class="pre">dev.gentoo.org</span></code> instead, in order to minimize
+the repository size.
+</p>
+
+<p>
+The files in the repository should be uncompressed plain text files, i.e.,
+no binaries. This will allow the version control system to merge changes and
+correctly inform developers of conflicts.
+</p>
+
+<p>
+Remember, the packages that you commit must be <i>ready</i> <i>out of the
+box</i> for end users when committed as stable.  Make sure that you have a good
+set of default settings that will satisfy the majority of systems and
+users that will use your package.  If your package is broken, and you are
+not sure how to get it to work, check some other distributions that have
+done their own versions of the package.  You can check
+<a class="" href="https://www.debian.org/distrib/packages">Debian</a> or
+<a class="" href="https://src.fedoraproject.org/projects/rpms/*">Fedora</a> for some
+examples.
+</p>
+
+<p>
+When committing to git, all developers should use <code class="docutils literal"><span class="pre">repoman commit</span></code>
+instead of <code class="docutils literal"><span class="pre">git commit</span></code> to submit their ebuilds.  Before committing,
+please run <code class="docutils literal"><span class="pre">repoman full</span></code> to make sure you didn't forget something.
+</p>
+
+</div>
+<div class="section">
+<h2 id="initial-architecture-keywords">Initial Architecture Keywords</h2>
+
+<p>
+When adding a new ebuild, you should only include <code class="docutils literal"><span class="pre">KEYWORDS</span></code> for
+architectures on which you have actually tested the ebuild, confirming
+that it works as it should and that <code class="docutils literal"><span class="pre">USE</span></code> flags are properly
+honoured in the resulting package which would be installed. If
+possible, you should give the actual library or application thorough
+testing as well, since you would be responsible for any breakages for
+your architecture(s). Minimal testing such as checking that the
+application starts up without any errors should always be performed.
+</p>
+
+<p>
+If you are adding a user-submitted ebuild, do not assume that the
+submitter has done testing on various architectures: often, <code class="docutils literal"><span class="pre">KEYWORDS</span></code>
+are cloned across packages or generated from documentation in the
+source packages, which does not signify that the package does indeed
+work on those architectures.
+</p>
+
+</div>
+<div class="section">
+<h2 id="the-files-directory">The files Directory</h2>
+
+<p>
+As noted earlier, under each package subdirectory is
+a <code class="docutils literal"><span class="pre">files/</span></code> directory. Any patches, configuration files, or
+other ancillary files your package might require should be added to
+this directory; any files bigger than 20KB-or-so should go to the
+mirrors to lower the amount of (unneeded) files our users have to
+download. You may want to consider naming patches you create yourself
+just to get your package to build with a version-specific name, such
+as <code class="docutils literal"><span class="pre">mypkg-1.0-gentoo.diff</span></code>, or more
+simply, <code class="docutils literal"><span class="pre">1.0-gentoo.diff</span></code>.  Also note that the
+<code class="docutils literal"><span class="pre">gentoo</span></code> extension informs people that this patch was created
+by us, the Gentoo Linux developers, rather than having been grabbed from a
+mailing list or somewhere else. Again, you should not compress these
+patches.
+</p>
+
+<p>
+Consider prefixing or suffixing (such as <code class="docutils literal"><span class="pre">mypkg-1.0</span></code>) every file
+you put into the <code class="docutils literal"><span class="pre">files/</span></code> directory, so that the files used for
+each individual version on an ebuild are distinguishable from one another, and
+so that the changes between different revisions are visible.  This is generally
+a really good idea :).  You may want to use a different suffix if you wish to
+convey more meaning with the patch name.
+</p>
+
+<p>
+If you have many files that should go into the <code class="docutils literal"><span class="pre">files/</span></code> directory,
+consider creating subdirectories such as <code class="docutils literal"><span class="pre">files/1.0/</span></code> and putting the
+relevant files in the appropriate subdirectory.  If you use this method,
+you do not need to add version information to the names of the files,
+which is often more convenient.
+</p>
+
+</div>
+</div></main><footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+                Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+              </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script><script src="/assets.gentoo.org/lunr/lunr.min.js"></script><script>var documentsSrc = "../../documents.js"</script><script src="../../search.js"></script>
+</body>
+</html>

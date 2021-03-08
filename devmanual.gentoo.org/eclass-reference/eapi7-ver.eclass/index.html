@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>eapi7-ver.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>EAPI7-VER.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+eapi7-ver.eclass - Testing implementation of EAPI 7 version manipulators
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+A stand-alone implementation of the version manipulation functions
+aimed for EAPI 7.  Intended to be used for wider testing of
+the proposed functions and to allow ebuilds to switch to the new
+model early, with minimal change needed for actual EAPI 7.
+<P>
+<A HREF="https://bugs.gentoo.org/482170">https://bugs.gentoo.org/482170</A>
+<P>
+
+<H3 ID="lbAD">Version strings</H3>
+
+<P>
+The functions support arbitrary version strings consisting of version
+components interspersed with (possibly empty) version separators.
+<P>
+A version component can either consist purely of digits ([0-9]+)
+or purely of uppercase and lowercase letters ([A-Za-z]+).  A version
+separator is either a string of any other characters ([^A-Za-z0-9]+),
+or it occurs at the transition between a sequence of letters
+and a sequence of digits, or vice versa.  In the latter case,
+the version separator is an empty string.
+<P>
+The version is processed left-to-right, and each successive component
+is assigned numbers starting with 1.  The components are either split
+on version separators or on boundaries between digits and letters
+(in which case the separator between the components is empty).
+Version separators are assigned numbers starting with 1 for
+the separator between 1st and 2nd components.  As a special case,
+if the version string starts with a separator, it is assigned index 0.
+<P>
+Examples:
+<P>
+<PRE>
+  1.2b-alpha4 -&gt; 1 . 2 '' b - alpha '' 4
+                 c s c s  c s c     s  c
+                 1 1 2 2  3 3 4     4  5
+
+  .11.        -&gt; . 11 .
+                 s c  s
+                 0 1  1
+</PRE>
+
+<P>
+
+<H3 ID="lbAE">Ranges</H3>
+
+<P>
+A range can be specified as 'm' for m-th version component, 'm-'
+for all components starting with m-th or 'm-n' for components starting
+at m-th and ending at n-th (inclusive).  If the range spans outside
+the version string, it is truncated silently.
+
+<H2 ID="lbAF">SUPPORTED EAPIS</H2>
+
+0 1 2 3 4 5 6
+
+<H2 ID="lbAG">FUNCTIONS</H2>
+
+<DL>
+<DT><B>ver_cut</B> &lt;range&gt; [&lt;version&gt;]<DD>
+Print the substring of the version string containing components
+defined by the &lt;range&gt; and the version separators between them.
+Processes &lt;version&gt; if specified, ${PV} otherwise.
+<P>
+For the syntax of versions and ranges, please see the eclass
+description.
+<DT><B>ver_rs</B> &lt;range&gt; &lt;repl&gt; [&lt;range&gt; &lt;repl&gt;...] [&lt;version&gt;]<DD>
+Print the version string after substituting the specified version
+separators at &lt;range&gt; with &lt;repl&gt; (string).  Multiple '&lt;range&gt; &lt;repl&gt;'
+pairs can be specified.  Processes &lt;version&gt; if specified,
+${PV} otherwise.
+<P>
+For the syntax of versions and ranges, please see the eclass
+description.
+<DT><B>ver_test</B> [&lt;v1&gt;] &lt;op&gt; &lt;v2&gt;<DD>
+Check if the relation &lt;v1&gt; &lt;op&gt; &lt;v2&gt; is true.  If &lt;v1&gt; is not specified,
+default to ${PVR}.  &lt;op&gt; can be -gt, -ge, -eq, -ne, -le, -lt.
+Both versions must conform to the PMS version syntax (with optional
+revision parts), and the comparison is performed according to
+the algorithm specified in the PMS.
+</DL>
+
+<H2 ID="lbAH">AUTHORS</H2>
+
+Ulrich Müller &lt;<A HREF="mailto:ulm@gentoo.org">ulm@gentoo.org</A>&gt;
+<BR>
+
+Michał Górny &lt;<A HREF="mailto:mgorny@gentoo.org">mgorny@gentoo.org</A>&gt;
+
+<H2 ID="lbAI">MAINTAINERS</H2>
+
+PMS team &lt;<A HREF="mailto:pms@gentoo.org">pms@gentoo.org</A>&gt;
+
+<H2 ID="lbAJ">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAK">FILES</H2>
+
+<B>eapi7-ver.eclass</B>
+
+
+<H2 ID="lbAL">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/eapi7-ver.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/eapi7-ver.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DL>
+<DT><A HREF="index.html#lbAD">Version strings</A><DD>
+<DT><A HREF="index.html#lbAE">Ranges</A><DD>
+</DL>
+<DT><A HREF="index.html#lbAF">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAG">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAH">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAI">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAJ">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAK">FILES</A><DD>
+<DT><A HREF="index.html#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

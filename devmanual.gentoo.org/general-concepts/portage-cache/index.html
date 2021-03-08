@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>The Portage Cache – Gentoo Development Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span> Home</a></li>
+<li class="dropdown">
+<a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></a><ul class="dropdown-menu"><li><a class="reference" href="index.html#conditional-inherits">Conditional Inherits</a></li></ul>
+</li>
+<li><a class="w-250 text-center" href="../pic/index.html"><span class="fa fa-arrow-left"></span><span class="truncated-text d-inline-block max-w-200 ml-2">Position Independent Code</span></a></li>
+<li><a class="w-250 text-center" href="../projects/index.html"><span class="truncated-text d-inline-block max-w-200 mr-2">Projects</span><span class="fa fa-arrow-right"></span></a></li>
+</ul></div>
+</div></div></nav><nav class="navbar navbar-grey navbar-stick" id="devmanual-actions" role="navigation"><div class="container"><div class="row"><div class="input-group">
+<input type="search" name="search" placeholder="Search" title="Search Gentoo Developer Manual [f]" accesskey="f" id="searchInput" class="form-control" onclick="fetchDocuments()"><div class="input-group-btn"><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton btn btn-default" onclick="search()"></div>
+</div></div></div></nav><div id="searchResults" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Search Results</h4>
+</div>
+<div class="modal-body"><p>No results found.</p></div>
+<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+</div></div></div>
+<div class="container"><div class="row"><div class="col-md010"><ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">General Concepts</a></li>
+</ol></div></div></div></header><main><div class="container">
+<h1 class="first-header">The Portage Cache</h1>
+<p>
+Portage uses a cache for most top-level variables (<code class="docutils literal"><span class="pre">DEPEND</span></code>, <code class="docutils literal"><span class="pre">DESCRIPTION</span></code>,
+<code class="docutils literal"><span class="pre">SRC_URI</span></code> and so on). This cache may be generated on a different machine, so
+these variables must be either static or generated using only unchanging
+'version / name' variables (<code class="docutils literal"><span class="pre">P</span></code>, <code class="docutils literal"><span class="pre">PN</span></code>, <code class="docutils literal"><span class="pre">PV</span></code>, <code class="docutils literal"><span class="pre">PR</span></code>, <code class="docutils literal"><span class="pre">PVR</span></code> and <code class="docutils literal"><span class="pre">PF</span></code>).
+</p>
+
+<p>
+So, the following will not work:
+</p>
+
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">DO</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">NOT</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">DO</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">THIS!</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">if</span> ! <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">has_version</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>x11-libs/gtk+<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">;</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">then</span>
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${DEPEND}</span>
+		gtk?  <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span>x11-libs/gtk+-2 <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span>
+		!gtk? <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier"></span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span>x11-libs/gtk+-1.2* <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">fi</span>
+</span></pre>
+
+<p>
+However, this is legal, since <code class="docutils literal"><span class="pre">eapi7-ver.eclass</span></code> works upon <code class="docutils literal"><span class="pre">PV</span></code>, and
+<code class="docutils literal"><span class="pre">PV</span></code> and <code class="docutils literal"><span class="pre">PN</span></code> are both static:
+</p>
+
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">inherit</span> eapi7-ver
+
+<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">if</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">ver_test</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">-ge</span> 7.0 <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">;</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">then</span>
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">IUSE</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${IUSE}</span> tcltk mzscheme<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${DEPEND}</span>
+		tcltk?    <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> dev-lang/tcl <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span>
+		mzscheme? <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> dev-lisp/mzscheme <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">RDEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${RDEPEND}</span>
+		tcltk?    <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> dev-lang/tcl <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span>
+		mzscheme? <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> dev-lisp/mzscheme <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">if</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">[[</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${MY_PN}</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">!</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>vim-core<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">]]</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">;</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">then</span>
+		<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">RDEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${RDEPEND}</span> !&lt;app-vim/align-30-r1<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">fi</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">fi</span>
+</span></pre>
+<div class="section">
+<h2 id="conditional-inherits">Conditional Inherits</h2>
+<p>
+Because eclasses modify various cached variables, conditional inheritance is not
+allowed except where the same results will always be obtained on every system.
+For example, inherits based upon <code class="docutils literal"><span class="pre">USE</span></code> flags are illegal, but inherits based
+solely upon <code class="docutils literal"><span class="pre">PN</span></code> are allowed.
+</p>
+
+<p>
+As an example of a legal and possibly useful conditional inherit, some eclasses
+or ebuilds do:
+</p>
+
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">if</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">[[</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${PV}</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier"></span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span>= 9999 ]]; <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">then</span>
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">inherit</span> git-r3
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">EGIT_REPO_URI</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>https://anongit.gentoo.org/git/proj/devmanual.git<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">else</span>
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">SRC_URI</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>https://dev.gentoo.org/~ulm/distfiles/<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${P}</span>.tar.xz<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">KEYWORDS</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>~amd64 ~arm ~hppa ~ppc ~ppc64 ~sparc ~x86<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">fi</span>
+</span></pre>
+
+<p>
+This allows the same eclass (or the same ebuild "template") to be used for both
+regular and live packages.
+</p>
+</div>
+</div></main><footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+                Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+              </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script><script src="/assets.gentoo.org/lunr/lunr.min.js"></script><script>var documentsSrc = "../../documents.js"</script><script src="../../search.js"></script>
+</body>
+</html>

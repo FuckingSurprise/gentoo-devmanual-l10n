@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>systemd.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>SYSTEMD.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+systemd.eclass - helper functions to install systemd units
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+This eclass provides a set of functions to install unit files for
+sys-apps/systemd within ebuilds.
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+0 1 2 3 4 5 6 7
+
+<H2 ID="lbAE">EXAMPLE</H2>
+
+<P>
+<PRE>
+inherit systemd
+
+src_configure() {
+local myconf=(
+        --enable-foo
+        --with-systemdsystemunitdir=&quot;$(systemd_get_systemunitdir)&quot;
+)
+
+econf &quot;${myconf[@]}&quot;
+}
+</PRE>
+
+
+<H2 ID="lbAF">FUNCTIONS</H2>
+
+<DL>
+<DT><B>systemd_get_systemunitdir</B> <DD>
+Output the path for the systemd system unit directory (not including
+${D}).  This function always succeeds, even if systemd is not
+installed.
+<DT><B>systemd_get_unitdir</B> <DD>
+Deprecated alias for systemd_get_systemunitdir.
+<DT><B>systemd_get_userunitdir</B> <DD>
+Output the path for the systemd user unit directory (not including
+${D}). This function always succeeds, even if systemd is not
+installed.
+<DT><B>systemd_get_utildir</B> <DD>
+Output the path for the systemd utility directory (not including
+${D}). This function always succeeds, even if systemd is not
+installed.
+<DT><B>systemd_get_systemgeneratordir</B> <DD>
+Output the path for the systemd system generator directory (not including
+${D}). This function always succeeds, even if systemd is not
+installed.
+<DT><B>systemd_dounit</B> &lt;unit&gt;...<DD>
+Install systemd unit(s). Uses doins, thus it is fatal in EAPI 4
+and non-fatal in earlier EAPIs.
+<DT><B>systemd_newunit</B> &lt;old-name&gt; &lt;new-name&gt;<DD>
+Install systemd unit with a new name. Uses newins, thus it is fatal
+in EAPI 4 and non-fatal in earlier EAPIs.
+<DT><B>systemd_douserunit</B> &lt;unit&gt;...<DD>
+Install systemd user unit(s). Uses doins, thus it is fatal in EAPI 4
+and non-fatal in earlier EAPIs.
+<DT><B>systemd_newuserunit</B> &lt;old-name&gt; &lt;new-name&gt;<DD>
+Install systemd user unit with a new name. Uses newins, thus it
+is fatal in EAPI 4 and non-fatal in earlier EAPIs.
+<DT><B>systemd_install_serviced</B> &lt;conf-file&gt; [&lt;service&gt;]<DD>
+Install &lt;conf-file&gt; as the template &lt;service&gt;.d/00gentoo.conf.
+If &lt;service&gt; is not specified
+&lt;conf-file&gt; with the .conf suffix stripped is used
+(e.g. foo.service.conf -&gt; foo.service.d/00gentoo.conf).
+<DT><B>systemd_dotmpfilesd</B> &lt;tmpfilesd&gt;...<DD>
+Deprecated in favor of tmpfiles.eclass.
+<P>
+Install systemd tmpfiles.d files. Uses doins, thus it is fatal
+in EAPI 4 and non-fatal in earlier EAPIs.
+<DT><B>systemd_newtmpfilesd</B> &lt;old-name&gt; &lt;new-name&gt;.conf<DD>
+Deprecated in favor of tmpfiles.eclass.
+<P>
+Install systemd tmpfiles.d file under a new name. Uses newins, thus it
+is fatal in EAPI 4 and non-fatal in earlier EAPIs.
+<DT><B>systemd_enable_service</B> &lt;target&gt; &lt;service&gt;<DD>
+Enable service in desired target, e.g. install a symlink for it.
+Uses dosym, thus it is fatal in EAPI 4 and non-fatal in earlier
+EAPIs.
+<DT><B>systemd_enable_ntpunit</B> &lt;NN-name&gt; &lt;service&gt;...<DD>
+Add an NTP service provider to the list of implementations
+in timedated. &lt;NN-name&gt; defines the newly-created ntp-units.d priority
+and name, while the remaining arguments list service units that will
+be added to that file.
+<P>
+Uses doins, thus it is fatal in EAPI 4 and non-fatal in earlier
+EAPIs.
+<P>
+Doc: <A HREF="https://www.freedesktop.org/wiki/Software/systemd/timedated/">https://www.freedesktop.org/wiki/Software/systemd/timedated/</A>
+<DT><B>systemd_with_unitdir</B> [&lt;configure-option-name&gt;]<DD>
+Note: deprecated and banned in EAPI 6. Please use full --with-...=
+parameter for improved ebuild readability.
+<P>
+Output '--with-systemdsystemunitdir' as expected by systemd-aware configure
+scripts. This function always succeeds. Its output may be quoted in order
+to preserve whitespace in paths. systemd_to_myeconfargs() is preferred over
+this function.
+<P>
+If upstream does use invalid configure option to handle installing systemd
+units (e.g. `--with-systemdunitdir'), you can pass the 'suffix' as an optional
+argument to this function (`$(systemd_with_unitdir systemdunitdir)'). Please
+remember to report a bug upstream as well.
+<DT><B>systemd_with_utildir</B> <DD>
+Note: deprecated and banned in EAPI 6. Please use full --with-...=
+parameter for improved ebuild readability.
+<P>
+Output '--with-systemdsystemutildir' as used by some packages to install
+systemd helpers. This function always succeeds. Its output may be quoted
+in order to preserve whitespace in paths.
+<DT><B>systemd_update_catalog</B> <DD>
+Update the journald catalog. This needs to be called after installing
+or removing catalog files. This must be called in pkg_post* phases.
+<P>
+If systemd is not installed, no operation will be done. The catalog
+will be (re)built once systemd is installed.
+<P>
+See: <A HREF="https://www.freedesktop.org/wiki/Software/systemd/catalog">https://www.freedesktop.org/wiki/Software/systemd/catalog</A>
+<DT><B>systemd_is_booted</B> <DD>
+Check whether the system was booted using systemd.
+<P>
+This should be used purely for informational purposes, e.g. warning
+user that he needs to use systemd. Installed files or application
+behavior *must not* rely on this. Please remember to check MERGE_TYPE
+to not trigger the check on binary package build hosts!
+<P>
+Returns 0 if systemd is used to boot the system, 1 otherwise.
+<P>
+See: man sd_booted
+<DT><B>systemd_tmpfiles_create</B> &lt;tmpfilesd&gt; ...<DD>
+Deprecated in favor of tmpfiles.eclass.
+<P>
+Invokes systemd-tmpfiles --create with given arguments.
+Does nothing if ROOT != / or systemd-tmpfiles is not in PATH.
+This function should be called from pkg_postinst.
+<P>
+Generally, this function should be called with the names of any tmpfiles
+fragments which have been installed, either by the build system or by a
+previous call to systemd_dotmpfilesd. This ensures that any tmpfiles are
+created without the need to reboot the system.
+<DT><B>systemd_reenable</B> &lt;unit&gt; ...<DD>
+Re-enables units if they are currently enabled. This resets symlinks to the
+defaults specified in the [Install] section.
+<P>
+This function is intended to fix broken symlinks that result from moving
+the systemd system unit directory. It should be called from pkg_postinst
+for system units that define the 'Alias' option in their [Install] section.
+It is not necessary to call this function to fix dependency symlinks
+generated by the 'WantedBy' and 'RequiredBy' options.
+</DL>
+
+<H2 ID="lbAG">MAINTAINERS</H2>
+
+<A HREF="mailto:systemd@gentoo.org">systemd@gentoo.org</A>
+
+<H2 ID="lbAH">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAI">FILES</H2>
+
+<B>systemd.eclass</B>
+
+
+<H2 ID="lbAJ">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/systemd.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/systemd.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">EXAMPLE</A><DD>
+<DT><A HREF="index.html#lbAF">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAG">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAH">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAI">FILES</A><DD>
+<DT><A HREF="index.html#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

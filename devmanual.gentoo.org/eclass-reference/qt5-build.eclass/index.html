@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>qt5-build.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>QT5-BUILD.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+qt5-build.eclass - Eclass for Qt5 split ebuilds.
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+This eclass contains various functions that are used when building Qt5.
+Requires EAPI 7.
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+7
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>qt5-build_src_unpack</B> <DD>
+Unpacks the sources.
+<DT><B>qt5-build_src_prepare</B> <DD>
+Prepares the environment and patches the sources if necessary.
+<DT><B>qt5-build_src_configure</B> <DD>
+Runs qmake in the target directories. For packages
+in qtbase, ./configure is also run before qmake.
+<DT><B>qt5-build_src_compile</B> <DD>
+Runs emake in the target directories.
+<DT><B>qt5-build_src_test</B> <DD>
+Runs tests in the target directories.
+<DT><B>qt5-build_src_install</B> <DD>
+Runs emake install in the target directories.
+<DT><B>qt5-build_pkg_postinst</B> <DD>
+Regenerate configuration after installation or upgrade/downgrade.
+<DT><B>qt5-build_pkg_postrm</B> <DD>
+Regenerate configuration when a module is completely removed.
+<DT><B>qt_use</B> &lt;flag&gt; [feature] [enableval]<DD>
+&lt;flag&gt; is the name of a flag in IUSE.
+<P>
+Outputs &quot;-${enableval}-${feature}&quot; if &lt;flag&gt; is enabled, &quot;-no-${feature}&quot;
+otherwise. If [feature] is not specified, &lt;flag&gt; is used in its place.
+If [enableval] is not specified, the &quot;-${enableval}&quot; prefix is omitted.
+<DT><B>qt_use_compile_test</B> &lt;flag&gt; [config]<DD>
+&lt;flag&gt; is the name of a flag in IUSE.
+[config] is the argument of qtCompileTest, defaults to &lt;flag&gt;.
+<P>
+This function is useful to disable optional dependencies that are checked
+at qmake-time using the qtCompileTest() function. If &lt;flag&gt; is disabled,
+the compile test is skipped and the dependency is assumed to be unavailable,
+i.e. the corresponding feature will be disabled. Note that all invocations
+of this function must happen before calling qt5-build_src_configure.
+<DT><B>qt_use_disable_config</B> &lt;flag&gt; &lt;config&gt; &lt;files...&gt;<DD>
+&lt;flag&gt; is the name of a flag in IUSE.
+&lt;config&gt; is the (lowercase) name of a Qt5 config entry.
+&lt;files...&gt; is a list of one or more qmake project files.
+<P>
+This function patches &lt;files&gt; to treat &lt;config&gt; as disabled
+when &lt;flag&gt; is disabled, otherwise it does nothing.
+This can be useful to avoid an automagic dependency when the config entry
+is enabled on the system but the corresponding USE flag is disabled.
+<DT><B>qt_use_disable_mod</B> &lt;flag&gt; &lt;module&gt; &lt;files...&gt;<DD>
+&lt;flag&gt; is the name of a flag in IUSE.
+&lt;module&gt; is the (lowercase) name of a Qt5 module.
+&lt;files...&gt; is a list of one or more qmake project files.
+<P>
+This function patches &lt;files&gt; to treat &lt;module&gt; as not installed
+when &lt;flag&gt; is disabled, otherwise it does nothing.
+This can be useful to avoid an automagic dependency when the module
+is present on the system but the corresponding USE flag is disabled.
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>QT5_MODULE</B> ?= <I>${PN}</I> (SET BEFORE INHERIT)<DD>
+The upstream name of the module this package belongs to. Used for
+SRC_URI and EGIT_REPO_URI. Must be set before inheriting the eclass.
+<DT><B>QT5_TARGET_SUBDIRS</B><DD>
+Array variable containing the source directories that should be built.
+All paths must be relative to ${S}.
+<DT><B>QT5_GENTOO_CONFIG</B><DD>
+Array of &lt;useflag:feature:macro&gt; triplets that are evaluated in src_install
+to generate the per-package list of enabled QT_CONFIG features and macro
+definitions, which are then merged together with all other Qt5 packages
+installed on the system to obtain the global qconfig.{h,pri} files.
+<DT><B>QT5_GENTOO_PRIVATE_CONFIG</B><DD>
+Array of &lt;useflag:feature&gt; pairs that are evaluated in src_install
+to generate the per-package list of enabled QT.global_private features,
+which are then merged together with all other Qt5 packages installed on the
+system to obtain the global qmodule.pri file.
+<DT><B>VIRTUALX_REQUIRED</B> ?= <I>manual</I><DD>
+For proper description see virtualx.eclass man page.
+Here we redefine default value to be manual, if your package needs virtualx
+for tests you should proceed with setting VIRTUALX_REQUIRED=test.
+<DT><B>QT5_BUILD_DIR</B> ?= <I>${S}_build</I> (GENERATED BY ECLASS)<DD>
+Build directory for out-of-source builds.
+</DL>
+
+<H2 ID="lbAG">AUTHORS</H2>
+
+Davide Pesavento &lt;<A HREF="mailto:pesa@gentoo.org">pesa@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">MAINTAINERS</H2>
+
+<A HREF="mailto:qt@gentoo.org">qt@gentoo.org</A>
+
+<H2 ID="lbAI">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAJ">FILES</H2>
+
+<B>qt5-build.eclass</B>
+
+
+<H2 ID="lbAK">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/qt5-build.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/qt5-build.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAH">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAI">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAJ">FILES</A><DD>
+<DT><A HREF="index.html#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>subversion.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>SUBVERSION.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+subversion.eclass - Fetch software sources from subversion repositories
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+The subversion eclass provides functions to fetch, patch and bootstrap
+software sources from subversion repositories.
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+4 5 6 7
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>subversion_fetch</B> [repo_uri] [destination]<DD>
+Wrapper function to fetch sources from subversion via svn checkout or svn update,
+depending on whether there is an existing working copy in ${ESVN_STORE_DIR}.
+<P>
+Can take two optional parameters:
+<BR>&nbsp;&nbsp;repo_uri&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;a&nbsp;repository&nbsp;URI.&nbsp;default&nbsp;is&nbsp;ESVN_REPO_URI.
+<BR>&nbsp;&nbsp;destination&nbsp;-&nbsp;a&nbsp;check&nbsp;out&nbsp;path&nbsp;in&nbsp;S.
+<DT><B>subversion_bootstrap</B> <DD>
+Apply patches in ${ESVN_PATCHES} and run ${ESVN_BOOTSTRAP} if specified.
+Removed in EAPI 6 and later.
+<DT><B>subversion_wc_info</B> [repo_uri]<DD>
+Get svn info for the specified repo_uri. The default repo_uri is ESVN_REPO_URI.
+<P>
+The working copy information on the specified repository URI are set to
+ESVN_WC_* variables.
+<P>
+Return value: ESVN_WC_URL, ESVN_WC_ROOT, ESVN_WC_UUID, ESVN_WC_REVISION and ESVN_WC_PATH
+<DT><B>subversion_src_unpack</B> <DD>
+Default src_unpack. Fetch.
+<DT><B>subversion_src_prepare</B> <DD>
+Default src_prepare. Bootstrap.
+Removed in EAPI 6 and later.
+<DT><B>subversion_pkg_preinst</B> [repo_uri]<DD>
+Log the svn revision of source code. Doing this in pkg_preinst because we
+want the logs to stick around if packages are uninstalled without messing with
+config protection.
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>ESVN_STORE_DIR</B> = <I>&quot;${PORTAGE_ACTUAL_DISTDIR:-${DISTDIR}}/svn-src&quot;</I><DD>
+subversion sources store directory. Users may override this in /etc/portage/make.conf
+<DT><B>ESVN_FETCH_CMD</B> = <I>&quot;svn checkout&quot;</I><DD>
+subversion checkout command
+<DT><B>ESVN_UPDATE_CMD</B> = <I>&quot;svn update&quot;</I><DD>
+subversion update command
+<DT><B>ESVN_SWITCH_CMD</B> = <I>&quot;svn switch&quot;</I><DD>
+subversion switch command
+<DT><B>ESVN_OPTIONS</B> = <I>&quot;${ESVN_OPTIONS:-}&quot;</I><DD>
+the options passed to checkout or update. If you want a specific revision see
+ESVN_REPO_URI instead of using -rREV.
+<DT><B>ESVN_REPO_URI</B> = <I>&quot;${ESVN_REPO_URI:-}&quot;</I><DD>
+repository uri
+<P>
+e.g. <A HREF="http://example.org/trunk,">http://example.org/trunk,</A> <A HREF="svn://example.org/branch/foo@1234">svn://example.org/branch/foo@1234</A>
+<P>
+supported URI schemes:
+<BR>&nbsp;&nbsp;http://
+<BR>&nbsp;&nbsp;https://
+<BR>&nbsp;&nbsp;svn://
+<BR>&nbsp;&nbsp;svn+ssh://
+<BR>&nbsp;&nbsp;file://
+<P>
+to peg to a specific revision, append @REV to the repo's uri
+<DT><B>ESVN_REVISION</B> = <I>&quot;${ESVN_REVISION:-}&quot;</I><DD>
+User configurable revision checkout or update to from the repository
+<P>
+Useful for live svn or trunk svn ebuilds allowing the user to peg
+to a specific revision
+<P>
+Note: This should never be set in an ebuild!
+<DT><B>ESVN_USER</B> = <I>&quot;${ESVN_USER:-}&quot;</I><DD>
+User name
+<DT><B>ESVN_PASSWORD</B> = <I>&quot;${ESVN_PASSWORD:-}&quot;</I><DD>
+Password
+<DT><B>ESVN_PROJECT</B> = <I>&quot;${ESVN_PROJECT:-${PN/-svn}}&quot;</I><DD>
+project name of your ebuild (= name space)
+<P>
+subversion eclass will check out the subversion repository like:
+<P>
+<BR>&nbsp;&nbsp;${ESVN_STORE_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/}
+<P>
+so if you define ESVN_REPO_URI as <A HREF="http://svn.collab.net/repo/svn/trunk">http://svn.collab.net/repo/svn/trunk</A> or
+<A HREF="http://svn.collab.net/repo/svn/trunk/.">http://svn.collab.net/repo/svn/trunk/.</A> and PN is subversion-svn.
+it will check out like:
+<P>
+<BR>&nbsp;&nbsp;${ESVN_STORE_DIR}/subversion/trunk
+<P>
+this is not used in order to declare the name of the upstream project.
+so that you can declare this like:
+<P>
+<BR>&nbsp;&nbsp;#&nbsp;jakarta&nbsp;commons-loggin
+<BR>&nbsp;&nbsp;ESVN_PROJECT=commons/logging
+<P>
+default: ${PN/-svn}.
+<DT><B>ESVN_BOOTSTRAP</B> = <I>&quot;${ESVN_BOOTSTRAP:-}&quot;</I><DD>
+Bootstrap script or command like autogen.sh or etc..
+Removed in EAPI 6 and later.
+<DT><B>ESVN_PATCHES</B> = <I>&quot;${ESVN_PATCHES:-}&quot;</I><DD>
+subversion eclass can apply patches in subversion_bootstrap().
+you can use regexp in this variable like *.diff or *.patch or etc.
+NOTE: patches will be applied before ESVN_BOOTSTRAP is processed.
+<P>
+Patches are searched both in ${PWD} and ${FILESDIR}, if not found in either
+location, the installation dies.
+<P>
+Removed in EAPI 6 and later, use PATCHES instead.
+<DT><B>ESVN_RESTRICT</B> = <I>&quot;${ESVN_RESTRICT:-}&quot;</I><DD>
+this should be a space delimited list of subversion eclass features to
+restrict.
+<BR>&nbsp;&nbsp;export)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;don't&nbsp;export&nbsp;the&nbsp;working&nbsp;copy&nbsp;to&nbsp;S.
+<DT><B>ESVN_OFFLINE</B> = <I>&quot;${ESVN_OFFLINE:-${EVCS_OFFLINE}}&quot;</I><DD>
+Set this variable to a non-empty value to disable the automatic updating of
+an svn source tree. This is intended to be set outside the subversion source
+tree by users.
+<DT><B>ESVN_UMASK</B> = <I>&quot;${ESVN_UMASK:-${EVCS_UMASK}}&quot;</I><DD>
+Set this variable to a custom umask. This is intended to be set by users.
+By setting this to something like 002, it can make life easier for people
+who do development as non-root (but are in the portage group), and then
+switch over to building with FEATURES=userpriv.  Or vice-versa.  Shouldn't
+be a security issue here as anyone who has portage group write access
+already can screw the system over in more creative ways.
+<DT><B>ESVN_UP_FREQ</B> = <I>&quot;${ESVN_UP_FREQ:=}&quot;</I><DD>
+Set the minimum number of hours between svn up'ing in any given svn module. This is particularly
+useful for split KDE ebuilds where we want to ensure that all submodules are compiled for the same
+revision. It should also be kept user overrideable.
+<DT><B>ESCM_LOGDIR</B> = <I>&quot;${ESCM_LOGDIR:=}&quot;</I><DD>
+User configuration variable. If set to a path such as e.g. /var/log/scm any
+package inheriting from subversion.eclass will record svn revision to
+${CATEGORY}/${PN}.log in that path in pkg_preinst. This is not supposed to be
+set by ebuilds/eclasses. It defaults to empty so users need to opt in.
+</DL>
+
+<H2 ID="lbAG">AUTHORS</H2>
+
+Original Author: Akinori Hattori &lt;<A HREF="mailto:hattya@gentoo.org">hattya@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">MAINTAINERS</H2>
+
+Akinori Hattori &lt;<A HREF="mailto:hattya@gentoo.org">hattya@gentoo.org</A>&gt;
+
+<H2 ID="lbAI">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAJ">FILES</H2>
+
+<B>subversion.eclass</B>
+
+
+<H2 ID="lbAK">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/subversion.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/subversion.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAH">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAI">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAJ">FILES</A><DD>
+<DT><A HREF="index.html#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

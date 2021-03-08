@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>versionator.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>VERSIONATOR.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+versionator.eclass - functions which simplify manipulation of ${PV} and similar version strings
+
+<H2 ID="lbAC">DEPRECATED</H2>
+
+Replacement: ver_* functions from EAPI 7
+
+<H2 ID="lbAD">DESCRIPTION</H2>
+
+This eclass provides functions which simplify manipulating $PV and similar
+variables. Most functions default to working with $PV, although other
+values can be used.
+
+<H2 ID="lbAE">SUPPORTED EAPIS</H2>
+
+0 1 2 3 4 5 6
+
+<H2 ID="lbAF">EXAMPLE</H2>
+
+Simple Example 1: $PV is 1.2.3b, we want 1_2.3b:
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;MY_PV=$(replace_version_separator&nbsp;1&nbsp;'_'&nbsp;)
+<P>
+Simple Example 2: $PV is 1.4.5, we want 1:
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;MY_MAJORV=$(get_major_version&nbsp;)
+<P>
+Rather than being a number, the index parameter can be a separator character
+such as '-', '.' or '_'. In this case, the first separator of this kind is
+selected.
+<P>
+There's also:
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;version_is_at_least&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;want&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;have
+<BR>&nbsp;which&nbsp;may&nbsp;be&nbsp;buggy,&nbsp;so&nbsp;use&nbsp;with&nbsp;caution.
+
+<H2 ID="lbAG">FUNCTIONS</H2>
+
+<DL>
+<DT><B>get_all_version_components</B> [version]<DD>
+Split up a version string into its component parts. If no parameter is
+supplied, defaults to $PV.
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;0.8.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;0&nbsp;.&nbsp;8&nbsp;.&nbsp;3
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;7c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;7&nbsp;c
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.0_p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;3&nbsp;.&nbsp;0&nbsp;_&nbsp;p2
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;20040905&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;20040905
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.0c-r1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;3&nbsp;.&nbsp;0&nbsp;c&nbsp;-&nbsp;r1
+<DT><B>get_version_components</B> [version]<DD>
+Get the important version components, excluding '.', '-' and '_'. Defaults to
+$PV if no parameter is supplied.
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;0.8.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;0&nbsp;8&nbsp;3
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;7c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;7&nbsp;c
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.0_p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;3&nbsp;0&nbsp;p2
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;20040905&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;20040905
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.0c-r1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;3&nbsp;0&nbsp;c&nbsp;r1
+<DT><B>get_major_version</B> [version]<DD>
+Get the major version of a value. Defaults to $PV if no parameter is supplied.
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;0.8.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;0
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;7c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;7
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.0_p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;3
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;20040905&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;20040905
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.0c-r1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;3
+<DT><B>get_version_component_range</B> &lt;range&gt; [version]<DD>
+Get a particular component or range of components from the version. If no
+version parameter is supplied, defaults to $PV.
+<BR>&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;1
+<BR>&nbsp;&nbsp;&nbsp;1-2&nbsp;&nbsp;&nbsp;&nbsp;1.2.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;1.2
+<BR>&nbsp;&nbsp;&nbsp;2-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;2.3
+<DT><B>get_after_major_version</B> [version]<DD>
+Get everything after the major version and its separator (if present) of a
+value. Defaults to $PV if no parameter is supplied.
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;0.8.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;8.3
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;7c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;c
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.0_p2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;0_p2
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;20040905&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;(empty&nbsp;string)
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.0c-r1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;0c-r1
+<DT><B>replace_version_separator</B> &lt;search&gt; &lt;replacement&gt; [subject]<DD>
+Replace the $1th separator with $2 in $3 (defaults to $PV if $3 is not
+supplied). If there are fewer than $1 separators, don't change anything.
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;'_'&nbsp;1.2.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;1_2.3
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;'_'&nbsp;1.2.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;1.2_3
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;'_'&nbsp;1b-2.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;1b_2.3
+Rather than being a number, $1 can be a separator character such as '-', '.'
+or '_'. In this case, the first separator of this kind is selected.
+<DT><B>replace_all_version_separators</B> &lt;replacement&gt; [subject]<DD>
+Replace all version separators in $2 (defaults to $PV) with $1.
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;'_'&nbsp;1b.2.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;1b_2_3
+<DT><B>delete_version_separator</B> &lt;search&gt; [subject]<DD>
+Delete the $1th separator in $2 (defaults to $PV if $2 is not supplied). If
+there are fewer than $1 separators, don't change anything.
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;1.2.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;12.3
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;1.2.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;1.23
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;1b-2.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;1b2.3
+Rather than being a number, $1 can be a separator character such as '-', '.'
+or '_'. In this case, the first separator of this kind is deleted.
+<DT><B>delete_all_version_separators</B> [subject]<DD>
+Delete all version separators in $1 (defaults to $PV).
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;1b.2.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;1b23
+<DT><B>get_version_component_count</B> [version]<DD>
+How many version components are there in $1 (defaults to $PV)?
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;1.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;3
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.0c-r1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;4
+<DT><B>get_last_version_component_index</B> [version]<DD>
+What is the index of the last version component in $1 (defaults to $PV)?
+Equivalent to get_version_component_count - 1.
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;1.0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;2
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;3.0c-r1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&gt;&nbsp;&nbsp;3
+<DT><B>version_is_at_least</B> &lt;want&gt; [have]<DD>
+Is $2 (defaults to $PVR) at least version $1? Intended for use in eclasses
+only. May not be reliable, be sure to do very careful testing before actually
+using this.
+<DT><B>version_compare</B> &lt;A&gt; &lt;B&gt;<DD>
+Takes two parameters (A, B) which are versions. If A is an earlier version
+than B, returns 1. If A is identical to B, return 2. If A is later than B,
+return 3. You probably want version_is_at_least rather than this function.
+May not be very reliable. Test carefully before using this.
+<DT><B>version_sort</B> &lt;version&gt; [more versions...]<DD>
+Returns its parameters sorted, highest version last. We're using a quadratic
+algorithm for simplicity, so don't call it with more than a few dozen items.
+Uses version_compare, so be careful.
+<DT><B>version_format_string</B> &lt;format&gt; [version]<DD>
+Reformat complicated version strings.  The first argument is the string
+to reformat with while the rest of the args are passed on to the
+get_version_components function.  You should make sure to single quote
+the first argument since it'll have variables that get delayed expansions.
+</DL>
+
+<H2 ID="lbAH">MAINTAINERS</H2>
+
+Jonathan Callen &lt;<A HREF="mailto:jcallen@gentoo.org">jcallen@gentoo.org</A>&gt;
+<BR>
+
+<A HREF="mailto:base-system@gentoo.org">base-system@gentoo.org</A>
+
+<H2 ID="lbAI">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAJ">FILES</H2>
+
+<B>versionator.eclass</B>
+
+
+<H2 ID="lbAK">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/versionator.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/versionator.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DEPRECATED</A><DD>
+<DT><A HREF="index.html#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAE">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAF">EXAMPLE</A><DD>
+<DT><A HREF="index.html#lbAG">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAH">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAI">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAJ">FILES</A><DD>
+<DT><A HREF="index.html#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

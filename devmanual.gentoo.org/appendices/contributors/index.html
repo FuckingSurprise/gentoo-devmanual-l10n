@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Contributions – Gentoo Development Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span> Home</a></li>
+<li class="dropdown"><a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></a></li>
+<li><a class="w-250 text-center" href="../devbook-guide/index.html"><span class="fa fa-arrow-left"></span><span class="truncated-text d-inline-block max-w-200 ml-2">Gentoo DevBook XML Guide</span></a></li>
+<li><a class="w-250 text-center" href="../todo-list/index.html"><span class="truncated-text d-inline-block max-w-200 mr-2">TODO List</span><span class="fa fa-arrow-right"></span></a></li>
+</ul></div>
+</div></div></nav><nav class="navbar navbar-grey navbar-stick" id="devmanual-actions" role="navigation"><div class="container"><div class="row"><div class="input-group">
+<input type="search" name="search" placeholder="Search" title="Search Gentoo Developer Manual [f]" accesskey="f" id="searchInput" class="form-control" onclick="fetchDocuments()"><div class="input-group-btn"><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton btn btn-default" onclick="search()"></div>
+</div></div></div></nav><div id="searchResults" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Search Results</h4>
+</div>
+<div class="modal-body"><p>No results found.</p></div>
+<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+</div></div></div>
+<div class="container"><div class="row"><div class="col-md010"><ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Appendices</a></li>
+</ol></div></div></div></header><main><div class="container">
+<h1 class="first-header">Contributions</h1>
+
+<p>
+This page lists the contributions to the Gentoo Development Guide:
+</p>
+
+<dl>
+<dt>Ciaran McCreesh &lt;<a href="mailto:ciaran.mccreesh@blueyonder.co.uk">ciaran.mccreesh@blueyonder.co.uk</a>&gt;</dt>
+<dd>
+  Main Content
+</dd>
+<dt>Grant Goodyear &lt;<a href="mailto:g2boojum@gentoo.org">g2boojum@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../tools-reference/cat/index.html#here-documents">Here Documents</a>
+</dd>
+<dt>Aaron Walker &lt;<a href="mailto:ka0ttic@gentoo.org">ka0ttic@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../tasks-reference/completion/index.html">Completion Files</a>
+</dd>
+<dt>Robert Coie &lt;<a href="mailto:rac@gentoo.org">rac@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../editor-configuration/xemacs/index.html">Configuring XEmacs for UTF-8</a>
+</dd>
+<dt>Tom Martin &lt;<a href="mailto:slarti@gentoo.org">slarti@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../editor-configuration/emacs/index.html">Configuring GNU Emacs</a>,
+  <a class="" href="../../general-concepts/use-flags/index.html#conflicting-use-flags">Conflicting USE Flags</a>
+</dd>
+<dt>Paul Varner &lt;<a href="mailto:fuzzyray@gentoo.org">fuzzyray@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../ebuild-writing/functions/src_unpack/rpm-sources/index.html">RPM Sources</a>
+</dd>
+<dt>Ilya Volynets-Evenbakh &lt;<a href="mailto:iluxa@gentoo.org">iluxa@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../archs/mips/index.html#mips-abis">MIPS ABIs</a>
+</dd>
+<dt>Diego Pettenò &lt;<a href="mailto:flameeyes@gentoo.org">flameeyes@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../tasks-reference/pam/index.html">Working with PAM</a>,
+  <a class="" href="../../general-concepts/autotools/index.html#aclocal-and-m4-files">aclocal and m4 Files</a>
+</dd>
+<dt>Fernando J. Pereda &lt;<a href="mailto:ferdy@gentoo.org">ferdy@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../archs/alpha/index.html">Arch Specific Notes — Alpha</a>
+</dd>
+<dt>Simon Stelling &lt;<a href="mailto:blubb@gentoo.org">blubb@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../archs/amd64/index.html">Arch Specific Notes — AMD64/EM64T</a>
+</dd>
+<dt>Alin Dobre &lt;<a href="mailto:alin@gentoo.org">alin@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../tools-reference/echo/index.html">echo — Print Strings</a>
+</dd>
+<dt>Joseph Jezak &lt;<a href="mailto:josejx@gentoo.org">josejx@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../archs/ppc/index.html">Arch Specific Notes — PPC</a>
+</dd>
+<dt>Ursula Maplehurst &lt;<a href="mailto:plasm@roo.me.uk">plasm@roo.me.uk</a>&gt;</dt>
+<dd>
+  Previous maintainer (XSL Stylesheets, legacy Developer Handbook content)
+</dd>
+<dt>Mark Loeser &lt;<a href="mailto:halcy0n@gentoo.org">halcy0n@gentoo.org</a>&gt;</dt>
+<dd>
+  XSL Stylesheets, previous maintainer
+</dd>
+<dt>Petteri Räty &lt;<a href="mailto:betelgeuse@gentoo.org">betelgeuse@gentoo.org</a>&gt;</dt>
+<dd>
+<a class="" href="../../ebuild-writing/index.html">Ebuild Writing</a>,
+<a class="" href="../../eclass-writing/index.html">Eclass Writing Guide</a>,
+<a class="" href="../../general-concepts/dependencies/index.html">Dependencies</a>,
+Misc
+</dd>
+<dt>Ulrich Müller &lt;<a href="mailto:ulm@gentoo.org">ulm@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../quickstart/index.html">Quickstart Ebuild Guide</a>,
+  <a class="" href="../../general-concepts/virtuals/index.html">Virtuals</a>,
+  <a class="" href="../../ebuild-writing/index.html">Ebuild Writing</a>,
+  <a class="" href="../../ebuild-maintenance/index.html">Ebuild Maintenance</a>,
+  <a class="" href="../editor-configuration/emacs/index.html">Configuring GNU Emacs</a>,
+  <a class="" href="../devbook-guide/index.html">Gentoo DevBook XML Guide</a>,
+  DTD, XSL stylesheet, eclass conversion
+</dd>
+<dt>Mike Pagano &lt;<a href="mailto:mpagano@gentoo.org">mpagano@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../general-concepts/news/index.html">News Items</a>
+</dd>
+<dt>Markus Meier &lt;<a href="mailto:maekke@gentoo.org">maekke@gentoo.org</a>&gt;</dt>
+<dd>
+  Misc
+</dd>
+<dt>Markos Chandras &lt;<a href="mailto:hwoarang@gentoo.org">hwoarang@gentoo.org</a>&gt;</dt>
+<dd>
+  Misc
+</dd>
+<dt>Xavier Neys &lt;<a href="mailto:neysx@gentoo.org">neysx@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../devbook-guide/index.html">GuideXML guide</a>
+</dd>
+<dt>Daniel Robbins &lt;<a href="mailto:drobbins@gentoo.org">drobbins@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../devbook-guide/index.html">GuideXML guide</a>
+</dd>
+<dt>Jeremy Olexa &lt;<a href="mailto:darkside@gentoo.org">darkside@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../general-concepts/use-flags/index.html">USE Flags</a>
+</dd>
+<dt>Julian Ospald &lt;<a href="mailto:hasufell@gentoo.org">hasufell@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../ebuild-writing/common-mistakes/index.html">Common Mistakes</a>,
+  <a class="" href="../../tools-reference/find/index.html">find — Finding Files</a>
+</dd>
+<dt>Alexandre Rostovtsev &lt;<a href="mailto:tetromino@gentoo.org">tetromino@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../general-concepts/slotting/index.html">Slotting</a>
+</dd>
+<dt>Göktürk Yüksek &lt;<a href="mailto:gokturk@gentoo.org">gokturk@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../general-concepts/projects/index.html">Projects</a>,
+  <a class="" href="../../ebuild-writing/variables/index.html">Variables</a>,
+  <a class="" href="../../ebuild-writing/misc-files/metadata/index.html">Package and Category metadata.xml</a>,
+  <a class="" href="../../eclass-writing/index.html">Eclass Writing Guide</a>,
+  <a class="" href="../devbook-guide/index.html">Gentoo DevBook XML Guide</a>,
+  search functionality
+</dd>
+<dt>Michael Orlitzky &lt;<a href="mailto:mjo@gentoo.org">mjo@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../ebuild-writing/users-and-groups/index.html">Users and Groups</a>,
+  <a class="" href="../../eclass-writing/index.html">Eclass Writing Guide</a>
+</dd>
+<dt>Michał Górny &lt;<a href="mailto:mgorny@gentoo.org">mgorny@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../general-concepts/index.html">General Concepts</a>,
+  <a class="" href="../../ebuild-writing/users-and-groups/index.html">Users and Groups</a>,
+  <a class="" href="../../ebuild-writing/variables/index.html">Variables</a>,
+  <a class="" href="../../ebuild-writing/functions/src_test/index.html">src_test</a>,
+  <a class="" href="../../ebuild-maintenance/index.html">Ebuild Maintenance</a>
+</dd>
+<dt>Brian Evans &lt;<a href="mailto:grknight@gentoo.org">grknight@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../ebuild-writing/eapi/index.html">EAPI Usage and Description</a>,
+  <a class="" href="../../ebuild-writing/variables/index.html">Variables</a>,
+  <a class="" href="../../ebuild-writing/functions/src_prepare/epatch/index.html">Patching with epatch and eapply</a>
+</dd>
+<dt>Lucas Ramage &lt;<a href="mailto:ramage.lucas@protonmail.com">ramage.lucas@protonmail.com</a>&gt;</dt>
+<dd>
+  Search functionality
+</dd>
+<dt>Mike Frysinger &lt;<a href="mailto:vapier@gentoo.org">vapier@gentoo.org</a>&gt;</dt>
+<dd>
+  <a class="" href="../../ebuild-writing/misc-files/patches/index.html#clean-patch-howto">Clean Patch Howto</a>
+</dd>
+</dl>
+
+
+</div></main><footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+                Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+              </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script><script src="/assets.gentoo.org/lunr/lunr.min.js"></script><script>var documentsSrc = "../../documents.js"</script><script src="../../search.js"></script>
+</body>
+</html>

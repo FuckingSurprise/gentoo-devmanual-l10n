@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>ruby-ng.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>RUBY-NG.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+ruby-ng.eclass - An eclass for installing Ruby packages with proper support for multiple Ruby slots.
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+The Ruby eclass is designed to allow an easier installation of Ruby packages
+and their incorporation into the Gentoo Linux system.
+<P>
+Currently available targets are listed in ruby-utils.eclass
+<P>
+This eclass does not define the implementation of the configure,
+compile, test, or install phases. Instead, the default phases are
+used.  Specific implementations of these phases can be provided in
+the ebuild either to be run for each Ruby implementation, or for all
+Ruby implementations, as follows:
+<P>
+<BR>&nbsp;*&nbsp;each_ruby_configure
+<BR>&nbsp;*&nbsp;all_ruby_configure
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+4 5 6 7
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>ruby_implementation_depend</B> target [comparator [version]]<DD>
+This function returns the formal package atom for a Ruby implementation.
+<P>
+`target' has to be one of the valid values for USE_RUBY (see above)
+<P>
+Set `comparator' and `version' to include a comparator (=, &gt;=, etc.) and a
+version string to the returned string
+<P>
+Return value: Package atom of a Ruby implementation to be used in dependencies.
+<DT><B>ruby_samelib</B> <DD>
+Convenience function to output the use dependency part of a
+dependency. Used as a building block for ruby_add_rdepend() and
+ruby_add_bdepend(), but may also be useful in an ebuild to specify
+more complex dependencies.
+<P>
+Return value: use flag string with current ruby implementations
+<DT><B>ruby_implementation_command</B> <DD>
+Not all implementations have the same command basename as the
+target; This function translate between the two
+<P>
+Return value: the path to the given ruby implementation
+<DT><B>ruby_add_rdepend</B> dependencies<DD>
+Adds the specified dependencies, with use condition(s) to RDEPEND,
+taking the current set of ruby targets into account. This makes sure
+that all ruby dependencies of the package are installed for the same
+ruby targets. Use this function for all ruby dependencies instead of
+setting RDEPEND yourself. The list of atoms uses the same syntax as
+normal dependencies.
+<P>
+Note: runtime dependencies are also added as build-time test
+dependencies.
+<DT><B>ruby_add_bdepend</B> dependencies<DD>
+Adds the specified dependencies, with use condition(s) to DEPEND (or
+BDEPEND in EAPI7), taking the current set of ruby targets into
+account. This makes sure that all ruby dependencies of the package are
+installed for the same ruby targets. Use this function for all ruby
+dependencies instead of setting DEPEND or BDEPEND yourself. The list
+of atoms uses the same syntax as normal dependencies.
+<DT><B>ruby_add_depend</B> dependencies<DD>
+Adds the specified dependencies to DEPEND in EAPI7, similar to
+ruby_add_bdepend.
+<DT><B>ruby_get_use_implementations</B> <DD>
+Gets an array of ruby use targets enabled by the user
+<DT><B>ruby_get_use_targets</B> <DD>
+Gets an array of ruby use targets that the ebuild sets
+<DT><B>ruby_implementations_depend</B> <DD>
+Produces the dependency string for the various implementations of ruby
+which the package is being built against. This should not be used when
+RUBY_OPTIONAL is unset but must be used if RUBY_OPTIONAL=yes. Do not
+confuse this function with ruby_implementation_depend().
+<P>
+<P>
+Return value: Dependencies suitable for injection into DEPEND and RDEPEND.
+<DT><B>ruby-ng_pkg_setup</B> <DD>
+Check whether at least one ruby target implementation is present.
+<DT><B>ruby-ng_src_unpack</B> <DD>
+Unpack the source archive.
+<DT><B>ruby-ng_src_prepare</B> <DD>
+Apply patches and prepare versions for each ruby target
+implementation. Also carry out common clean up tasks.
+<DT><B>ruby-ng_src_configure</B> <DD>
+Configure the package.
+<DT><B>ruby-ng_src_compile</B> <DD>
+Compile the package.
+<DT><B>ruby-ng_src_test</B> <DD>
+Run tests for the package.
+<DT><B>ruby-ng_src_install</B> <DD>
+Install the package for each ruby target implementation.
+<DT><B>ruby_rbconfig_value</B> rbconfig item<DD>
+Return value: Returns the value of the given rbconfig item of the Ruby interpreter in ${RUBY}.
+<DT><B>doruby</B> file [file...]<DD>
+Installs the specified file(s) into the sitelibdir of the Ruby interpreter in ${RUBY}.
+<DT><B>ruby_get_libruby</B> <DD>
+Return value: The location of libruby*.so belonging to the Ruby interpreter in ${RUBY}.
+<DT><B>ruby_get_hdrdir</B> <DD>
+Return value: The location of the header files belonging to the Ruby interpreter in ${RUBY}.
+<DT><B>ruby_get_version</B> <DD>
+Return value: The version of the Ruby interpreter in ${RUBY}, or what 'ruby' points to.
+<DT><B>ruby_get_implementation</B> <DD>
+Return value: The implementation of the Ruby interpreter in ${RUBY}, or what 'ruby' points to.
+<DT><B>ruby-ng_rspec</B> <DD>
+This is simply a wrapper around the rspec command (executed by $RUBY})
+which also respects TEST_VERBOSE and NOCOLOR environment variables.
+Optionally takes arguments to pass on to the rspec invocation.  The
+environment variable RSPEC_VERSION can be used to control the specific
+rspec version that must be executed. It defaults to 2 for historical
+compatibility.
+<DT><B>ruby-ng_cucumber</B> <DD>
+This is simply a wrapper around the cucumber command (executed by $RUBY})
+which also respects TEST_VERBOSE and NOCOLOR environment variables.
+<DT><B>ruby-ng_testrb-2</B> <DD>
+This is simply a replacement for the testrb command that load the test
+files and execute them, with test-unit 2.x. This actually requires
+either an old test-unit-2 version or 2.5.1-r1 or later, as they remove
+their script and we installed a broken wrapper for a while.
+This also respects TEST_VERBOSE and NOCOLOR environment variables.
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>USE_RUBY</B> (REQUIRED)<DD>
+This variable contains a space separated list of targets (see above) a package
+is compatible to. It must be set before the `inherit' call. There is no
+default. All ebuilds are expected to set this variable.
+<DT><B>RUBY_PATCHES</B><DD>
+A String or Array of filenames of patches to apply to all implementations.
+<DT><B>RUBY_OPTIONAL</B><DD>
+Set the value to &quot;yes&quot; to make the dependency on a Ruby interpreter
+optional and then ruby_implementations_depend() to help populate
+BDEPEND, DEPEND and RDEPEND.
+<DT><B>RUBY_S</B><DD>
+If defined this variable determines the source directory name after
+unpacking. This defaults to the name of the package. Note that this
+variable supports a wildcard mechanism to help with github tarballs
+that contain the commit hash as part of the directory name.
+<DT><B>RUBY_QA_ALLOWED_LIBS</B><DD>
+If defined this variable contains a whitelist of shared objects that
+are allowed to exist even if they don't link to libruby. This avoids
+the QA check that makes this mandatory. This is most likely not what
+you are looking for if you get the related &quot;Missing links&quot; QA warning,
+since the proper fix is almost always to make sure the shared object
+is linked against libruby. There are cases were this is not the case
+and the shared object is generic code to be used in some other way
+(e.g. selenium's firefox driver extension). When set this argument is
+passed to &quot;grep -E&quot; to remove reporting of these shared objects.
+</DL>
+
+<H2 ID="lbAG">AUTHORS</H2>
+
+Author: Diego E. Pettenò &lt;<A HREF="mailto:flameeyes@gentoo.org">flameeyes@gentoo.org</A>&gt;
+<BR>
+
+Author: Alex Legler &lt;<A HREF="mailto:a3li@gentoo.org">a3li@gentoo.org</A>&gt;
+<BR>
+
+Author: Hans de Graaff &lt;<A HREF="mailto:graaff@gentoo.org">graaff@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">MAINTAINERS</H2>
+
+Ruby herd &lt;<A HREF="mailto:ruby@gentoo.org">ruby@gentoo.org</A>&gt;
+
+<H2 ID="lbAI">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAJ">FILES</H2>
+
+<B>ruby-ng.eclass</B>
+
+
+<H2 ID="lbAK">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/ruby-ng.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/ruby-ng.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAH">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAI">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAJ">FILES</A><DD>
+<DT><A HREF="index.html#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

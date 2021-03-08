@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>autotools-utils.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>AUTOTOOLS-UTILS.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+autotools-utils.eclass - common ebuild functions for autotools-based packages
+
+<H2 ID="lbAC">DEPRECATED</H2>
+
+Replacement: out-of-source
+
+<H2 ID="lbAD">DESCRIPTION</H2>
+
+autotools-utils.eclass is <A HREF="../autotools.eclass/index.html">autotools.eclass</A>(5) and <A HREF="../base.eclass/index.html">base.eclass</A>(5) wrapper
+providing all inherited features along with econf arguments as Bash array,
+out of source build with overridable build dir location, static archives
+handling, libtool files removal.
+<P>
+Please note that autotools-utils does not support mixing of its phase
+functions with regular econf/emake calls. If necessary, please call
+autotools-utils_src_compile instead of the latter.
+<P>
+
+<H2 ID="lbAE">SUPPORTED EAPIS</H2>
+
+4 5
+
+<H2 ID="lbAF">EXAMPLE</H2>
+
+Typical ebuild using autotools-utils.eclass:
+<P>
+<PRE>
+EAPI=&quot;2&quot;
+
+inherit autotools-utils
+
+DESCRIPTION=&quot;Foo bar application&quot;
+HOMEPAGE=&quot;<A HREF="http://example.org/foo/">http://example.org/foo/</A>&quot;
+SRC_URI=&quot;mirror://sourceforge/foo/${P}.tar.bz2&quot;
+
+LICENSE=&quot;LGPL-2.1&quot;
+KEYWORDS=&quot;&quot;
+SLOT=&quot;0&quot;
+IUSE=&quot;debug doc examples qt4 static-libs tiff&quot;
+
+CDEPEND=&quot;
+        media-libs/libpng:0
+        qt4? (
+                dev-qt/qtcore:4
+                dev-qt/qtgui:4
+        )
+        tiff? ( media-libs/tiff:0 )
+&quot;
+RDEPEND=&quot;${CDEPEND}
+        !media-gfx/bar
+&quot;
+DEPEND=&quot;${CDEPEND}
+        doc? ( app-doc/doxygen )
+&quot;
+
+# bug 123456
+AUTOTOOLS_IN_SOURCE_BUILD=1
+
+DOCS=(AUTHORS ChangeLog README &quot;Read me.txt&quot; TODO)
+
+PATCHES=(
+        &quot;${FILESDIR}/${P}-gcc44.patch&quot; # bug 123458
+        &quot;${FILESDIR}/${P}-as-needed.patch&quot;
+        &quot;${FILESDIR}/${P}-unbundle_libpng.patch&quot;
+)
+
+src_configure() {
+        local myeconfargs=(
+                $(use_enable debug)
+                $(use_with qt4)
+                $(use_enable threads multithreading)
+                $(use_with tiff)
+        )
+        autotools-utils_src_configure
+}
+
+src_compile() {
+        autotools-utils_src_compile
+        use doc &amp;&amp; autotools-utils_src_compile docs
+}
+
+src_install() {
+        use doc &amp;&amp; HTML_DOCS=(&quot;${BUILD_DIR}/apidocs/html/&quot;)
+        autotools-utils_src_install
+        if use examples; then
+                dobin &quot;${BUILD_DIR}&quot;/foo_example{1,2,3} \
+                        || die 'dobin examples failed'
+        fi
+}
+
+</PRE>
+
+
+<H2 ID="lbAG">FUNCTIONS</H2>
+
+<DL>
+<DT><B>autotools-utils_src_prepare</B> <DD>
+The src_prepare function.
+<P>
+Supporting PATCHES array and user patches. See <A HREF="../base.eclass/index.html">base.eclass</A>(5) for reference.
+<DT><B>autotools-utils_src_configure</B> <DD>
+The src_configure function. For out of source build it creates build
+directory and runs econf there. Configuration parameters defined
+in myeconfargs are passed here to econf. Additionally following USE
+flags are known:
+<P>
+IUSE=&quot;static-libs&quot; passes --enable-shared and either --disable-static/--enable-static
+to econf respectively.
+<DT><B>myeconfargs</B><DD>
+Optional econf arguments as Bash array. Should be defined before calling src_configure.
+<PRE>
+src_configure() {
+        local myeconfargs=(
+                --disable-readline
+                --with-confdir=&quot;/etc/nasty foo confdir/&quot;
+                $(use_enable debug cnddebug)
+                $(use_enable threads multithreading)
+        )
+        autotools-utils_src_configure
+}
+</PRE>
+
+<DT><B>autotools-utils_src_compile</B> <DD>
+The autotools src_compile function, invokes emake in specified BUILD_DIR.
+<DT><B>autotools-utils_src_install</B> <DD>
+The autotools src_install function. Runs emake install, unconditionally
+removes unnecessary static libs (based on shouldnotlink libtool property)
+and removes unnecessary libtool files when static-libs USE flag is defined
+and unset.
+<P>
+DOCS and HTML_DOCS arrays are supported. See <A HREF="../base.eclass/index.html">base.eclass</A>(5) for reference.
+<DT><B>autotools-utils_src_test</B> <DD>
+The autotools src_test function. Runs emake check in build directory.
+</DL>
+
+<H2 ID="lbAH">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>AUTOTOOLS_AUTORECONF</B><DD>
+Set to a non-empty value before calling inherit to enable running autoreconf
+in src_prepare() and adding autotools dependencies.
+<P>
+This is usually necessary when using live sources or applying patches
+modifying configure.ac or Makefile.am files. Note that in the latter case
+setting this variable is obligatory even though the eclass will work without
+it (to add the necessary dependencies).
+<P>
+The eclass will try to determine the correct autotools to run including a few
+external tools: gettext, glib-gettext, intltool, gtk-doc, gnome-doc-prepare.
+If your tool is not supported, please open a bug and we'll add support for it.
+<P>
+Note that dependencies are added for autoconf, automake and libtool only.
+If your package needs one of the external tools listed above, you need to add
+appropriate packages to DEPEND yourself.
+<DT><B>BUILD_DIR</B><DD>
+Build directory, location where all autotools generated files should be
+placed. For out of source builds it defaults to ${WORKDIR}/${P}_build.
+<P>
+This variable has been called AUTOTOOLS_BUILD_DIR formerly.
+It is set under that name for compatibility.
+<DT><B>AUTOTOOLS_IN_SOURCE_BUILD</B><DD>
+Set to enable in-source build.
+<DT><B>ECONF_SOURCE</B><DD>
+Specify location of autotools' configure script. By default it uses ${S}.
+<DT><B>DOCS</B><DD>
+Array containing documents passed to dodoc command.
+<P>
+In EAPIs 4+, can list directories as well.
+<P>
+Example:
+<PRE>
+DOCS=( NEWS README )
+</PRE>
+
+<DT><B>HTML_DOCS</B><DD>
+Array containing documents passed to dohtml command.
+<P>
+Example:
+<PRE>
+HTML_DOCS=( doc/html/ )
+</PRE>
+
+<DT><B>PATCHES</B><DD>
+PATCHES array variable containing all various patches to be applied.
+<P>
+Example:
+<PRE>
+PATCHES=( &quot;${FILESDIR}&quot;/${P}-mypatch.patch )
+</PRE>
+
+<DT><B>AUTOTOOLS_PRUNE_LIBTOOL_FILES</B><DD>
+Sets the mode of pruning libtool files. The values correspond to
+prune_libtool_files parameters, with leading dashes stripped.
+<P>
+Defaults to pruning the libtool files when static libraries are not
+installed or can be linked properly without them. Libtool files
+for modules (plugins) will be kept in case plugin loader needs them.
+<P>
+If set to 'modules', the .la files for modules will be removed
+as well. This is often the preferred option.
+<P>
+If set to 'all', all .la files will be removed unconditionally. This
+option is discouraged and shall be used only if 'modules' does not
+remove the files.
+<P>
+If set to 'none', no .la files will be pruned ever. Use in corner
+cases only.
+</DL>
+
+<H2 ID="lbAI">MAINTAINERS</H2>
+
+Maciej Mrozowski &lt;<A HREF="mailto:reavertm@gentoo.org">reavertm@gentoo.org</A>&gt;
+<BR>
+
+Michał Górny &lt;<A HREF="mailto:mgorny@gentoo.org">mgorny@gentoo.org</A>&gt;
+
+<H2 ID="lbAJ">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAK">FILES</H2>
+
+<B>autotools-utils.eclass</B>
+
+
+<H2 ID="lbAL">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/autotools-utils.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/autotools-utils.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DEPRECATED</A><DD>
+<DT><A HREF="index.html#lbAD">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAE">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAF">EXAMPLE</A><DD>
+<DT><A HREF="index.html#lbAG">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAH">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAI">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAJ">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAK">FILES</A><DD>
+<DT><A HREF="index.html#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

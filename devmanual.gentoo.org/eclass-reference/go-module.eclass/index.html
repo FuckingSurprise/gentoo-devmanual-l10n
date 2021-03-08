@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>go-module.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>GO-MODULE.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+go-module.eclass - basic eclass for building software written as go modules
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+This eclass provides basic settings and functions needed by all software
+written in the go programming language that uses modules.
+<P>
+If the software you are packaging  has a file named go.mod in its top
+level directory, it uses modules and  your ebuild should inherit this
+eclass. If it does not, your ebuild should use the golang-* eclasses.
+<P>
+If, besides go.mod, your software has a directory named vendor in its
+top level directory, the only thing you need to do is inherit the
+eclass. If there is no vendor directory, you need to also populate
+EGO_SUM and call go-module_set_globals as discussed below.
+<P>
+Since Go programs are statically linked, it is important that your ebuild's
+LICENSE= setting includes the licenses of all statically linked
+dependencies. So please make sure it is accurate.
+You can use a utility like dev-util/golicense (network connectivity is
+required) to extract this information from the compiled binary.
+<P>
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+7
+
+<H2 ID="lbAE">EXAMPLE</H2>
+
+<P>
+<PRE>
+
+inherit go-module
+
+EGO_SUM=(
+  &quot;github.com/aybabtme/rgbterm v0.0.0-20170906152045-cc83f3b3ce59/go.mod&quot;
+  &quot;github.com/aybabtme/rgbterm v0.0.0-20170906152045-cc83f3b3ce59&quot;
+)
+
+go-module_set_globals
+
+SRC_URI=&quot;https://github.com/example/${PN}/archive/v${PV}.tar.gz -&gt; ${P}.tar.gz
+           ${EGO_SUM_SRC_URI}&quot;
+
+</PRE>
+
+
+<H2 ID="lbAF">FUNCTIONS</H2>
+
+<DL>
+<DT><B>go-module_set_globals</B> <DD>
+Convert the information in EGO_SUM for other usage in the ebuild.
+- Populates EGO_SUM_SRC_URI that can be added to SRC_URI
+- Exports _GOMODULE_GOSUM_REVERSE_MAP which provides reverse mapping from
+<BR>&nbsp;&nbsp;distfile&nbsp;back&nbsp;to&nbsp;the&nbsp;relative&nbsp;part&nbsp;of&nbsp;SRC_URI,&nbsp;as&nbsp;needed&nbsp;for
+<BR>&nbsp;&nbsp;GOPROXY=<A HREF="file:///...">file:///...</A>
+<DT><B>go-module_src_unpack</B> <DD>
+If EGO_SUM is set, unpack the base tarball(s) and set up the
+<BR>&nbsp;&nbsp;local&nbsp;go&nbsp;proxy.
+- Otherwise, if EGO_VENDOR is set, bail out.
+- Otherwise do a normal unpack.
+<DT><B>_go-module_src_unpack_gosum</B> <DD>
+Populate a GOPROXY directory hierarchy with distfiles from EGO_SUM and
+unpack the base distfiles.
+<P>
+Exports GOPROXY environment variable so that Go calls will source the
+directory correctly.
+<DT><B>_go-module_gosum_synthesize_files</B> <DD>
+Given a path &amp;  version, populate all Goproxy metadata files which aren't
+needed to be downloaded directly.
+- .../@v/${version}.info
+- .../@v/list
+<DT><B>_go-module_src_unpack_verify_gosum</B> <DD>
+Validate the Go modules declared by EGO_SUM are sufficient to cover building
+the package, without actually building it yet.
+<DT><B>go-module_live_vendor</B> <DD>
+This function is used in live ebuilds to vendor the dependencies when
+upstream doesn't vendor them.
+<DT><B>go-module_pkg_postinst</B> <DD>
+Display a warning about security updates for Go programs.
+<DT><B>_go-module_gomod_encode</B> <DD>
+Encode the name(path) of a Golang module in the format expected by Goproxy.
+<P>
+Upper letters are replaced by their lowercase version with a '!' prefix.
+<P>
+</DL>
+
+<H2 ID="lbAG">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>EGO_SUM</B><DD>
+This is an array based on the go.sum content from inside the target package.
+Each array entry must be quoted and contain information from a single
+line from go.sum.
+<P>
+The format of go.sum is described upstream here:
+<A HREF="https://tip.golang.org/cmd/go/#hdr-Module_authentication_using_go_sum">https://tip.golang.org/cmd/go/#hdr-Module_authentication_using_go_sum</A>
+<P>
+For inclusion in EGO_SUM, the h1: value and other future extensions SHOULD be
+omitted at this time. The EGO_SUM parser will accept them for ease of ebuild
+creation.
+<P>
+h1:&lt;hash&gt; is the Hash1 structure used by upstream Go
+The Hash1 is MORE stable than Gentoo distfile hashing, and upstream warns
+that it's conceptually possible for the Hash1 value to remain stable while
+the upstream zipfiles change. Here are examples that do NOT change the h1:
+hash, but do change a regular checksum over all bytes of the file:
+- Differing mtimes within zipfile
+- Differing filename ordering with the zipfile
+- Differing zipfile compression parameters
+- Differing zipfile extra fields
+<P>
+For Gentoo usage, the authors of this eclass feel that the h1: hash should
+NOT be included in the EGO_SUM at this time in order to reduce size of the
+ebuilds. This position will be reconsidered in future when a Go module
+distfile collision comes to light, where the Hash1 value of two distfiles is
+the same, but checksums over the file as a byte stream consider the files to
+be different.
+<P>
+This decision  does NOT weaken Go module security, as Go will verify the
+go.sum copy of the Hash1 values during building of the package.
+<DT><B>_GOMODULE_GOPROXY_BASEURI</B><DD>
+Golang module proxy service to fetch module files from. Note that the module
+proxy generally verifies modules via the Hash1 code.
+<P>
+Users in China may find some mirrors in the default list blocked, and should
+explicitly set an entry in /etc/portage/mirrors for goproxy to
+<A HREF="https://goproxy.cn/">https://goproxy.cn/</A> or another mirror that is not blocked in China.
+See <A HREF="https://arslan.io/2019/08/02/why-you-should-use-a-go-module-proxy/">https://arslan.io/2019/08/02/why-you-should-use-a-go-module-proxy/</A> for
+further details
+<P>
+This variable is NOT intended for user-level configuration of mirrors, but
+rather to cover go modules that might exist only on specific Goproxy
+servers for non-technical reasons.
+<P>
+This variable should NOT be present in user-level configuration e.g.
+/etc/portage/make.conf, as it will violate metadata immutability!
+<P>
+I am considering removing this and just hard coding <A HREF="mirror://goproxy">mirror://goproxy</A>
+below, so please do not rely on it.
+<DT><B>_GOMODULE_GOSUM_REVERSE_MAP</B><DD>
+Mapping back from Gentoo distfile name to upstream distfile path.
+Associative array to avoid O(N*M) performance when populating the GOPROXY
+directory structure.
+</DL>
+
+<H2 ID="lbAH">AUTHORS</H2>
+
+William Hubbs &lt;<A HREF="mailto:williamh@gentoo.org">williamh@gentoo.org</A>&gt;
+<BR>
+
+Robin H. Johnson &lt;<A HREF="mailto:robbat2@gentoo.org">robbat2@gentoo.org</A>&gt;
+
+<H2 ID="lbAI">MAINTAINERS</H2>
+
+William Hubbs &lt;<A HREF="mailto:williamh@gentoo.org">williamh@gentoo.org</A>&gt;
+
+<H2 ID="lbAJ">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAK">FILES</H2>
+
+<B>go-module.eclass</B>
+
+
+<H2 ID="lbAL">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/go-module.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/go-module.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">EXAMPLE</A><DD>
+<DT><A HREF="index.html#lbAF">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAG">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAH">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAI">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAJ">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAK">FILES</A><DD>
+<DT><A HREF="index.html#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

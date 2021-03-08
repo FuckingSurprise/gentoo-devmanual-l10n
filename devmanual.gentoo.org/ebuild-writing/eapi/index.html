@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>EAPI Usage and Description – Gentoo Development Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span> Home</a></li>
+<li class="dropdown">
+<a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></a><ul class="dropdown-menu">
+<li><a class="reference" href="index.html#usage-of-eapis">Usage of EAPIs</a></li>
+<li><a class="reference" href="index.html#eapis-0-to-4">EAPIs 0 to 4</a></li>
+<li><a class="reference" href="index.html#eapi-5">EAPI 5</a></li>
+<li><a class="reference" href="index.html#eapi-6">EAPI 6</a></li>
+<li><a class="reference" href="index.html#eapi-7">EAPI 7</a></li>
+</ul>
+</li>
+<li><a class="w-250 text-center" href="../file-format/index.html"><span class="fa fa-arrow-left"></span><span class="truncated-text d-inline-block max-w-200 ml-2">Ebuild File Format</span></a></li>
+<li><a class="w-250 text-center" href="../use-conditional-code/index.html"><span class="truncated-text d-inline-block max-w-200 mr-2">USE Flag Conditional Code</span><span class="fa fa-arrow-right"></span></a></li>
+</ul></div>
+</div></div></nav><nav class="navbar navbar-grey navbar-stick" id="devmanual-actions" role="navigation"><div class="container"><div class="row"><div class="input-group">
+<input type="search" name="search" placeholder="Search" title="Search Gentoo Developer Manual [f]" accesskey="f" id="searchInput" class="form-control" onclick="fetchDocuments()"><div class="input-group-btn"><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton btn btn-default" onclick="search()"></div>
+</div></div></div></nav><div id="searchResults" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Search Results</h4>
+</div>
+<div class="modal-body"><p>No results found.</p></div>
+<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+</div></div></div>
+<div class="container"><div class="row"><div class="col-md010"><ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Ebuild Writing</a></li>
+</ol></div></div></div></header><main><div class="container">
+<h1 class="first-header">EAPI Usage and Description</h1>
+
+<p>
+The <a class="" href="https://wiki.gentoo.org/wiki/Project:PMS">Package Manager
+Specification (PMS)</a> is a standardization effort to ensure that the
+ebuild file format, the ebuild repository format (of which the Gentoo
+repository is Gentoo's main incarnation) as well as behaviour of the package
+managers interacting with these ebuilds is properly written down and agreed
+upon.
+</p>
+
+<p>
+EAPI is a version defined in ebuilds and other package manager related files
+which informs the package manager about the file syntax and content. It is,
+in effect, the version of the package manager specification (PMS) that the
+file adheres to.
+</p>
+
+<p>
+This section provides usage and descriptions of the different EAPIs.
+</p>
+
+<div class="section">
+<h2 id="usage-of-eapis">Usage of EAPIs</h2>
+
+<div class="alert alert-warning" role="alert">
+<strong>Important:</strong>
+An overview about the important features of each EAPI is provided in the
+appendix of the Package Manager Specification.  The two-page leaflet
+can be printed out, consulted for reference and is available
+as <code class="docutils literal"><span class="pre">app-doc/pms</span></code> in the main tree.
+</div>
+
+<p>
+You must set the EAPI variable by specifying it at the top of the ebuild:
+</p>
+
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Copyright</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">1999-2021</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Gentoo</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Authors</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Distributed</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">under</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">the</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">terms</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">of</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">the</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">GNU</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">General</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Public</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">License</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">v2</span>
+
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">EAPI</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span>7
+</span></pre>
+
+<div class="alert alert-info" role="alert">
+<strong>Note:</strong>
+Most developers prefer to set the EAPI version without quotes. However, the PMS
+allows single and double quotes as well.
+</div>
+
+<div class="alert alert-warning" role="alert">
+<strong>Important:</strong>
+EAPI must only be defined in ebuild files, not eclasses. (eclasses may have
+EAPI-conditional code)
+</div>
+
+<p>
+When writing new ebuilds developers can choose whatever EAPI they think
+is the best.  Using the features of the latest EAPI is encouraged.
+</p>
+
+</div>
+<div class="section">
+<h2 id="eapis-0-to-4">EAPIs 0 to 4</h2>
+
+<p>
+EAPIs 0 to 4 are obsolete and must no longer be used. Refer to the Package
+Manager Specification for details about them.
+</p>
+
+</div>
+<div class="section">
+<h2 id="eapi-5">EAPI 5</h2>
+<div class="section">
+<h3 id="eapi-5-metadata">EAPI 5 Metadata</h3>
+
+<dl>
+  <dt>REQUIRED_USE supports new at-most-one-of operator</dt>
+  <dd>
+    The new <b>at-most-one-of</b> operator consists of the string <code class="docutils literal"><span class="pre">??</span></code>,
+    and is satisfied if zero or one (but no more) of its child elements is
+    matched.
+  </dd>
+  <dt>SLOT supports optional "sub-slot" part</dt>
+  <dd>
+    The <code class="docutils literal"><span class="pre">SLOT</span></code> variable may contain an optional <b>sub-slot</b> part that
+    follows the regular slot and is delimited by a <code class="docutils literal"><span class="pre">/</span></code> character.
+    The sub-slot must be a valid slot name. The sub-slot is used to represent
+    cases in which an upgrade to a new version of a package with a different
+    sub-slot may require dependent packages to be rebuilt. When the sub-slot
+    part is omitted from the SLOT definition, the package is considered to have
+    an implicit sub-slot which is equal to the regular slot.
+  </dd>
+  <dt>Slot operators and sub-slots in dependencies</dt>
+  <dd>
+    <p>
+    A slot dependency may contain an optional sub-slot part that follows the
+    regular slot and is delimited by a <code class="docutils literal"><span class="pre">/</span></code> character. This can be useful
+    for packages installing pre-built binaries that require a library with a
+    specific soname version which corresponds to the sub-slot. For example:
+    </p>
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">RDEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>dev-libs/foo:0/3<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+</span></pre>
+    <p>
+    Package dependency specifications can use <b>slot operators</b> to clarify
+    what should happen if the slot and/or sub-slot of a runtime dependency
+    changes:
+    </p>
+    <ul>
+      <li>
+        <code class="docutils literal"><span class="pre">:*</span></code> Indicates that any slot value is acceptable. In addition,
+        for runtime dependencies, indicates that the package specifying the
+        dependency will not break if the package matching the dependency is
+        replaced by a different matching package with a different slot and/or
+        sub-slot.
+      </li>
+      <li>
+        <code class="docutils literal"><span class="pre">:=</span></code> Indicates that any slot value is acceptable. In addition,
+        for runtime dependencies, indicates that the package specifying the
+        dependency will break unless there is available a package matching
+        the dependency and whose slot and sub-slot are equal to the slot and
+        sub-slot of the best installed version that had matched this dependency
+        at the time when the package specifying this dependency had been
+        installed.
+      </li>
+      <li>
+        <p>
+        <code class="docutils literal"><span class="pre">:slot=</span></code> Indicates that only a specific slot value is acceptable,
+        and otherwise behaves identically to the <code class="docutils literal"><span class="pre">:=</span></code> operator.
+        </p>
+        <div class="alert alert-info" role="alert">
+<strong>Note:</strong>
+        use <code class="docutils literal"><span class="pre">:slot/subslot</span></code> without a <code class="docutils literal"><span class="pre">=</span></code> to depend on a specific
+        slot and sub-slot pair; it's a syntax error to use <code class="docutils literal"><span class="pre">:slot/subslot=</span></code>
+        in an ebuild.
+        </div>
+      </li>
+    </ul>
+    <p>
+    The <code class="docutils literal"><span class="pre">:slot</span></code> dependency syntax continues to behave like in EAPI=4 or
+    earlier, i.e. it indicates that only the specific slot value is acceptable,
+    but the package will not break when the version matching the runtime
+    dependency is replaced by a version with a different sub-slot.
+    </p>
+    <p>
+    For example:
+    </p>
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">RDEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>dev-libs/foo:2=
+    <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span>dev-libs/bar-0.9:=
+    media-gfx/baz:*
+    x11-misc/wombat:0<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+</span></pre>
+    <p>
+    means that the package should be rebuilt when <code class="docutils literal"><span class="pre">foo:2</span></code> or
+    <code class="docutils literal"><span class="pre">&gt;=bar-0.9</span></code> are upgraded to versions with different subslots,
+    but that changes in subslots of <code class="docutils literal"><span class="pre">baz</span></code> or <code class="docutils literal"><span class="pre">wombat:0</span></code> should be
+    ignored.
+    </p>
+  </dd>
+</dl>
+
+</div>
+<div class="section">
+<h3 id="eapi-5-profiles">EAPI 5 Profiles</h3>
+
+<dl>
+  <dt>Profile stable USE forcing and masking</dt>
+  <dd>
+    In profile directories with an EAPI supporting stable masking, new USE
+    configuration files are supported: <code class="docutils literal"><span class="pre">use.stable.mask</span></code>,
+    <code class="docutils literal"><span class="pre">use.stable.force</span></code>, <code class="docutils literal"><span class="pre">package.use.stable.mask</span></code> and
+    <code class="docutils literal"><span class="pre">package.use.stable.force</span></code>. These files behave similarly to previously
+    supported USE configuration files, except that they only influence packages
+    that are merged due to a stable keyword.
+  </dd>
+</dl>
+</div>
+<div class="section">
+<h3 id="eapi-5-helpers">EAPI 5 Helpers</h3>
+
+<dl>
+  <dt>econf adds --disable-silent-rules</dt>
+  <dd>
+    This option will automatically be passed if <code class="docutils literal"><span class="pre">--disable-silent-rules</span></code>
+    occurs in the output of <code class="docutils literal"><span class="pre">configure --help</span></code>.
+  </dd>
+  <dt>new* commands can read from standard input</dt>
+  <dd>
+    Standard input is read when the first parameter is <code class="docutils literal"><span class="pre">-</span></code> (a hyphen).
+  </dd>
+  <dt>New option --host-root for {has,best}_version</dt>
+  <dd>
+    This option <code class="docutils literal"><span class="pre">--host-root</span></code> will cause the query to apply to the host
+    root instead of ROOT.
+  </dd>
+  <dt>New doheader helper function</dt>
+  <dd>
+    Installs the given header files into <code class="docutils literal"><span class="pre">/usr/include/</span></code>. If option
+    <code class="docutils literal"><span class="pre">-r</span></code> is specified, descends recursively into any directories given.
+  </dd>
+  <dt>New usex helper function</dt>
+  <dd>
+    
+<pre>
+USAGE: usex &lt;USE flag&gt; [true output] [false output] [true suffix] [false suffix]
+DESCRIPTION:
+If USE flag is set, echo [true output][true suffix] (defaults to "yes"),
+ otherwise echo [false output][false suffix] (defaults to "no").
+</pre>
+  </dd>
+</dl>
+
+</div>
+<div class="section">
+<h3 id="eapi-5-phases">EAPI 5 Phases</h3>
+
+<dl>
+  <dt>src_test supports parallel tests</dt>
+  <dd>
+    Unlike older EAPIs, the default <code class="docutils literal"><span class="pre">src_test</span></code> implementation will not
+    pass the -j1 option to emake.
+  </dd>
+</dl>
+
+</div>
+<div class="section">
+<h3 id="eapi-5-variables">EAPI 5 Variables</h3>
+
+<dl>
+  <dt>EBUILD_PHASE_FUNC</dt>
+  <dd>
+    During execution of an ebuild phase function (such as <code class="docutils literal"><span class="pre">pkg_setup</span></code> or
+    <code class="docutils literal"><span class="pre">src_unpack</span></code>), the <code class="docutils literal"><span class="pre">EBUILD_PHASE_FUNC</span></code> variable will contain the
+    name of the phase function that is currently executing.
+  </dd>
+</dl>
+
+</div>
+</div>
+<div class="section">
+<h2 id="eapi-6">EAPI 6</h2>
+<div class="section">
+<h3 id="eapi-6-bash-version">EAPI 6 Bash version</h3>
+
+<dl>
+  <dt>Bash version</dt>
+  <dd>
+    Ebuilds can use features of Bash version 4.2 (was 3.2 before).
+  </dd>
+</dl>
+
+</div>
+<div class="section">
+<h3 id="eapi-6-ebuild-environment">EAPI 6 Ebuild Environment</h3>
+
+<dl>
+  <dt>Locale settings</dt>
+  <dd>
+    Behaviour of case modification and collation order (<code class="docutils literal"><span class="pre">LC_CTYPE</span></code> and
+    <code class="docutils literal"><span class="pre">LC_COLLATE</span></code>) are guaranteed to be the same as in the C locale, as far
+    as characters in the ASCII range are concerned.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">failglob</span></code> enabled</dt>
+  <dd>
+    For <code class="docutils literal"><span class="pre">EAPI=6</span></code>, the <code class="docutils literal"><span class="pre">failglob</span></code> option of bash is set in the global
+    scope of ebuilds. If set, failed pattern matches during filename expansion
+    result in an error when the ebuild is being sourced.
+  </dd>
+</dl>
+
+</div>
+<div class="section">
+<h3 id="eapi-6-phases">EAPI 6 Phases</h3>
+
+<dl>
+  <dt>Update default implementation of <code class="docutils literal"><span class="pre">src_prepare</span></code>
+</dt>
+  <dd>
+    <p>
+    This phase is no longer a no-op, it supports applying patches via the
+    <code class="docutils literal"><span class="pre">PATCHES</span></code> variable and applying user patches via <code class="docutils literal"><span class="pre">eapply_user</span></code>.
+    The default <code class="docutils literal"><span class="pre">src_prepare</span></code> looks like this:
+    </p>
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Special">src_prepare()</span> <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">{</span>
+    <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">if</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">[[</span> <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">$(</span>declare -p PATCHES 2&gt;/dev/null<span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier"></span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span>= <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>declare -a<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>* ]]; <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">then</span>
+        <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">[[</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">-n</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${PATCHES[@]}</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">]]</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">&amp;&amp;</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">eapply</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${PATCHES[@]}</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+    <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">else</span>
+        <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">[[</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">-n</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${PATCHES}</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">]]</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">&amp;&amp;</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">eapply</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${PATCHES}</span>
+    <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">fi</span>
+    <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">eapply_user</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">}</span>
+</span></pre>
+  </dd>
+  <dt>New <code class="docutils literal"><span class="pre">src_install</span></code> Phase Function</dt>
+  <dd>
+    <p>
+    This phase uses the new <code class="docutils literal"><span class="pre">einstalldocs</span></code> function for installation of
+    documentation. The default <code class="docutils literal"><span class="pre">src_install</span></code> looks like this:
+    </p>
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Special">src_install()</span> <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">{</span>
+    <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">if</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">[[</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">-f</span> Makefile <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">]]</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">||</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">[[</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">-f</span> GNUmakefile <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">]]</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">||</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">[[</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">-f</span> makefile ]]; <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">then</span>
+        <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">emake</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DESTDIR</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${D}</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span> install
+    <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">fi</span>
+    <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">einstalldocs</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">}</span>
+</span></pre>
+  </dd>
+</dl>
+
+</div>
+<div class="section">
+<h3 id="eapi-6-helpers">EAPI 6 Helpers</h3>
+
+<dl>
+  <dt>
+<code class="docutils literal"><span class="pre">einstall</span></code> banned</dt>
+  <dd>
+    The <code class="docutils literal"><span class="pre">einstall</span></code> helper has been banned with <code class="docutils literal"><span class="pre">EAPI=6</span></code>.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">dohtml</span></code> deprecated</dt>
+  <dd>
+    The <code class="docutils literal"><span class="pre">dohtml</span></code> helper has been deprecated with <code class="docutils literal"><span class="pre">EAPI=6</span></code>.
+  </dd>
+  <dt><code class="docutils literal"><span class="pre">nonfatal die</span></code></dt>
+  <dd>
+    When <code class="docutils literal"><span class="pre">die</span></code> or <code class="docutils literal"><span class="pre">assert</span></code> are called under the <code class="docutils literal"><span class="pre">nonfatal</span></code>
+    command and with the <code class="docutils literal"><span class="pre">-n</span></code> option, they will not abort the build
+    process but return with an error.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">eapply</span></code> support</dt>
+  <dd>
+    The <code class="docutils literal"><span class="pre">eapply</span></code> command is a simplified substitute for <code class="docutils literal"><span class="pre">epatch</span></code>
+    (from <code class="docutils literal"><span class="pre">eutils.eclass</span></code>), implemented in the package manager.
+    The patches from its file or directory arguments are applied using patch
+    <code class="docutils literal"><span class="pre">-p1</span></code>, but it accepts <code class="docutils literal"><span class="pre">patch(1)</span></code> options from GNU patch to
+    override default behavior.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">eapply_user</span></code> support</dt>
+  <dd>
+    <p>
+    The <code class="docutils literal"><span class="pre">eapply_user</span></code> command permits the package manager to apply
+    user-provided patches. It must be called from every <code class="docutils literal"><span class="pre">src_prepare</span></code>
+    function.
+    </p>
+    <div class="alert alert-info" role="alert">
+<strong>Note:</strong>
+    <code class="docutils literal"><span class="pre">eapply_user</span></code> doesn't need to be called explicitly when default
+    <code class="docutils literal"><span class="pre">src_prepare</span></code> is called.
+    </div>
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">econf</span></code> adds <code class="docutils literal"><span class="pre">--docdir</span></code> and <code class="docutils literal"><span class="pre">--htmldir</span></code>
+</dt>
+  <dd>
+    Options <code class="docutils literal"><span class="pre">--docdir</span></code> and <code class="docutils literal"><span class="pre">--htmldir</span></code> are passed to
+    <code class="docutils literal"><span class="pre">configure</span></code>, in addition to the existing options.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">in_iuse</span></code> support</dt>
+  <dd>
+    The <code class="docutils literal"><span class="pre">in_iuse</span></code> function returns <code class="docutils literal"><span class="pre">true</span></code> if the given parameter is
+    available in the ebuilds <code class="docutils literal"><span class="pre">USE</span></code>.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">unpack</span></code> changes</dt>
+  <dd>
+    <ul>
+      <li>
+        <code class="docutils literal"><span class="pre">unpack</span></code> supports relative paths without leading <code class="docutils literal"><span class="pre">./</span></code>
+        (<code class="docutils literal"><span class="pre">unpack foo/bar.tar.gz</span></code> is valid as relative path).
+      </li>
+      <li>
+<code class="docutils literal"><span class="pre">unpack</span></code> supports <code class="docutils literal"><span class="pre">.txz</span></code> (xz compressed tarball).</li>
+      <li>
+<code class="docutils literal"><span class="pre">unpack</span></code> matches filename extensions case-insensitively.</li>
+    </ul>
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">einstalldocs</span></code> support</dt>
+  <dd>
+    The <code class="docutils literal"><span class="pre">einstalldocs</span></code> function will install the files specified by the
+    <code class="docutils literal"><span class="pre">DOCS</span></code> variable (or a default set of files if <code class="docutils literal"><span class="pre">DOCS</span></code> is unset)
+    and by the <code class="docutils literal"><span class="pre">HTML_DOCS</span></code> variable.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">get_libdir</span></code> support</dt>
+  <dd>
+    The <code class="docutils literal"><span class="pre">get_libdir</span></code> command outputs the <code class="docutils literal"><span class="pre">lib*</span></code> directory basename
+    suitable for the current ABI.
+  </dd>
+</dl>
+
+</div>
+</div>
+<div class="section">
+<h2 id="eapi-7">EAPI 7</h2>
+<div class="section">
+<h3 id="eapi-7-terminology">EAPI 7 Terminology</h3>
+
+<p>
+Documents may use the following terms to better describe dependency and
+installation targets.
+</p>
+
+<dl>
+  <dt><code class="docutils literal"><span class="pre">CHOST</span></code></dt>
+  <dd>
+    The system that will be running the installed package.
+  </dd>
+  <dt><code class="docutils literal"><span class="pre">CBUILD</span></code></dt>
+  <dd>
+    The system used to build packages. When not cross-compiling,
+    CBUILD == CHOST.
+  </dd>
+  <dt><code class="docutils literal"><span class="pre">CTARGET</span></code></dt>
+  <dd>
+    Used in certain cross-compilations, often empty value.
+  </dd>
+</dl>
+
+</div>
+<div class="section">
+<h3 id="eapi-7-variables">EAPI 7 Variables</h3>
+
+<dl>
+  <dt>
+<code class="docutils literal"><span class="pre">PORTDIR</span></code> and <code class="docutils literal"><span class="pre">ECLASSDIR</span></code> are removed</dt>
+  <dd>
+    <code class="docutils literal"><span class="pre">PORTDIR</span></code> and <code class="docutils literal"><span class="pre">ECLASSDIR</span></code> are no longer defined and cannot be
+    used in ebuilds to access these directories.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">DESTTREE</span></code> and <code class="docutils literal"><span class="pre">INSDESTTREE</span></code> are removed</dt>
+  <dd>
+    The unintended exported variables <code class="docutils literal"><span class="pre">PORTDIR</span></code> and <code class="docutils literal"><span class="pre">ECLASSDIR</span></code>
+    cannot be used in ebuilds to manipulate installation paths. Use <code class="docutils literal"><span class="pre">into</span></code>
+    or <code class="docutils literal"><span class="pre">insinto</span></code>, respectively, instead.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">D</span></code>, <code class="docutils literal"><span class="pre">ED</span></code>, <code class="docutils literal"><span class="pre">ROOT</span></code>, and <code class="docutils literal"><span class="pre">EROOT</span></code> modified</dt>
+  <dd>
+    These variables no longer contain a trailing slash with <code class="docutils literal"><span class="pre">EAPI=7</span></code>.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">BDEPEND</span></code> added</dt>
+  <dd>
+    Previously, all build-time tools and libraries went into the <code class="docutils literal"><span class="pre">DEPEND</span></code>.
+    Now, built-time dependencies are split into <code class="docutils literal"><span class="pre">DEPEND</span></code> and
+    <code class="docutils literal"><span class="pre">BDEPEND</span></code>. The difference is simply that <code class="docutils literal"><span class="pre">BDEPEND</span></code> are
+    dependencies to be executed on the CBUILD. <code class="docutils literal"><span class="pre">DEPEND</span></code> remains for other
+    dependencies, such as libraries, for the CHOST. This improves the
+    cross-compilation support.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">BROOT</span></code> added</dt>
+  <dd>
+    <code class="docutils literal"><span class="pre">BROOT</span></code> is the absolute path to the root directory, including any
+    prefix, containing build dependencies satisfied by BDEPEND, typically
+    executable build tools.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">SYSROOT</span></code> and <code class="docutils literal"><span class="pre">ESYSROOT</span></code> added</dt>
+  <dd>
+    <code class="docutils literal"><span class="pre">SYSROOT</span></code> is the location of where dependencies in <code class="docutils literal"><span class="pre">DEPEND</span></code> are
+    installed. <code class="docutils literal"><span class="pre">ESYSROOT</span></code> is <code class="docutils literal"><span class="pre">SYSROOT</span></code> with <code class="docutils literal"><span class="pre">EPREFIX</span></code> appended.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">ENV_UNSET</span></code> added</dt>
+  <dd>
+    A whitespace delimited list of variables to be removed from the build
+    environment.
+  </dd>
+</dl>
+
+</div>
+<div class="section">
+<h3 id="eapi-7-metadata">EAPI 7 Metadata</h3>
+
+<dl>
+  <dt>Empty groupings are banned</dt>
+  <dd>
+    Groupings which are empty, such as <code class="docutils literal"><span class="pre">DEPEND="|| ( ${empty_var} )"</span></code>
+    will now generate an error. Furthermore, conditions within groupings are
+    more strictly enforced. For example, <code class="docutils literal"><span class="pre">REQUIRED_USE="|| ( foo? ( bar )
+    baz? ( zoinks )"</span></code> would previously work with <code class="docutils literal"><span class="pre">USE="-foo -baz"</span></code>
+    now requires either <code class="docutils literal"><span class="pre">USE="foo bar"</span></code> or <code class="docutils literal"><span class="pre">USE="baz zoinks"</span></code>.
+  </dd>
+</dl>
+
+</div>
+<div class="section">
+<h3 id="eapi-7-profiles">EAPI 7 Profiles</h3>
+
+<dl>
+  <dt>
+<code class="docutils literal"><span class="pre">package.provided</span></code> banned</dt>
+  <dd>
+    Profiles may no longer contain a <code class="docutils literal"><span class="pre">package.provided</span></code> file with
+    <code class="docutils literal"><span class="pre">EAPI=7</span></code>.
+  </dd>
+</dl>
+
+</div>
+<div class="section">
+<h3 id="eapi-7-helpers">EAPI 7 Helpers</h3>
+
+<dl>
+  <dt>
+<code class="docutils literal"><span class="pre">dohtml</span></code> banned</dt>
+  <dd>
+    The <code class="docutils literal"><span class="pre">dohtml</span></code> helper has been banned with <code class="docutils literal"><span class="pre">EAPI=7</span></code>.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">dolib</span></code> and <code class="docutils literal"><span class="pre">libopts</span></code> banned</dt>
+  <dd>
+    The <code class="docutils literal"><span class="pre">dolib</span></code> helper and the associated <code class="docutils literal"><span class="pre">libopts</span></code> have been banned
+    with <code class="docutils literal"><span class="pre">EAPI=7</span></code>.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">has_version</span></code> and <code class="docutils literal"><span class="pre">best_version</span></code> changes</dt>
+  <dd>
+    <p>
+    <code class="docutils literal"><span class="pre">has_version</span></code> and <code class="docutils literal"><span class="pre">best_version</span></code> now support an optional switch
+    to determine which type of dependencies to check.
+    </p>
+    <ul>
+      <li>
+<code class="docutils literal"><span class="pre">-r</span></code> (the default) will check runtime dependencies (RDEPEND)</li>
+      <li>
+<code class="docutils literal"><span class="pre">-d</span></code> will check CHOST build-time dependencies (DEPEND)</li>
+      <li>
+<code class="docutils literal"><span class="pre">-b</span></code> will check CBUILD build-time dependencies (BDEPEND)</li>
+    </ul>
+  </dd>
+  <dt>Version manipulation and comparison commands</dt>
+  <dd>
+    <p>
+    EAPI=7 introduced three commands for common version number operations.
+    </p>
+    <ul>
+      <li>
+<code class="docutils literal"><span class="pre">ver_cut</span></code> obtains substrings of a version string</li>
+      <li>
+<code class="docutils literal"><span class="pre">ver_rs</span></code> replaces separators in a version string</li>
+      <li>
+<code class="docutils literal"><span class="pre">ver_test</span></code> compares two versions</li>
+    </ul>
+    <p>
+    See <a class="" href="../variables/index.html#version-and-name-formatting-issues">Version and Name Formatting Issues</a>
+    for examples of common uses or
+    <a class="" href="https://dev.gentoo.org/~mgorny/articles/the-ultimate-guide-to-eapi-7.html#version-manipulation-and-comparison-commands">
+    an in-depth look</a>
+    </p>
+  </dd>
+  <dt>New function <code class="docutils literal"><span class="pre">eqawarn</span></code>
+</dt>
+  <dd>
+    The <code class="docutils literal"><span class="pre">eqawarn</span></code> helper has been added with <code class="docutils literal"><span class="pre">EAPI=7</span></code>. This function
+    is to alert developers to a deprecated feature. Previously, this was
+    contained in <code class="docutils literal"><span class="pre">eutils</span></code> eclass which is no longer necessary.
+  </dd>
+  <dt>New function <code class="docutils literal"><span class="pre">dostrip</span></code>
+</dt>
+  <dd>
+    The <code class="docutils literal"><span class="pre">dostrip</span></code> helper has been added with <code class="docutils literal"><span class="pre">EAPI=7</span></code>. This function
+    controls whether or not to strip a binary. <code class="docutils literal"><span class="pre">dostrip -x [file]</span></code> will
+    exclude a binary from being stripped. Conversely, when combined with
+    RESTRICT=strip, <code class="docutils literal"><span class="pre">dostrip [file]</span></code> selects a binary file to be stripped.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">die</span></code> and <code class="docutils literal"><span class="pre">assert</span></code> changes</dt>
+  <dd>
+    These commands are now safe to use in a subshell and act as if they were
+    called in the main process.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">nonfatal</span></code> changes</dt>
+  <dd>
+    The <code class="docutils literal"><span class="pre">nonfatal</span></code> command now works for shell functions and subprocesses.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">domo</span></code> behaviour changed</dt>
+  <dd>
+    <code class="docutils literal"><span class="pre">domo</span></code> (for localizations) now ignores the <code class="docutils literal"><span class="pre">into</span></code> directives.
+    This follows similar commands like <code class="docutils literal"><span class="pre">doinfo</span></code> and <code class="docutils literal"><span class="pre">doman</span></code>.
+  </dd>
+  <dt>
+<code class="docutils literal"><span class="pre">econf</span></code> changes</dt>
+  <dd>
+    The cross-compilation options <code class="docutils literal"><span class="pre">--build</span></code> and <code class="docutils literal"><span class="pre">--target</span></code> options
+    to specify <code class="docutils literal"><span class="pre">CBUILD</span></code> and <code class="docutils literal"><span class="pre">CTARGET</span></code> respectively have been added
+    and are retro-active to all EAPIs. In addition, if the build supports
+    <code class="docutils literal"><span class="pre">--with-sysroot</span></code>, the correct value will be passed such that normal
+    and cross-compilations succeed.
+  </dd>
+</dl>
+
+</div>
+</div>
+</div></main><footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+                Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+              </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script><script src="/assets.gentoo.org/lunr/lunr.min.js"></script><script>var documentsSrc = "../../documents.js"</script><script src="../../search.js"></script>
+</body>
+</html>

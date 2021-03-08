@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>java-ant-2.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>JAVA-ANT-2.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+java-ant-2.eclass - eclass for ant based Java packages
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+Eclass for Ant-based Java packages. Provides support for both automatic and
+manual manipulation of build.xml files. Should be inherited after java-pkg-2
+or java-pkg-opt-2 eclass.
+
+<H2 ID="lbAD">FUNCTIONS</H2>
+
+<DL>
+<DT><B>java-ant-2_src_configure</B> <DD>
+src_configure rewrites the build.xml files automatically, unless EAPI is undefined, 0 or 1.
+<DT><B>java-ant_bsfix_files</B> &lt;path/to/first/build.xml&gt; [path/to/second.build.xml ...]<DD>
+Attempts to fix named build files.
+<P>
+<PRE>
+Affected by variables:
+JAVA_PKG_BSFIX_SOURCE_TAGS
+JAVA_PKG_BSFIX_TARGET_TAGS
+JAVA_ANT_REWRITE_CLASSPATH
+JAVA_ANT_JAVADOC_INPUT_DIRS: Where we can find java sources for javadoc
+                               input. Can be a space separated list of
+                               directories
+JAVA_ANT_BSFIX_EXTRA_ARGS: You can use this to pass extra variables to the
+                           rewriter if you know what you are doing.
+</PRE>
+
+<P>
+If JAVA_ANT_JAVADOC_INPUT_DIRS is set, we will turn on the adding of a basic
+javadoc target to the ant's build.xml with the javadoc xml-rewriter feature.
+Then we will set EANT DOC TARGET to the added javadoc target
+NOTE: the variable JAVA_ANT_JAVADOC_OUTPUT_DIR points where we will
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;generate&nbsp;the&nbsp;javadocs.&nbsp;This&nbsp;is&nbsp;a&nbsp;read-only&nbsp;variable,&nbsp;dont&nbsp;change&nbsp;it.
+<DT><B>java-ant_bsfix_one</B> &lt;path/to/build.xml&gt;<DD>
+Attempts to fix named build file.
+<P>
+<PRE>
+Affected by variables:
+JAVA_PKG_BSFIX_SOURCE_TAGS
+JAVA_PKG_BSFIX_TARGET_TAGS
+</PRE>
+
+<DT><B>java-ant_rewrite-classpath</B> [path/to/build.xml]<DD>
+Adds 'classpath=&quot;${gentoo.classpath}&quot;' to specified build file.
+<P>
+Affected by:
+JAVA_ANT_CLASSPATH_TAGS
+<P>
+Parameter defaults to build.xml when not specified
+<DT><B>java-ant_ignore-system-classes</B> [path/to/build.xml]<DD>
+Makes the available task ignore classes in the system classpath
+Parameter defaults to build.xml when not specified
+<DT><B>java-ant_xml-rewrite</B> &lt;xml rewriter arguments&gt;<DD>
+Run the right xml-rewrite binary with the given arguments
+<DT><B>java-ant_rewrite-bootclasspath</B> &lt;version&gt; [path/to/build.xml] [prepend] [append]<DD>
+Adds bootclasspath to javac-like tasks in build.xml filled with jars of a
+bootclasspath package of given version.
+<P>
+<PRE>
+Affected by:
+JAVA_PKG_BSFIX_TARGET_TAGS - the tags of javac tasks
+
+Parameters:
+$1 - the version of bootclasspath (e.g. 1.5), 'auto' for bootclasspath
+     of the current JDK
+$2 - path to desired build.xml file, defaults to 'build.xml'
+$3 - (optional) what to prepend the bootclasspath with (to override)
+$4 - (optional) what to append to the bootclasspath
+</PRE>
+
+</DL>
+
+<H2 ID="lbAE">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>WANT_ANT_TASKS</B><DD>
+An $IFS separated list of ant tasks.
+Ebuild can specify this variable before inheriting java-ant-2 eclass to
+determine ANT_TASKS it needs. They will be automatically translated to
+DEPEND variable and ANT_TASKS variable. JAVA_PKG_FORCE_ANT_TASKS can override
+ANT_TASKS set by WANT_ANT_TASKS, but not the DEPEND due to caching.
+Ebuilds that need to depend conditionally on certain tasks and specify them
+differently for different eant calls can't use this simplified approach.
+You also cannot specify version or anything else than ant-*.
+<P>
+<PRE>
+WANT_ANT_TASKS=&quot;ant-junit ant-trax&quot;
+</PRE>
+
+<DT><B>JAVA_ANT_DISABLE_ANT_CORE_DEP</B><DD>
+Setting this variable non-empty before inheriting java-ant-2 disables adding
+dev-java/ant-core into DEPEND.
+<DT><B>JAVA_PKG_BSFIX</B> = <I>${JAVA_PKG_BSFIX:-&quot;on&quot;}</I><DD>
+Should we attempt to 'fix' ant build files to include the source/target
+attributes when calling javac?
+<DT><B>JAVA_PKG_BSFIX_ALL</B> = <I>${JAVA_PKG_BSFIX_ALL:-&quot;yes&quot;}</I><DD>
+If we're fixing build files, should we try to fix all the ones we can find?
+<DT><B>JAVA_PKG_BSFIX_NAME</B> = <I>${JAVA_PKG_BSFIX_NAME:-&quot;build.xml&quot;}</I><DD>
+Filename of build files to fix/search for
+<DT><B>JAVA_PKG_BSFIX_TARGET_TAGS</B> = <I>${JAVA_PKG_BSFIX_TARGET_TAGS:-&quot;javac xjavac javac.preset&quot;}</I><DD>
+Targets to fix the 'source' attribute in
+<DT><B>JAVA_PKG_BSFIX_SOURCE_TAGS</B> = <I>${JAVA_PKG_BSFIX_SOURCE_TAGS:-&quot;javadoc javac xjavac javac.preset&quot;}</I><DD>
+Targets to fix the 'target' attribute in
+<DT><B>JAVA_ANT_CLASSPATH_TAGS</B> = <I>&quot;javac xjavac&quot;</I><DD>
+Targets to add the classpath attribute to
+<DT><B>JAVA_ANT_IGNORE_SYSTEM_CLASSES</B><DD>
+When set, &lt;available&gt; Ant tasks are rewritten to ignore Ant's runtime classpath.
+</DL>
+
+<H2 ID="lbAF">AUTHORS</H2>
+
+kiorky (<A HREF="mailto:kiorky@cryptelium.net">kiorky@cryptelium.net</A>), Petteri Räty (<A HREF="mailto:betelgeuse@gentoo.org">betelgeuse@gentoo.org</A>)
+
+<H2 ID="lbAG">MAINTAINERS</H2>
+
+<A HREF="mailto:java@gentoo.org">java@gentoo.org</A>
+
+<H2 ID="lbAH">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAI">FILES</H2>
+
+<B>java-ant-2.eclass</B>
+
+
+<H2 ID="lbAJ">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/java-ant-2.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/java-ant-2.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAE">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAF">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAG">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAH">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAI">FILES</A><DD>
+<DT><A HREF="index.html#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

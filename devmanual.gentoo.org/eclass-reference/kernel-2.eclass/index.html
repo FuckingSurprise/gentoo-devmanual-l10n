@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>kernel-2.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>KERNEL-2.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+kernel-2.eclass - Eclass for kernel packages
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+This is the kernel.eclass rewrite for a clean base regarding the 2.6
+series of kernel with back-compatibility for 2.4
+Please direct your bugs to the current eclass maintainer :)
+added functionality:
+unipatch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- a flexible, singular method to extract, add and remove patches.<BR>
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+2 3 4 5 6
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>debug-print-kernel2-variables</B> <DD>
+this function exists only to help debug kernel-2.eclass
+if you are adding new functionality in, put a call to it
+at the start of src_unpack, or during SRC_URI/dep generation.
+<DT><B>handle_genpatches</B> [--set-unipatch-list]<DD>
+add genpatches to list of patches to apply if wanted
+<DT><B>detect_version</B> <DD>
+this function will detect and set
+- OKV: Original Kernel Version (2.6.0/2.6.0-test11)
+- KV: Kernel Version (2.6.0-gentoo/2.6.0-test11-gentoo-r1)
+- EXTRAVERSION: The additional version appended to OKV (-gentoo/-gentoo-r1)
+<DT><B>kernel_is</B> &lt;conditional version | version&gt;<DD>
+user for comparing kernel versions
+or just identifying a version
+e.g kernel_is 2 4
+e.g kernel_is ge 4.8.11
+Note: duplicated in linux-info.eclass
+<DT><B>kernel_is_2_4</B> <DD>
+return true if kernel is version 2.4
+<DT><B>kernel_is_2_6</B> <DD>
+return true if kernel is version 2.6
+<DT><B>kernel_header_destdir</B> <DD>
+return header destination directory
+<DT><B>cross_pre_c_headers</B> <DD>
+set use if necessary for cross compile support
+<DT><B>env_setup_xmakeopts</B> <DD>
+set the ARCH/CROSS_COMPILE when cross compiling
+<DT><B>unpack_2_4</B> <DD>
+unpack and generate .config for 2.4 kernels
+<DT><B>unpack_2_6</B> <DD>
+unpack and generate .config for 2.6 kernels
+<DT><B>universal_unpack</B> <DD>
+unpack kernel sources
+<DT><B>unpack_set_extraversion</B> <DD>
+handle EXTRAVERSION
+<DT><B>unpack_fix_install_path</B> <DD>
+Should be done after patches have been applied
+Otherwise patches that modify the same area of Makefile will fail
+<DT><B>compile_headers</B> <DD>
+header compilation
+<DT><B>compile_headers_tweak_config</B> <DD>
+some targets can be very very picky, so let's finesse the
+.config based upon any info we may have
+<DT><B>install_universal</B> <DD>
+Fix permissions in tarball
+<DT><B>install_headers</B> <DD>
+Install headers
+<DT><B>install_sources</B> <DD>
+Install sources
+<DT><B>preinst_headers</B> <DD>
+Headers preinst steps
+<DT><B>postinst_sources</B> <DD>
+Sources post installation function.
+see inline comments
+<DT><B>setup_headers</B> <DD>
+Determine if ${PN} supports arch
+<DT><B>unipatch</B> &lt;list of patches to apply&gt;<DD>
+Universal function that will apply patches to source
+<DT><B>getfilevar</B> &lt;variable&gt; &lt;configfile&gt;<DD>
+pulled from linux-info
+<DT><B>detect_arch</B> <DD>
+This function sets ARCH_URI and ARCH_PATCH
+with the neccessary info for the arch sepecific compatibility
+patchsets.
+<DT><B>headers___fix</B> <DD>
+Voodoo to partially fix broken upstream headers.
+note: do not put inline/asm/volatile together (breaks &quot;inline asm volatile&quot;)
+<DT><B>kernel-2_src_unpack</B> <DD>
+unpack sources, handle genpatches, deblob
+<DT><B>kernel-2_src_prepare</B> <DD>
+Apply any user patches
+<DT><B>kernel-2_src_compile</B> <DD>
+conpile headers or run deblob script
+<DT><B>kernel-2_src_test</B> <DD>
+if you leave it to the default src_test, it will run make to
+find whether test/check targets are present; since &quot;make test&quot;
+actually produces a few support files, they are installed even
+though the package is binchecks-restricted.
+<P>
+Avoid this altogether by making the function moot.
+<DT><B>kernel-2_pkg_preinst</B> <DD>
+if ETYPE = headers, call preinst_headers
+<DT><B>kernel-2_src_install</B> <DD>
+Install headers or sources dependant on ETYPE
+<DT><B>kernel-2_pkg_postinst</B> <DD>
+call postinst_sources for ETYPE = sources
+<DT><B>kernel-2_pkg_setup</B> <DD>
+check for supported kernel version, die if ETYPE is unknown, call setup_headers
+if necessary
+<DT><B>kernel-2_pkg_postrm</B> <DD>
+Notify the user that after a depclean, there may be sources
+left behind that need to be manually cleaned
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>K_USEPV</B><DD>
+When setting the EXTRAVERSION variable, it should
+add PV to the end.
+this is useful for things like wolk. IE:
+EXTRAVERSION would be something like : -wolk-4.19-r1
+<DT><B>K_NODRYRUN</B><DD>
+if this is set then patch --dry-run will not 
+be run. Certain patches will fail with this parameter
+See bug #507656
+<DT><B>K_NOSETEXTRAVERSION</B><DD>
+if this is set then EXTRAVERSION will not be
+automatically set within the kernel Makefile
+<DT><B>K_NOUSENAME</B><DD>
+if this is set then EXTRAVERSION will not include the
+first part of ${PN} in EXTRAVERSION
+<DT><B>K_NOUSEPR</B><DD>
+if this is set then EXTRAVERSION will not include the
+anything based on ${PR}.
+<DT><B>K_PREPATCHED</B><DD>
+if the patchset is prepatched (ie: pf-sources,
+zen-sources etc) it will use PR (ie: -r5) as the
+patchset version for and not use it as a true package
+revision
+<DT><B>K_EXTRAEINFO</B><DD>
+this is a new-line seperated list of einfo displays in
+postinst and can be used to carry additional postinst
+messages
+<DT><B>K_EXTRAELOG</B><DD>
+same as K_EXTRAEINFO except using elog instead of einfo
+<DT><B>K_EXTRAEWARN</B><DD>
+same as K_EXTRAEINFO except using ewarn instead of einfo
+<DT><B>K_SYMLINK</B><DD>
+if this is set, then forcably create symlink anyway
+<DT><B>K_BASE_VER</B><DD>
+for git-sources, declare the base version this patch is
+based off of.
+<DT><B>K_DEFCONFIG</B><DD>
+Allow specifying a different defconfig target.
+If length zero, defaults to &quot;defconfig&quot;.
+<DT><B>K_WANT_GENPATCHES</B><DD>
+Apply genpatches to kernel source. Provide any
+combination of &quot;base&quot;, &quot;extras&quot; or &quot;experimental&quot;.
+<DT><B>K_EXP_GENPATCHES_PULL</B><DD>
+If set, we pull &quot;experimental&quot; regardless of the USE FLAG
+but expect the ebuild maintainer to use K_EXP_GENPATCHES_LIST.
+<DT><B>K_EXP_GENPATCHES_NOUSE</B><DD>
+If set, no USE flag will be provided for &quot;experimental&quot;;
+as a result the user cannot choose to apply those patches.
+<DT><B>K_EXP_GENPATCHES_LIST</B><DD>
+A list of patches to pick from &quot;experimental&quot; to apply when
+the USE flag is unset and K_EXP_GENPATCHES_PULL is set.
+<DT><B>K_FROM_GIT</B><DD>
+If set, this variable signals that the kernel sources derives
+from a git tree and special handling will be applied so that
+any patches that are applied will actually apply.
+<DT><B>K_GENPATCHES_VER</B><DD>
+The version of the genpatches tarball(s) to apply.
+A value of &quot;5&quot; would apply genpatches-2.6.12-5 to
+my-sources-2.6.12.ebuild
+<DT><B>K_SECURITY_UNSUPPORTED</B><DD>
+If set, this kernel is unsupported by Gentoo Security
+to the current eclass maintainer :)
+<DT><B>K_DEBLOB_AVAILABLE</B><DD>
+A value of &quot;0&quot; will disable all of the optional deblob
+code. If empty, will be set to &quot;1&quot; if deblobbing is
+possible. Test ONLY for &quot;1&quot;.
+<DT><B>K_DEBLOB_TAG</B><DD>
+This will be the version of deblob script. It's a upstream SVN tag
+such asw -gnu or -gnu1.
+<DT><B>K_PREDEBLOBBED</B><DD>
+This kernel was already deblobbed elsewhere.
+If false, either optional deblobbing will be available
+or the license will note the inclusion of linux-firmware code.
+<DT><B>K_LONGTERM</B><DD>
+If set, the eclass will search for the kernel source
+in the long term directories on the upstream servers
+as the location has been changed by upstream
+<DT><B>H_SUPPORTEDARCH</B><DD>
+this should be a space separated list of ARCH's which
+can be supported by the headers ebuild
+<DT><B>UNIPATCH_LIST</B><DD>
+space delimetered list of patches to be applied to the kernel
+<DT><B>UNIPATCH_EXCLUDE</B><DD>
+An addition var to support exlusion based completely
+on &quot;&lt;passedstring&gt;*&quot; and not &quot;&lt;passedno#&gt;_*&quot;
+this should _NOT_ be used from the ebuild as this is
+reserved for end users passing excludes from the cli
+<DT><B>UNIPATCH_DOCS</B><DD>
+space delimemeted list of docs to be installed to
+the doc dir
+<DT><B>UNIPATCH_STRICTORDER</B><DD>
+if this is set places patches into directories of
+order, so they are applied in the order passed
+Changing any other variable in this eclass is not supported; you can request
+for additional variables to be added by contacting the current maintainer.
+If you do change them, there is a chance that we will not fix resulting bugs;
+that of course does not mean we're not willing to help.
+</DL>
+
+<H2 ID="lbAG">AUTHORS</H2>
+
+John Mylchreest &lt;<A HREF="mailto:johnm@gentoo.org">johnm@gentoo.org</A>&gt;
+<BR>
+
+Mike Pagano &lt;<A HREF="mailto:mpagano@gentoo.org">mpagano@gentoo.org</A>&gt;
+<BR>
+
+&lt;so many, many others, please add yourself&gt;
+
+<H2 ID="lbAH">MAINTAINERS</H2>
+
+Gentoo Kernel project &lt;<A HREF="mailto:kernel@gentoo.org">kernel@gentoo.org</A>&gt;
+
+<H2 ID="lbAI">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAJ">FILES</H2>
+
+<B>kernel-2.eclass</B>
+
+
+<H2 ID="lbAK">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/kernel-2.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/kernel-2.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAH">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAI">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAJ">FILES</A><DD>
+<DT><A HREF="index.html#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

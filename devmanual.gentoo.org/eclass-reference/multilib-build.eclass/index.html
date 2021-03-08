@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>multilib-build.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>MULTILIB-BUILD.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+multilib-build.eclass - flags and utility functions for building multilib packages
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+The multilib-build.eclass exports USE flags and utility functions
+necessary to build packages for multilib in a clean and uniform
+manner.
+<P>
+Please note that dependency specifications for multilib-capable
+dependencies shall use the USE dependency string in ${MULTILIB_USEDEP}
+to properly request multilib enabled.
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+4 5 6 7
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>multilib_get_enabled_abis</B> <DD>
+Return the ordered list of enabled ABIs if multilib builds
+are enabled. The best (most preferred) ABI will come last.
+<P>
+If multilib is disabled, the default ABI will be returned
+in order to enforce consistent testing with multilib code.
+<DT><B>multilib_get_enabled_abi_pairs</B> <DD>
+Return the ordered list of enabled &lt;use-flag&gt;.&lt;ABI&gt; pairs
+if multilib builds are enabled. The best (most preferred)
+ABI will come last.
+<P>
+If multilib is disabled, the default ABI will be returned
+along with empty &lt;use-flag&gt;.
+<DT><B>multilib_foreach_abi</B> &lt;argv&gt;...<DD>
+If multilib support is enabled, sets the toolchain up for each
+supported ABI along with the ABI variable and correct BUILD_DIR,
+and runs the given commands with them.
+<P>
+If multilib support is disabled, it just runs the commands. No setup
+is done.
+<DT><B>multilib_parallel_foreach_abi</B> &lt;argv&gt;...<DD>
+If multilib support is enabled, sets the toolchain up for each
+supported ABI along with the ABI variable and correct BUILD_DIR,
+and runs the given commands with them.
+<P>
+If multilib support is disabled, it just runs the commands. No setup
+is done.
+<P>
+This function used to run multiple commands in parallel. Now it's just
+a deprecated alias to multilib_foreach_abi.
+<DT><B>multilib_for_best_abi</B> &lt;argv&gt;...<DD>
+Runs the given command with setup for the 'best' (usually native) ABI.
+<DT><B>multilib_check_headers</B> <DD>
+Check whether the header files are consistent between ABIs.
+<P>
+This function needs to be called after each ABI's installation phase.
+It obtains the header file checksums and compares them with previous
+runs (if any). Dies if header files differ.
+<DT><B>multilib_copy_sources</B> <DD>
+Create a single copy of the package sources for each enabled ABI.
+<P>
+The sources are always copied from initial BUILD_DIR (or S if unset)
+to ABI-specific build directory matching BUILD_DIR used by
+multilib_foreach_abi().
+<DT><B>multilib_prepare_wrappers</B> [&lt;install-root&gt;]<DD>
+Perform the preparation of all kinds of wrappers for the current ABI.
+This function shall be called once per each ABI, after installing
+the files to be wrapped.
+<P>
+Takes an optional custom &lt;install-root&gt; from which files will be
+used. If no root is specified, uses ${ED}.
+<P>
+The files to be wrapped are specified using separate variables,
+e.g. MULTILIB_WRAPPED_HEADERS. Those variables shall not be changed
+between the successive calls to multilib_prepare_wrappers
+and multilib_install_wrappers.
+<P>
+After all wrappers are prepared, multilib_install_wrappers shall
+be called to commit them to the installation tree.
+<DT><B>multilib_install_wrappers</B> [&lt;install-root&gt;]<DD>
+Install the previously-prepared wrappers. This function shall
+be called once, after all wrappers were prepared.
+<P>
+Takes an optional custom &lt;install-root&gt; to which the wrappers will be
+installed. If no root is specified, uses ${ED}. There is no need to
+use the same root as when preparing the wrappers.
+<P>
+The files to be wrapped are specified using separate variables,
+e.g. MULTILIB_WRAPPED_HEADERS. Those variables shall not be changed
+between the calls to multilib_prepare_wrappers
+and multilib_install_wrappers.
+<DT><B>multilib_is_native_abi</B> <DD>
+Determine whether the currently built ABI is the profile native.
+Return true status (0) if that is true, otherwise false (1).
+<DT><B>multilib_build_binaries</B> <DD>
+Deprecated synonym for multilib_is_native_abi
+<DT><B>multilib_native_use_with</B> &lt;flag&gt; [&lt;opt-name&gt; [&lt;opt-value&gt;]]<DD>
+Output --with configure option alike use_with if USE &lt;flag&gt; is enabled
+and executables are being built (multilib_is_native_abi is true).
+Otherwise, outputs --without configure option. Arguments are the same
+as for use_with in the EAPI.
+<DT><B>multilib_native_use_enable</B> &lt;flag&gt; [&lt;opt-name&gt; [&lt;opt-value&gt;]]<DD>
+Output --enable configure option alike use_enable if USE &lt;flag&gt;
+is enabled and executables are being built (multilib_is_native_abi
+is true). Otherwise, outputs --disable configure option. Arguments are
+the same as for use_enable in the EAPI.
+<DT><B>multilib_native_enable</B> &lt;opt-name&gt; [&lt;opt-value&gt;]<DD>
+Output --enable configure option if executables are being built
+(multilib_is_native_abi is true). Otherwise, output --disable configure
+option.
+<DT><B>multilib_native_with</B> &lt;opt-name&gt; [&lt;opt-value&gt;]<DD>
+Output --with configure option if executables are being built
+(multilib_is_native_abi is true). Otherwise, output --without configure
+option.
+<DT><B>multilib_native_usex</B> &lt;flag&gt; [&lt;true1&gt; [&lt;false1&gt; [&lt;true2&gt; [&lt;false2&gt;]]]]<DD>
+Output the concatenation of &lt;true1&gt; (or 'yes' if unspecified)
+and &lt;true2&gt; if USE &lt;flag&gt; is enabled and executables are being built
+(multilib_is_native_abi is true). Otherwise, output the concatenation
+of &lt;false1&gt; (or 'no' if unspecified) and &lt;false2&gt;. Arguments
+are the same as for usex in the EAPI.
+<P>
+Note: in EAPI 4 you need to inherit eutils to use this function.
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>MULTILIB_COMPAT</B><DD>
+List of multilib ABIs supported by the ebuild. If unset, defaults to
+all ABIs supported by the eclass.
+<P>
+This variable is intended for use in prebuilt multilib packages that
+can provide binaries only for a limited set of ABIs. If ABIs need to
+be limited due to a bug in source code, package.use.mask is to be used
+instead. Along with MULTILIB_COMPAT, KEYWORDS should contain '-*'.
+<P>
+Note that setting this variable effectively disables support for all
+other ABIs, including other architectures. For example, specifying
+abi_x86_{32,64} disables support for MIPS as well.
+<P>
+The value of MULTILIB_COMPAT determines the value of IUSE. If set, it
+also enables REQUIRED_USE constraints.
+<P>
+Example use:
+<PRE>
+# Upstream provides binaries for x86 &amp; amd64 only
+MULTILIB_COMPAT=( abi_x86_{32,64} )
+</PRE>
+
+<DT><B>MULTILIB_USEDEP</B> (GENERATED BY ECLASS)<DD>
+The USE-dependency to be used on dependencies (libraries) needing
+to support multilib as well.
+<P>
+Example use:
+<PRE>
+RDEPEND=&quot;dev-libs/libfoo[${MULTILIB_USEDEP}]
+net-libs/libbar[ssl,${MULTILIB_USEDEP}]&quot;
+</PRE>
+
+<DT><B>MULTILIB_ABI_FLAG</B> (GENERATED BY ECLASS)<DD>
+The complete ABI name. Resembles the USE flag name.
+<P>
+This is set within multilib_foreach_abi(),
+multilib_parallel_foreach_abi() and multilib-minimal sub-phase
+functions.
+<P>
+It may be null (empty) when the build is done on ABI not controlled
+by a USE flag (e.g. on non-multilib arch or when using multilib
+portage). The build will always be done for a single ABI then.
+<P>
+Example value:
+<PRE>
+abi_x86_64
+</PRE>
+
+<DT><B>MULTILIB_WRAPPED_HEADERS</B><DD>
+A list of headers to wrap for multilib support. The listed headers
+will be moved to a non-standard location and replaced with a file
+including them conditionally to current ABI.
+<P>
+This variable has to be a bash array. Paths shall be relative to
+installation root (${ED}), and name regular files. Recursive wrapping
+is not supported.
+<P>
+Please note that header wrapping is *discouraged*. It is preferred to
+install all headers in a subdirectory of libdir and use pkg-config to
+locate the headers. Some C preprocessors will not work with wrapped
+headers.
+<P>
+Example:
+<PRE>
+MULTILIB_WRAPPED_HEADERS=(
+/usr/include/foobar/config.h
+)
+</PRE>
+
+<DT><B>MULTILIB_CHOST_TOOLS</B><DD>
+A list of tool executables to preserve for each multilib ABI.
+The listed executables will be renamed to ${CHOST}-${basename},
+and the native variant will be symlinked to the generic name.
+<P>
+This variable has to be a bash array. Paths shall be relative to
+installation root (${ED}), and name regular files or symbolic
+links to regular files. Recursive wrapping is not supported.
+<P>
+If symbolic link is passed, both symlink path and symlink target
+will be changed. As a result, the symlink target is expected
+to be wrapped as well (either by listing in MULTILIB_CHOST_TOOLS
+or externally).
+<P>
+Please note that tool wrapping is *discouraged*. It is preferred to
+install pkg-config files for each ABI, and require reverse
+dependencies to use that.
+<P>
+Packages that search for tools properly (e.g. using AC_PATH_TOOL
+macro) will find the wrapper executables automatically. Other packages
+will need explicit override of tool paths.
+<P>
+Example:
+<PRE>
+MULTILIB_CHOST_TOOLS=(
+/usr/bin/foo-config
+)
+</PRE>
+
+</DL>
+
+<H2 ID="lbAG">AUTHORS</H2>
+
+Author: Michał Górny &lt;<A HREF="mailto:mgorny@gentoo.org">mgorny@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">MAINTAINERS</H2>
+
+gx86-multilib team &lt;<A HREF="mailto:multilib@gentoo.org">multilib@gentoo.org</A>&gt;
+
+<H2 ID="lbAI">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAJ">FILES</H2>
+
+<B>multilib-build.eclass</B>
+
+
+<H2 ID="lbAK">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/multilib-build.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/multilib-build.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAH">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAI">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAJ">FILES</A><DD>
+<DT><A HREF="index.html#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

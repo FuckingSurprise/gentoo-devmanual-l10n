@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>haskell-cabal.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>HASKELL-CABAL.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+haskell-cabal.eclass - for packages that make use of the Haskell Common Architecture for Building Applications and Libraries (cabal)
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+Basic instructions:
+<P>
+Before inheriting the eclass, set CABAL_FEATURES to
+reflect the tools and features that the package makes
+use of.
+<P>
+Currently supported features:
+<BR>&nbsp;&nbsp;haddock&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;for&nbsp;documentation&nbsp;generation
+<BR>&nbsp;&nbsp;hscolour&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;generation&nbsp;of&nbsp;colourised&nbsp;sources
+<BR>&nbsp;&nbsp;hoogle&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;generation&nbsp;of&nbsp;documentation&nbsp;search&nbsp;index
+<BR>&nbsp;&nbsp;profile&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;if&nbsp;package&nbsp;supports&nbsp;to&nbsp;build&nbsp;profiling-enabled&nbsp;libraries
+<BR>&nbsp;&nbsp;bootstrap&nbsp;&nbsp;--&nbsp;&nbsp;only&nbsp;used&nbsp;for&nbsp;the&nbsp;cabal&nbsp;package&nbsp;itself
+<BR>&nbsp;&nbsp;lib&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;the&nbsp;package&nbsp;installs&nbsp;libraries
+<BR>&nbsp;&nbsp;nocabaldep&nbsp;--&nbsp;&nbsp;don't&nbsp;add&nbsp;dependency&nbsp;on&nbsp;cabal.
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;only&nbsp;used&nbsp;for&nbsp;packages&nbsp;that&nbsp;_must_&nbsp;not&nbsp;pull&nbsp;the&nbsp;dependency
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on&nbsp;cabal,&nbsp;but&nbsp;still&nbsp;use&nbsp;this&nbsp;eclass&nbsp;(e.g.&nbsp;haskell-updater).
+<BR>&nbsp;&nbsp;ghcdeps&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;constraint&nbsp;dependency&nbsp;on&nbsp;package&nbsp;to&nbsp;ghc&nbsp;onces
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;only&nbsp;used&nbsp;for&nbsp;packages&nbsp;that&nbsp;use&nbsp;libghc&nbsp;internally&nbsp;and&nbsp;_must_
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;not&nbsp;pull&nbsp;upper&nbsp;versions
+<BR>&nbsp;&nbsp;test-suite&nbsp;--&nbsp;&nbsp;add&nbsp;support&nbsp;for&nbsp;cabal&nbsp;test-suites&nbsp;(introduced&nbsp;in&nbsp;Cabal-1.8)
+<BR>&nbsp;&nbsp;rebuild-after-doc-workaround&nbsp;--&nbsp;enable&nbsp;doctest&nbsp;test&nbsp;failue&nbsp;workaround.
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Symptom:&nbsp;when&nbsp;`./setup&nbsp;haddock`&nbsp;is&nbsp;run&nbsp;in&nbsp;a&nbsp;`build-type:&nbsp;Custom`
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;package&nbsp;it&nbsp;might&nbsp;cause&nbsp;cause&nbsp;the&nbsp;test-suite&nbsp;to&nbsp;fail&nbsp;with
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errors&nbsp;like:
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;&nbsp;&lt;command&nbsp;line&gt;:&nbsp;cannot&nbsp;satisfy&nbsp;-package-id&nbsp;singletons-2.7-3Z7pnljD8tU1NrslJodXmr
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Workaround&nbsp;re-reginsters&nbsp;the&nbsp;package&nbsp;to&nbsp;avoid&nbsp;the&nbsp;failure
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(and&nbsp;rebuilds&nbsp;changes).
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FEATURE&nbsp;can&nbsp;be&nbsp;removed&nbsp;once&nbsp;<A HREF="https://github.com/haskell/cabal/issues/7213">https://github.com/haskell/cabal/issues/7213</A>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;fixed.
+
+<H2 ID="lbAD">FUNCTIONS</H2>
+
+<DL>
+<DT><B>cabal_flag</B> <DD>
+ebuild.sh:use_enable() taken as base
+<P>
+Usage examples:
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;CABAL_CONFIGURE_FLAGS=$(cabal_flag&nbsp;gui)
+<BR>&nbsp;leads&nbsp;to&nbsp;&quot;--flags=gui&quot;&nbsp;or&nbsp;&quot;--flags=-gui&quot;&nbsp;(useflag&nbsp;'gui')
+<P>
+<BR>&nbsp;&nbsp;&nbsp;&nbsp;CABAL_CONFIGURE_FLAGS=$(cabal_flag&nbsp;gtk&nbsp;gui)
+<BR>&nbsp;also&nbsp;leads&nbsp;to&nbsp;&quot;--flags=gui&quot;&nbsp;or&nbsp;&quot;&nbsp;--flags=-gui&quot;&nbsp;(useflag&nbsp;'gtk')
+<P>
+<DT><B>cabal_chdeps</B> <DD>
+Allows easier patching of $CABAL_FILE (${S}/${PN}.cabal by default)
+depends
+<P>
+Accepts argument list as pairs of substitutions: &lt;from-string&gt; &lt;to-string&gt;...
+<P>
+Dies on error.
+<P>
+Usage examples:
+<P>
+src_prepare() {
+<BR>&nbsp;&nbsp;&nbsp;cabal_chdeps&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'base&nbsp;&gt;=&nbsp;4.2&nbsp;&amp;&amp;&nbsp;&lt;&nbsp;4.6'&nbsp;'base&nbsp;&gt;=&nbsp;4.2&nbsp;&amp;&amp;&nbsp;&lt;&nbsp;4.7'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'containers&nbsp;==0.4.*'&nbsp;'containers&nbsp;&gt;=&nbsp;0.4&nbsp;&amp;&amp;&nbsp;&lt;&nbsp;0.6'
+}
+or
+src_prepare() {
+<BR>&nbsp;&nbsp;&nbsp;CABAL_FILE=${S}/${MY_PN}.cabal&nbsp;cabal_chdeps&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'base&nbsp;&gt;=&nbsp;4.2&nbsp;&amp;&amp;&nbsp;&lt;&nbsp;4.6'&nbsp;'base&nbsp;&gt;=&nbsp;4.2&nbsp;&amp;&amp;&nbsp;&lt;&nbsp;4.7'
+<BR>&nbsp;&nbsp;&nbsp;CABAL_FILE=${S}/${MY_PN}-tools.cabal&nbsp;cabal_chdeps&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'base&nbsp;==&nbsp;3.*'&nbsp;'base&nbsp;&gt;=&nbsp;4.2&nbsp;&amp;&amp;&nbsp;&lt;&nbsp;4.7'
+}
+<P>
+<DT><B>cabal-constraint</B> <DD>
+Allowes to set contraint to the libraries that are
+used by specified package
+<DT><B>replace-hcflags</B> &lt;old&gt; &lt;new&gt;<DD>
+Replace the &lt;old&gt; flag with &lt;new&gt; in HCFLAGS. Accepts shell globs for &lt;old&gt;.
+The implementation is picked from flag-o-matic.eclass:replace-flags()
+</DL>
+
+<H2 ID="lbAE">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>CABAL_EXTRA_CONFIGURE_FLAGS</B><DD>
+User-specified additional parameters passed to 'setup configure'.
+example: /etc/portage/make.conf:
+<BR>&nbsp;&nbsp;&nbsp;CABAL_EXTRA_CONFIGURE_FLAGS=&quot;--enable-shared&nbsp;--enable-executable-dynamic&quot;
+<DT><B>CABAL_EXTRA_BUILD_FLAGS</B><DD>
+User-specified additional parameters passed to 'setup build'.
+example: /etc/portage/make.conf: CABAL_EXTRA_BUILD_FLAGS=-v
+<DT><B>GHC_BOOTSTRAP_FLAGS</B><DD>
+User-specified additional parameters for ghc when building
+_only_ 'setup' binary bootstrap.
+example: /etc/portage/make.conf: GHC_BOOTSTRAP_FLAGS=-dynamic to make
+linking 'setup' faster.
+<DT><B>CABAL_EXTRA_HADDOCK_FLAGS</B><DD>
+User-specified additional parameters passed to 'setup haddock'.
+example: /etc/portage/make.conf:
+<BR>&nbsp;&nbsp;&nbsp;CABAL_EXTRA_HADDOCK_FLAGS=&quot;--haddock-options=--latex&nbsp;--haddock-options=--pretty-html&quot;
+<DT><B>CABAL_EXTRA_HOOGLE_FLAGS</B><DD>
+User-specified additional parameters passed to 'setup haddock --hoogle'.
+example: /etc/portage/make.conf:
+<BR>&nbsp;&nbsp;&nbsp;CABAL_EXTRA_HOOGLE_FLAGS=&quot;--haddock-options=--show-all&quot;
+<DT><B>CABAL_EXTRA_HSCOLOUR_FLAGS</B><DD>
+User-specified additional parameters passed to 'setup hscolour'.
+example: /etc/portage/make.conf:
+<BR>&nbsp;&nbsp;&nbsp;CABAL_EXTRA_HSCOLOUR_FLAGS=&quot;--executables&nbsp;--tests&quot;
+<DT><B>CABAL_EXTRA_TEST_FLAGS</B><DD>
+User-specified additional parameters passed to 'setup test'.
+example: /etc/portage/make.conf:
+<BR>&nbsp;&nbsp;&nbsp;CABAL_EXTRA_TEST_FLAGS=&quot;-v3&nbsp;--show-details=streaming&quot;
+<DT><B>CABAL_DEBUG_LOOSENING</B><DD>
+Show debug output for 'cabal_chdeps' function if set.
+Needs working 'diff'.
+<DT><B>CABAL_REPORT_OTHER_BROKEN_PACKAGES</B> ?= <I>yes</I><DD>
+Show other broken packages if 'cabal configure' fails.
+It should be normally enabled unless you know you are about
+to try to compile a lot of broken packages. Default value: 'yes'
+Set to anything else to disable.
+</DL>
+
+<H2 ID="lbAF">AUTHORS</H2>
+
+Original author: Andres Loeh &lt;<A HREF="mailto:kosmikus@gentoo.org">kosmikus@gentoo.org</A>&gt;
+<BR>
+
+Original author: Duncan Coutts &lt;<A HREF="mailto:dcoutts@gentoo.org">dcoutts@gentoo.org</A>&gt;
+
+<H2 ID="lbAG">MAINTAINERS</H2>
+
+Haskell herd &lt;<A HREF="mailto:haskell@gentoo.org">haskell@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAI">FILES</H2>
+
+<B>haskell-cabal.eclass</B>
+
+
+<H2 ID="lbAJ">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/haskell-cabal.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/haskell-cabal.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAE">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAF">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAG">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAH">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAI">FILES</A><DD>
+<DT><A HREF="index.html#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

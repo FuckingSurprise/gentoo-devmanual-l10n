@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>ruby-fakegem.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>RUBY-FAKEGEM.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+ruby-fakegem.eclass - An eclass for installing Ruby packages to behave like RubyGems.
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+This eclass allows to install arbitrary Ruby libraries (including Gems),
+providing integration into the RubyGems system even for &quot;regular&quot; packages.
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+4 5 6 7
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>ruby_fakegem_gemsdir</B> <DD>
+This function returns the gems data directory for the ruby
+implementation in question.
+<P>
+Return value: Returns the gem data directory
+<DT><B>ruby_fakegem_doins</B> &lt;file&gt; [file...]<DD>
+Installs the specified file(s) into the gems directory.
+<DT><B>ruby_fakegem_newins</B> &lt;file&gt; &lt;newname&gt;<DD>
+Installs the specified file into the gems directory using the provided filename.
+<DT><B>ruby_fakegem_install_gemspec</B> <DD>
+Install a .gemspec file for this package. Either use the file indicated
+by the RUBY_FAKEGEM_GEMSPEC variable, or generate one using
+ruby_fakegem_genspec.
+<DT><B>ruby_fakegem_gemspec_gemspec</B> &lt;gemspec-input&gt; &lt;gemspec-output&gt;<DD>
+Generates an installable version of the specification indicated by
+RUBY_FAKEGEM_GEMSPEC. This file is eval'ed to produce a final specification
+in a way similar to packaging the gemspec file.
+<DT><B>ruby_fakegem_metadata_gemspec</B> &lt;gemspec-metadata&gt; &lt;gemspec-output&gt;<DD>
+Generates an installable version of the specification indicated by
+the metadata distributed by the gem itself. This is similar to how
+rubygems creates an installation from a .gem file.
+<DT><B>ruby_fakegem_genspec</B> &lt;output-gemspec&gt;<DD>
+Generates a gemspec for the package and places it into the &quot;specifications&quot;
+directory of RubyGems.
+If the metadata normally distributed with a gem is present then that is
+used to generate the gemspec file.
+<P>
+As a fallback we can generate our own version.
+In the gemspec, the following values are set: name, version, summary,
+homepage, and require_paths=[&quot;lib&quot;].
+See RUBY_FAKEGEM_NAME and RUBY_FAKEGEM_VERSION for setting name and version.
+See RUBY_FAKEGEM_REQUIRE_PATHS for setting extra require paths.
+<DT><B>ruby_fakegem_binwrapper</B> &lt;command&gt; [path] [content]<DD>
+Creates a new binary wrapper for a command installed by the RubyGem.
+path defaults to /usr/bin/$command content is optional and can be used
+to inject additional ruby code into the wrapper. This may be useful to
+e.g. force a specific version using the gem command.
+<DT><B>each_fakegem_configure</B> <DD>
+Configure extensions defined in RUBY_FAKEGEM_EXTENSIONS, if any.
+<DT><B>each_ruby_configure</B> <DD>
+Run each_fakegem_configure for each ruby target
+<DT><B>all_fakegem_compile</B> <DD>
+Build documentation for the package if indicated by the doc USE flag
+and if there is a documetation task defined.
+<DT><B>each_fakegem_compile</B> <DD>
+Compile extensions defined in RUBY_FAKEGEM_EXTENSIONS, if any.
+<DT><B>each_ruby_compile</B> <DD>
+Run each_fakegem_compile for each ruby target
+<DT><B>all_ruby_unpack</B> <DD>
+Unpack the source archive, including support for unpacking gems.
+<DT><B>all_ruby_compile</B> <DD>
+Compile the package.
+<DT><B>each_fakegem_test</B> <DD>
+Run tests for the package for each ruby target if the test task is defined.
+<DT><B>each_fakegem_install</B> <DD>
+Install the package for each ruby target.
+<DT><B>each_ruby_install</B> <DD>
+Install the package for each target.
+<DT><B>all_fakegem_install</B> <DD>
+Install files common to all ruby targets.
+<DT><B>all_ruby_install</B> <DD>
+Install files common to all ruby targets.
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>RUBY_FAKEGEM_NAME</B> = <I>&quot;${RUBY_FAKEGEM_NAME:-${PN}}&quot;</I><DD>
+Sets the Gem name for the generated fake gemspec.
+This variable MUST be set before inheriting the eclass.
+<DT><B>RUBY_FAKEGEM_VERSION</B> = <I>&quot;${RUBY_FAKEGEM_VERSION:-${PV/_pre/.pre}}&quot;</I><DD>
+Sets the Gem version for the generated fake gemspec.
+This variable MUST be set before inheriting the eclass.
+<DT><B>RUBY_FAKEGEM_TASK_DOC</B> = <I>&quot;${RUBY_FAKEGEM_TASK_DOC-rdoc}&quot;</I><DD>
+Specify the rake(1) task to run to generate documentation.
+<DT><B>RUBY_FAKEGEM_RECIPE_TEST</B> = <I>&quot;${RUBY_FAKEGEM_RECIPE_TEST-rake}&quot;</I><DD>
+Specify one of the default testing function for ruby-fakegem:
+<BR>&nbsp;-&nbsp;rake&nbsp;(default;&nbsp;see&nbsp;also&nbsp;RUBY_FAKEGEM_TASK_TEST)
+<BR>&nbsp;-&nbsp;rspec&nbsp;(calls&nbsp;ruby-ng_rspec,&nbsp;adds&nbsp;dev-ruby/rspec:2&nbsp;to&nbsp;the&nbsp;dependencies)
+<BR>&nbsp;-&nbsp;rspec3&nbsp;(calls&nbsp;ruby-ng_rspec,&nbsp;adds&nbsp;dev-ruby/rspec:3&nbsp;to&nbsp;the&nbsp;dependencies)
+<BR>&nbsp;-&nbsp;cucumber&nbsp;(calls&nbsp;ruby-ng_cucumber,&nbsp;adds&nbsp;dev-util/cucumber&nbsp;to&nbsp;the
+<BR>&nbsp;&nbsp;&nbsp;dependencies)
+<BR>&nbsp;-&nbsp;none
+<DT><B>RUBY_FAKEGEM_TASK_TEST</B> = <I>&quot;${RUBY_FAKEGEM_TASK_TEST-test}&quot;</I><DD>
+Specify the rake(1) task used for executing tests. Only valid
+if RUBY_FAKEGEM_RECIPE_TEST is set to &quot;rake&quot; (the default).
+<DT><B>RUBY_FAKEGEM_RECIPE_DOC</B><DD>
+Specify one of the default API doc building function for ruby-fakegem:
+<BR>&nbsp;-&nbsp;rake&nbsp;(default;&nbsp;see&nbsp;also&nbsp;RUBY_FAKEGEM_TASK_DOC)
+<BR>&nbsp;-&nbsp;rdoc&nbsp;(calls&nbsp;`rdoc-2`,&nbsp;adds&nbsp;dev-ruby/rdoc&nbsp;to&nbsp;the&nbsp;dependencies);
+<BR>&nbsp;-&nbsp;yard&nbsp;(calls&nbsp;`yard`,&nbsp;adds&nbsp;dev-ruby/yard&nbsp;to&nbsp;the&nbsp;dependencies);
+<BR>&nbsp;-&nbsp;none
+<DT><B>RUBY_FAKEGEM_DOCDIR</B><DD>
+Specify the directory under which the documentation is built;
+if empty no documentation will be installed automatically.
+Note: if RUBY_FAKEGEM_RECIPE_DOC is set to `rdoc`, this variable is
+hardwired to `doc`.
+<DT><B>RUBY_FAKEGEM_EXTRADOC</B><DD>
+Extra documentation to install (readme, changelogs, …).
+<DT><B>RUBY_FAKEGEM_DOC_SOURCES</B> = <I>&quot;${RUBY_FAKEGEM_DOC_SOURCES-lib}&quot;</I><DD>
+Allow settings defined sources to scan for documentation.
+This only applies if RUBY_FAKEGEM_DOC_TASK is set to `rdoc`.
+<DT><B>RUBY_FAKEGEM_BINWRAP</B> = <I>&quot;${RUBY_FAKEGEM_BINWRAP-*}&quot;</I><DD>
+Binaries to wrap around (relative to the RUBY_FAKEGEM_BINDIR directory)
+<DT><B>RUBY_FAKEGEM_BINDIR</B> = <I>&quot;${RUBY_FAKEGEM_BINDIR-bin}&quot;</I><DD>
+Path that contains binaries to be binwrapped. Equivalent to the
+gemspec bindir option.
+<DT><B>RUBY_FAKEGEM_REQUIRE_PATHS</B><DD>
+Extra require paths (beside lib) to add to the specification
+<DT><B>RUBY_FAKEGEM_GEMSPEC</B><DD>
+Filename of .gemspec file to install instead of generating a generic one.
+<DT><B>RUBY_FAKEGEM_EXTRAINSTALL</B><DD>
+List of files and directories relative to the top directory that also
+get installed. Some gems provide extra files such as version information,
+Rails generators, or data that needs to be installed as well.
+<DT><B>RUBY_FAKEGEM_EXTENSIONS</B><DD>
+List of extensions supported by this gem. Each extension is listed as
+the configuration script that needs to be run to generate the
+extension.
+<DT><B>RUBY_FAKEGEM_EXTENSION_LIBDIR</B> = <I>&quot;${RUBY_FAKEGEM_EXTENSION_LIBDIR-lib}&quot;</I><DD>
+The lib directory where extensions are copied directly after they have
+been compiled. This is needed to run tests on the code and was the
+legacy way to install extensions for a long time.
+</DL>
+
+<H2 ID="lbAG">AUTHORS</H2>
+
+Author: Diego E. Pettenò &lt;<A HREF="mailto:flameeyes@gentoo.org">flameeyes@gentoo.org</A>&gt;
+<BR>
+
+Author: Alex Legler &lt;<A HREF="mailto:a3li@gentoo.org">a3li@gentoo.org</A>&gt;
+<BR>
+
+Author: Hans de Graaff &lt;<A HREF="mailto:graaff@gentoo.org">graaff@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">MAINTAINERS</H2>
+
+Ruby herd &lt;<A HREF="mailto:ruby@gentoo.org">ruby@gentoo.org</A>&gt;
+
+<H2 ID="lbAI">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAJ">FILES</H2>
+
+<B>ruby-fakegem.eclass</B>
+
+
+<H2 ID="lbAK">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/ruby-fakegem.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/ruby-fakegem.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAH">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAI">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAJ">FILES</A><DD>
+<DT><A HREF="index.html#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

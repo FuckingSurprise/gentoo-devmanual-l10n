@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>src_test – Gentoo Development Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../../../devmanual.css" type="text/css">
+<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../../index.html"><span class="fa fa-home"></span> Home</a></li>
+<li class="dropdown">
+<a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></a><ul class="dropdown-menu">
+<li><a class="reference" href="index.html#default-src_test">Default src_test</a></li>
+<li><a class="reference" href="index.html#sample-src_test">Sample src_test</a></li>
+<li><a class="reference" href="index.html#supporting-test-suites-in-packages">Supporting test suites in packages</a></li>
+<li><a class="reference" href="index.html#tests-that-require-network-or-service-access">Tests that require network or service access</a></li>
+<li><a class="reference" href="index.html#tests-that-require-x11">Tests that require X11</a></li>
+</ul>
+</li>
+<li><a class="w-250 text-center" href="../src_compile/no-build-system/index.html"><span class="fa fa-arrow-left"></span><span class="truncated-text d-inline-block max-w-200 ml-2">No Build System</span></a></li>
+<li><a class="w-250 text-center" href="../src_install/index.html"><span class="truncated-text d-inline-block max-w-200 mr-2">src_install</span><span class="fa fa-arrow-right"></span></a></li>
+</ul></div>
+</div></div></nav><nav class="navbar navbar-grey navbar-stick" id="devmanual-actions" role="navigation"><div class="container"><div class="row"><div class="input-group">
+<input type="search" name="search" placeholder="Search" title="Search Gentoo Developer Manual [f]" accesskey="f" id="searchInput" class="form-control" onclick="fetchDocuments()"><div class="input-group-btn"><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton btn btn-default" onclick="search()"></div>
+</div></div></div></nav><div id="searchResults" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Search Results</h4>
+</div>
+<div class="modal-body"><p>No results found.</p></div>
+<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+</div></div></div>
+<div class="container"><div class="row"><div class="col-md010"><ol class="breadcrumb">
+<li><a href="../../../index.html">Master Index</a></li>
+<li><a href="../../index.html">Ebuild Writing</a></li>
+<li><a href="../index.html">Ebuild Phase Functions</a></li>
+</ol></div></div></div></header><main><div class="container">
+<h1 class="first-header">src_test</h1>
+<table class="table">
+  <tr>
+    <th>Function</th>
+    <td><code class="docutils literal"><span class="pre">src_test</span></code></td>
+  </tr>
+  <tr>
+    <th>Purpose</th>
+    <td>Run pre-install test scripts</td>
+  </tr>
+  <tr>
+    <th>Sandbox</th>
+    <td>Enabled</td>
+  </tr>
+  <tr>
+    <th>Privilege</th>
+    <td>user</td>
+  </tr>
+  <tr>
+    <th>Called for</th>
+    <td>ebuild</td>
+  </tr>
+</table>
+<div class="section">
+<h2 id="default-src_test">Default <code class="docutils literal"><span class="pre">src_test</span></code>
+</h2>
+<p>The default test phase in EAPI 6 is equivalent to the following:</p>
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Special">src_test()</span> <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">{</span>
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">if</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">nonfatal</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">emake</span> check <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">-n</span> &amp;&gt; /dev/null; <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">then</span>
+		<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">emake</span> check
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">elif</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">nonfatal</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">emake</span> test <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">-n</span> &amp;&gt; /dev/null; <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">then</span>
+		<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">emake</span> test
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">fi</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">}</span>
+</span></pre>
+</div>
+<div class="section">
+<h2 id="sample-src_test">Sample <code class="docutils literal"><span class="pre">src_test</span></code>
+</h2>
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Special">src_test()</span> <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">{</span>
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">cd</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${S}</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>/src/testdir <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">||</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">die</span>
+
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> Test 49 won't work inside a portage environment
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">sed</span> -i -e 's~test49.out~~g' Makefile <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">||</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">die</span>
+
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> Try to run the non-gui tests only
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> pass -j1 <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">if</span> tests <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">do</span> not support being run <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">in</span> parallel
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">emake</span> -j1 test-nongui
+<span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">}</span>
+</span></pre>
+</div>
+<div class="section">
+<h2 id="supporting-test-suites-in-packages">Supporting test suites in packages</h2>
+
+<p>
+If the packaged software is equipped with a test suite, it is sensible
+to run it. Sometimes the package will need additional dependencies for this,
+i.e., dependencies that are only required to run the test suite. Such test-only
+dependencies should be specified in DEPEND or BDEPEND behind a USE flag;
+often, the <code class="docutils literal"><span class="pre">test</span></code> USE flag will be used for this. Please refer to the
+section on <a class="" href="../../../general-concepts/dependencies/index.html#test-dependencies">Test Dependencies</a>
+for more information.
+</p>
+
+<p>
+Often the default <code class="docutils literal"><span class="pre">src_test</span></code> is fine. Sometimes it is necessary
+to remove certain tests from the list if they cannot be used with a
+portage environment. Reasons for such a failure could include:
+</p>
+
+<ul>
+  <li>
+    Needing to work with files which are disallowed by the sandbox.
+  </li>
+  <li>Requiring user input (<code class="docutils literal"><span class="pre">src_test</span></code> must not be interactive).</li>
+  <li>Requiring root privileges.</li>
+</ul>
+
+<p>
+Usually, removing the relevant test from the <code class="docutils literal"><span class="pre">Makefile</span></code>
+using <code class="docutils literal"><span class="pre">sed</span></code> or skipping a particular <code class="docutils literal"><span class="pre">make</span></code> target is
+sufficient.
+</p>
+
+<p>
+Try to ensure that tests work properly for your ebuild. A good test
+suite is extremely helpful for arch maintainers.
+Sometimes it is necessary to skip tests entirely. This can be done by
+setting <code class="docutils literal"><span class="pre">RESTRICT="test"</span></code> in the ebuild.
+</p>
+
+<div class="alert alert-info" role="alert">
+<strong>Note:</strong>
+If upstream provides a test suite that doesn't work, consider talking
+to them about getting it fixed. A broken test suite requires developers
+to investigate each test failure in order to determine whether it is
+genuine or indicates a broken test.
+</div>
+</div>
+<div class="section">
+<h2 id="tests-that-require-network-or-service-access">Tests that require network or service access</h2>
+<p>
+Sometimes test suites (and other build-time programs) attempt to use
+remote or local network, or production servers running on the host. All
+of these are strictly forbidden. Developers should either fix such tests
+to work in an isolated environment, or disable them completely unless
+explicitly allowed by the user. At the bare minimum, the tests must
+not fail with <code class="docutils literal"><span class="pre">FEATURES=network-sandbox</span></code> being enabled.
+</p>
+
+<p>
+Internet access within the build procedure is forbidden for
+the following reasons:
+</p>
+<ul>
+  <li>
+    the build may be running in an environment with no or restricted
+    Internet access, and this must not cause the tests (build) to fail;
+  </li>
+
+  <li>
+    the Internet connection may be unstable (e.g. poor reception)
+    in which case an interrupted connection or packet loss must not
+    cause the tests to fail or hang, and it should not cause unnecessary
+    delays;
+  </li>
+
+  <li>
+    the Internet connection may be running on a limited data plan
+    in which case the additional network use may cause additional
+    charges or other inconveniences to the user;
+  </li>
+
+  <li>
+    the remote network services used by the tests may become unavailable
+    temporarily or permanently, causing unexpected test failures;
+  </li>
+
+  <li>
+    accessing remote sites always poses a privacy issue, and possibly
+    a threat to security (e.g. through inadvertently exposing
+    information about the system).
+  </li>
+</ul>
+
+<p>
+Fixing tests that require Internet access usually requires cooperation
+with upstream, and porting the tests to use test techniques such as
+mocking or using replay data. For this reason, developers report
+the issue upstream and skip tests that require network access.
+It is recommended to explicitly leave a note as to why the tests are
+skipped, so that other developers can re-enable them locally to run
+a more complete test suite.
+</p>
+
+<p>
+Local server access within the build procedure is additionally
+forbidden for the following reasons:
+</p>
+<ul>
+  <li>
+    tests must run reliably independently of whether a particular
+    server is running throughout the build process or not,
+  </li>
+
+  <li>
+    using production services for running tests is extremely
+    <b>dangerous</b> as it may inadvertently expose bugs in those
+    services, causing instability, data loss or even exposing security
+    vulnerabilities.
+  </li>
+</ul>
+
+<p>
+Fixing tests that require access to local services is usually done
+via starting additional isolated instances of those services during
+the test phase. Those services must either be running on a UNIX
+socket or on the loopback interface, to reliably prevent remote access.
+</p>
+
+<p>
+For all networked services exposed during the test phase (either by
+the ebuild or the tests themselves), UNIX sockets are strongly preferred
+over IP sockets as they provide better means for unique naming
+and access control mechanisms. IP sockets can be subject to port
+collisions with other local services and they can be accessed by local
+system users who may exploit a vulnerability through the tests.
+</p>
+
+<p>
+Additional protection against those issues is provided through
+<code class="docutils literal"><span class="pre">FEATURES=network-sandbox</span></code>. However, this is only an optional
+Portage feature relying on specific Linux kernel namespace mechanisms
+and developers should not rely on it being enabled.
+</p>
+
+</div>
+<div class="section">
+<h2 id="tests-that-require-x11">Tests that require X11</h2>
+<p>
+Some packages include tests (or other build-time applications) that
+attempt to use the user's X11 session and fail being unable to connect
+to it. Those tests need to be fixed to work independently of the X11
+server that might or might not be running when packages are being built.
+</p>
+
+<p>
+If the program in question does not strictly need X11 but merely
+attempts to take opportunity of the <code class="docutils literal"><span class="pre">DISPLAY</span></code> variable being set,
+the best solution is to simply unset this variable in the ebuild.
+</p>
+
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Special">src_test()</span> <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">{</span>
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> tests attempt to connect to X11 and fail when it is set
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> however, they work just fine without X11
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">unset</span> DISPLAY
+
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">default</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">}</span>
+</span></pre>
+
+<p>
+If the package actually requires a running X11 server to run
+the complete test suite, you can use the <code class="docutils literal"><span class="pre">virtualx</span></code> eclass to
+provide an isolated Xvfb environment for the tests to use. It provides
+a virtual X11 display that is not connected to any physical device
+and that programs can use reliably.
+</p>
+
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">inherit</span> virtualx
+
+<span xmlns="http://www.w3.org/1999/xhtml" class="Special">src_test()</span> <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">{</span>
+	virtx <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">default</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">}</span>
+</span></pre>
+</div>
+</div></main><footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+                Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+              </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script><script src="/assets.gentoo.org/lunr/lunr.min.js"></script><script>var documentsSrc = "../../../documents.js"</script><script src="../../../search.js"></script>
+</body>
+</html>

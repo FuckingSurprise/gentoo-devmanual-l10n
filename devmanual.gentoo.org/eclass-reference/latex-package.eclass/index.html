@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>latex-package.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>LATEX-PACKAGE.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+latex-package.eclass - An eclass for easy installation of LaTeX packages
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+This eClass is designed to be easy to use and implement.  The vast majority of
+LaTeX packages will only need to define SRC_URI (and sometimes S) for a
+successful installation.  If fonts need to be installed, then the variable
+SUPPLIER must also be defined.
+<P>
+However, those packages that contain subdirectories must process each
+subdirectory individually.  For example, a package that contains directories
+DIR1 and DIR2 must call latex-package_src_compile() and
+latex-package_src_install() in each directory, as shown here:
+<P>
+src_compile() {
+<BR>&nbsp;&nbsp;&nbsp;cd&nbsp;${S}
+<BR>&nbsp;&nbsp;&nbsp;cd&nbsp;DIR1
+<BR>&nbsp;&nbsp;&nbsp;latex-package_src_compile
+<BR>&nbsp;&nbsp;&nbsp;cd&nbsp;..
+<BR>&nbsp;&nbsp;&nbsp;cd&nbsp;DIR2
+<BR>&nbsp;&nbsp;&nbsp;latex-package_src_compile
+}
+<P>
+src_install() {
+<BR>&nbsp;&nbsp;&nbsp;cd&nbsp;${S}
+<BR>&nbsp;&nbsp;&nbsp;cd&nbsp;DIR1
+<BR>&nbsp;&nbsp;&nbsp;latex-package_src_install
+<BR>&nbsp;&nbsp;&nbsp;cd&nbsp;..
+<BR>&nbsp;&nbsp;&nbsp;cd&nbsp;DIR2
+<BR>&nbsp;&nbsp;&nbsp;latex-package_src_install
+}
+<P>
+The eClass automatically takes care of rehashing TeX's cache (ls-lR) after
+installation and after removal, as well as creating final documentation from
+TeX files that come with the source.  Note that we break TeX layout standards
+by placing documentation in /usr/share/doc/${PN}
+<P>
+For examples of basic installations, check out dev-tex/aastex and
+dev-tex/leaflet .
+<P>
+NOTE: The CTAN &quot;directory grab&quot; function creates files with different MD5
+signatures EVERY TIME.  For this reason, if you are grabbing from the CTAN,
+you must either grab each file individually, or find a place to mirror an
+archive of them.  (iBiblio)
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+7
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>latex-package_src_doinstall</B> [ module ]<DD>
+[module] can be one or more of: sh, sty, cls, fd, clo, def, cfg, dvi, ps, pdf,
+tex, dtx, tfm, vf, afm, pfb, ttf, bst, styles, doc, fonts, bin, or all.
+If [module] is not given, all is assumed.
+It installs the files found in the current directory to the standard locations
+for a TeX installation
+<DT><B>latex-package_src_compile</B> <DD>
+Calls latex for each *.ins in the current directory in order to generate the
+relevant files that will be installed
+<DT><B>latex-package_src_install</B> <DD>
+Installs the package
+<DT><B>latex-package_pkg_postinst</B> <DD>
+Calls latex-package_rehash to ensure the TeX installation is consistent with
+the kpathsea database
+<DT><B>latex-package_pkg_postrm</B> <DD>
+Calls latex-package_rehash to ensure the TeX installation is consistent with
+the kpathsea database
+<DT><B>latex-package_rehash</B> <DD>
+Rehashes the kpathsea database, according to the current TeX installation
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>SUPPLIER</B> = <I>&quot;misc&quot;</I><DD>
+This refers to the font supplier; it should be overridden (see eclass
+DESCRIPTION above)
+<DT><B>LATEX_DOC_ARGUMENTS</B> = <I>&quot;&quot;</I><DD>
+When compiling documentation (.tex/.dtx), this variable will be passed
+to pdflatex as additional argument (e.g. -shell-escape). This variable
+must be set after inherit, as it gets automatically cleared otherwise.
+</DL>
+
+<H2 ID="lbAG">AUTHORS</H2>
+
+Matthew Turk &lt;<A HREF="mailto:satai@gentoo.org">satai@gentoo.org</A>&gt;
+<BR>
+
+Martin Ehmsen &lt;<A HREF="mailto:ehmsen@gentoo.org">ehmsen@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">MAINTAINERS</H2>
+
+TeX team &lt;<A HREF="mailto:tex@gentoo.org">tex@gentoo.org</A>&gt;
+
+<H2 ID="lbAI">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAJ">FILES</H2>
+
+<B>latex-package.eclass</B>
+
+
+<H2 ID="lbAK">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/latex-package.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/latex-package.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAH">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAI">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAJ">FILES</A><DD>
+<DT><A HREF="index.html#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

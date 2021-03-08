@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Gentoo DevBook XML Guide – Gentoo Development Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span> Home</a></li>
+<li class="dropdown">
+<a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></a><ul class="dropdown-menu">
+<li><a class="reference" href="index.html#devbook-xml-design-goals">DevBook XML design goals</a></li>
+<li><a class="reference" href="index.html#devbook-xml">Devbook XML</a></li>
+<li><a class="reference" href="index.html#coding-style">Coding Style</a></li>
+</ul>
+</li>
+<li><a class="w-250 text-center" href="../contributing/index.html"><span class="fa fa-arrow-left"></span><span class="truncated-text d-inline-block max-w-200 ml-2">Contributing to This Document</span></a></li>
+<li><a class="w-250 text-center" href="../contributors/index.html"><span class="truncated-text d-inline-block max-w-200 mr-2">Contributions</span><span class="fa fa-arrow-right"></span></a></li>
+</ul></div>
+</div></div></nav><nav class="navbar navbar-grey navbar-stick" id="devmanual-actions" role="navigation"><div class="container"><div class="row"><div class="input-group">
+<input type="search" name="search" placeholder="Search" title="Search Gentoo Developer Manual [f]" accesskey="f" id="searchInput" class="form-control" onclick="fetchDocuments()"><div class="input-group-btn"><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton btn btn-default" onclick="search()"></div>
+</div></div></div></nav><div id="searchResults" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Search Results</h4>
+</div>
+<div class="modal-body"><p>No results found.</p></div>
+<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+</div></div></div>
+<div class="container"><div class="row"><div class="col-md010"><ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Appendices</a></li>
+</ol></div></div></div></header><main><div class="container">
+<h1 class="first-header">Gentoo DevBook XML Guide</h1>
+<div class="section">
+<h2 id="devbook-xml-design-goals">DevBook XML design goals</h2>
+
+<p>
+The DevBook XML syntax is lightweight yet expressive, so that it is easy to
+learn yet also provides all the features we need for the creation of web
+documentation.  The number of tags is kept to a minimum — just those we need.
+This makes it easy to transform guide into other formats, such as DocBook
+XML/SGML or web-ready HTML.
+</p>
+
+<p>
+The goal is to make it easy to <i>create</i> and <i>transform</i> DevBook XML
+documents.
+</p>
+
+</div>
+<div class="section">
+<h2 id="devbook-xml">Devbook XML</h2>
+<div class="section">
+<h3 id="basic-structure">Basic structure</h3>
+
+<p>
+Let's start learning the DevBook XML syntax. We'll start with the initial tags
+used in a DevBook XML document:
+</p>
+
+<pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">?xml</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">version</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">1.0</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">encoding</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">UTF-8</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">?</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">guide</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">self</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">appendices/devbook-guide/</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">chapter</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">title</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>Gentoo DevBook XML Guide<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/title</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+</span></pre>
+
+<p>
+On the first lines, we see the requisite tag that identifies this as an XML
+document. Next, there's a <code class="docutils literal"><span class="pre">&lt;guide&gt;</span></code> tag — the entire document is
+enclosed within a <code class="docutils literal"><span class="pre">&lt;guide&gt; &lt;/guide&gt;</span></code> pair. Its <code class="docutils literal"><span class="pre">self</span></code>
+attribute must point to the relative path of the document from the root node;
+in the example above the path is <code class="docutils literal"><span class="pre">appendices/devbook-guide/</span></code>. An exception
+is the root node itself, which has <code class="docutils literal"><span class="pre">&lt;guide root="true"&gt;</span></code> instead.
+</p>
+
+<p>
+Next, there is a <code class="docutils literal"><span class="pre">&lt;chapter&gt;</span></code> tag. Every document must have exactly
+one chapter. Its <code class="docutils literal"><span class="pre">&lt;title&gt;</span></code> is used to set the title for the entire
+document.
+</p>
+
+<div class="alert alert-warning" role="alert">
+<strong>Important:</strong>
+The <code class="docutils literal"><span class="pre">&lt;title&gt;</span></code> element cannot contain any newlines. Make sure it is
+in one line, including its opening and closing tags.
+</div>
+
+<p>
+All tags must be closed of course, so the document ends with:
+</p>
+
+<pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/chapter</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/guide</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+</span></pre>
+
+</div>
+<div class="section">
+<h3 id="sections-and-subsections">Sections and subsections</h3>
+
+<p>
+Once the initial tags have been specified, you're ready to start adding the
+structural elements of the document. Chapters are divided into sections;
+each section can hold zero or more subsections, which can contain zero or more
+subsubsections. Section, subsection and subsubsection elements must have a
+title. Here's an example section with a single subsection, consisting of a
+paragraph:
+</p>
+
+<pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">section</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">title</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>This is my section<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/title</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">subsection</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">title</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>This is subsection one of my section<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/title</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">body</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">p</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+This is the actual text content of my subsection.
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/p</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/body</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/subsection</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/section</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+</span></pre>
+
+<p>
+Above, I set the section title by adding a child <code class="docutils literal"><span class="pre">&lt;title&gt;</span></code> element
+to the <code class="docutils literal"><span class="pre">&lt;section&gt;</span></code> element. Then, I created a subsection by adding
+a <code class="docutils literal"><span class="pre">&lt;subsection&gt;</span></code> element. If you look inside the
+<code class="docutils literal"><span class="pre">&lt;subsection&gt;</span></code> element, you'll see that it has two child elements
+— a <code class="docutils literal"><span class="pre">&lt;title&gt;</span></code> and a <code class="docutils literal"><span class="pre">&lt;body&gt;</span></code>. While the
+<code class="docutils literal"><span class="pre">&lt;title&gt;</span></code> is nothing new, the <code class="docutils literal"><span class="pre">&lt;body&gt;</span></code> is —
+it contains the actual text content of this particular subsection. We'll look
+at the tags that are allowed inside a <code class="docutils literal"><span class="pre">&lt;body&gt;</span></code> element in a bit.
+</p>
+
+<div class="alert alert-info" role="alert">
+<strong>Note:</strong>
+The <code class="docutils literal"><span class="pre">&lt;chapter&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;section&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;subsection&gt;</span></code>
+and <code class="docutils literal"><span class="pre">&lt;subsubsection&gt;</span></code> elements contain a <code class="docutils literal"><span class="pre">&lt;body&gt;</span></code> and/or
+any number of section elements of the next lower level. Skipping of levels is
+not allowed, e.g., a subsection cannot be directly below a chapter.
+</div>
+
+</div>
+<div class="section">
+<h3 id="including-sub-documents">Including sub-documents</h3>
+
+<p>
+The manual is organized as a tree. Each directory contains one document, which
+can include multiple sub-documents using the <code class="docutils literal"><span class="pre">&lt;include href="foo/"/&gt;</span></code>
+tag. Note that the trailing slash in the <code class="docutils literal"><span class="pre">href</span></code> value is mandatory.
+</p>
+
+<p>
+A table of contents can be generated with <code class="docutils literal"><span class="pre">&lt;contentsTree&gt;</span></code>.
+Typically, this tag would be the only element in its own section body, as in
+the following example:
+</p>
+
+<pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">section</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">title</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>Contents<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/title</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">body</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">contentsTree/</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/body</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/section</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+</span></pre>
+
+</div>
+<div class="section">
+<h3 id="an-example-body">An example &lt;body&gt;</h3>
+
+<p>
+Now, it's time to learn how to mark up actual content.  Here's the XML code for
+an example <code class="docutils literal"><span class="pre">&lt;body&gt;</span></code> element:
+</p>
+
+<pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">p</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+This is a paragraph. <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">c</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>/etc/passwd<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/c</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span> is a file.
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">uri</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>https://www.gentoo.org/<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/uri</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span> is my favorite website.
+Type <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">c</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>ls<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/c</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span> if you feel like it. I <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">e</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>really<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/e</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span> want to go to sleep now.
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/p</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">pre</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+This is text output or code.
+# this is user input
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/pre</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">codesample</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">lang</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">sgml</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+Make HTML/XML easier to read by using selective emphasis:
+&amp;lt;foo&amp;gt;bar&amp;lt;/foo&amp;gt;
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/codesample</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">note</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+This is a note.
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/note</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">important</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+This is important.
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/important</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">warning</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+This is a warning.
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/warning</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+</span></pre>
+
+<p>
+Now, here's how the <code class="docutils literal"><span class="pre">&lt;body&gt;</span></code> element above is rendered:
+</p>
+
+<p>
+This is a paragraph. <code class="docutils literal"><span class="pre">/etc/passwd</span></code> is a file.
+<a class="" href="https://www.gentoo.org/">https://www.gentoo.org/</a> is my favorite web site.
+Type <code class="docutils literal"><span class="pre">ls</span></code> if you feel like it. I <i>really</i> want to go to sleep now.
+</p>
+
+<pre>
+This is text output or code.
+# this is user input
+</pre>
+
+<pre><span class="">Make HTML/XML easier to read by using selective emphasis:
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">foo</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>bar<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/foo</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+</span></pre>
+
+<div class="alert alert-info" role="alert">
+<strong>Note:</strong>
+This is a note.
+</div>
+
+<div class="alert alert-warning" role="alert">
+<strong>Important:</strong>
+This is important.
+</div>
+
+<div class="alert alert-danger" role="alert">
+<strong>Warning:</strong>
+This is a warning.
+</div>
+
+</div>
+<div class="section">
+<h3 id="the-body-tags">The &lt;body&gt; tags</h3>
+
+<p>
+We introduced a lot of new tags in the previous section — here's what you
+need to know. The <code class="docutils literal"><span class="pre">&lt;p&gt;</span></code> (paragraph), <code class="docutils literal"><span class="pre">&lt;pre&gt;</span></code>
+(preformatted block), <code class="docutils literal"><span class="pre">&lt;codesample&gt;</span></code> (code block),
+<code class="docutils literal"><span class="pre">&lt;note&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;important&gt;</span></code> and <code class="docutils literal"><span class="pre">&lt;warning&gt;</span></code> tags
+all can contain one or more lines of text. Besides the <code class="docutils literal"><span class="pre">&lt;figure&gt;</span></code>,
+<code class="docutils literal"><span class="pre">&lt;table&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;ul&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;ol&gt;</span></code>
+and <code class="docutils literal"><span class="pre">&lt;dl&gt;</span></code> elements (which we'll cover in just a bit), these are the
+only tags that should appear immediately inside a <code class="docutils literal"><span class="pre">&lt;body&gt;</span></code> element.
+Another thing — these tags <i>should not</i> be stacked — in other words,
+don't put a <code class="docutils literal"><span class="pre">&lt;note&gt;</span></code> element inside a <code class="docutils literal"><span class="pre">&lt;p&gt;</span></code> element. As
+you might guess, the <code class="docutils literal"><span class="pre">&lt;pre&gt;</span></code> and <code class="docutils literal"><span class="pre">&lt;codesample&gt;</span></code> elements
+preserve their whitespace exactly, making them well-suited for code excerpts:
+</p>
+
+<pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">pre</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+# uptime
+16:50:47 up 164 days,  2:06,  5 users,  load average: 0.23, 0.20, 0.25
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/pre</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+</span></pre>
+
+</div>
+<div class="section">
+<h3 id="c-b-and-e">&lt;c&gt;, &lt;b&gt;, and &lt;e&gt;</h3>
+
+<p>
+The <code class="docutils literal"><span class="pre">&lt;c&gt;</span></code> element is used to mark up a <i>command</i> or <i>user
+input</i>.  Think of <code class="docutils literal"><span class="pre">&lt;c&gt;</span></code> as a way to alert the reader to something
+that they can type in that will perform some kind of action.  For example, all
+the XML tags displayed in this document are enclosed in a <code class="docutils literal"><span class="pre">&lt;c&gt;</span></code>
+element because they represent something that the user could type in that is
+not a path.  By using <code class="docutils literal"><span class="pre">&lt;c&gt;</span></code> elements, you'll help your readers
+quickly identify commands that they need to type in.  Also, because
+<code class="docutils literal"><span class="pre">&lt;c&gt;</span></code> elements are already offset from regular text, <i>it is rarely
+necessary to surround user input with double-quotes</i>. For example, don't
+refer to a "<code class="docutils literal"><span class="pre">&lt;c&gt;</span></code>" element like I did in this sentence.  Avoiding
+the use of unnecessary double-quotes makes a document more readable — and
+adorable!
+</p>
+
+<p>
+As you might have guessed, <code class="docutils literal"><span class="pre">&lt;b&gt;</span></code> is used to <b>boldface</b> some
+text.
+</p>
+
+<p>
+<code class="docutils literal"><span class="pre">&lt;e&gt;</span></code> is used to apply emphasis to a word or phrase; for example:
+I <i>really</i> should use semicolons more often.  As you can see, this text is
+offset from the regular paragraph type for emphasis.  This helps to give your
+prose more <i>punch</i>!
+</p>
+
+</div>
+<div class="section">
+<h3 id="code-samples-and-colour-coding">Code samples and colour-coding</h3>
+
+<p>
+The <code class="docutils literal"><span class="pre">&lt;pre&gt;</span></code> tag does not support any syntax highlighting. When you
+need syntax highlighting, use the <code class="docutils literal"><span class="pre">&lt;codesample&gt;</span></code> tag along with a
+<code class="docutils literal"><span class="pre">lang</span></code> attribute — usually you want this to be set to <code class="docutils literal"><span class="pre">"ebuild"</span></code>
+to syntax highlight ebuild code snippets. Currently, the following languages
+are supported:
+</p>
+
+<ul>
+  <li>c</li>
+  <li>ebuild</li>
+  <li>make</li>
+  <li>m4</li>
+  <li>sgml</li>
+</ul>
+
+<div class="alert alert-info" role="alert">
+<strong>Note:</strong>
+Remember that all leading and trailing spaces, and line breaks in
+<code class="docutils literal"><span class="pre">&lt;codesample&gt;</span></code> blocks will appear in the displayed html page.
+</div>
+
+<p>
+Sample <code class="docutils literal"><span class="pre">&lt;codesample lang="c"&gt;</span></code> block:
+</p>
+
+<pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">#include</span><span xmlns="http://www.w3.org/1999/xhtml" class="PreProc"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">stdio.h</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+
+main()
+{
+<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">	</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">/*</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">This</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">is</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">a</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">comment</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">*/</span>
+	printf(<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">Hello,</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">world!\n</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>);
+}
+</span></pre>
+
+<p>
+You can also specify <code class="docutils literal"><span class="pre">numbering="lines"</span></code> to enable line numbering, as in
+the following example:
+</p>
+
+<pre><span class="Constant"><span style="float: left;">01: </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Copyright</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">1999-2021</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Gentoo</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Authors</span>
+<span style="float: left;">02: </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Distributed</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">under</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">the</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">terms</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">of</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">the</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">GNU</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">General</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Public</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">License</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">v2</span>
+<span style="float: left;">03: </span>
+<span style="float: left;">04: </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">EAPI</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span>7
+<span style="float: left;">05: </span>
+<span style="float: left;">06: </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DESCRIPTION</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>MicroGnuEmacs, a port from the BSDs<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+<span style="float: left;">07: </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">HOMEPAGE</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>https://homepage.boetes.org/software/mg/<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+<span style="float: left;">08: </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">SRC_URI</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>https://github.com/hboetes/<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${PN}</span>/archive/<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${PV}</span>.tar.gz -&gt; <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${P}</span>.tar.gz<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+<span style="float: left;">09: </span>
+<span style="float: left;">10: </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">LICENSE</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>public-domain<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+<span style="float: left;">11: </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">SLOT</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>0<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+<span style="float: left;">12: </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">KEYWORDS</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>alpha amd64 arm hppa ppc ~ppc64 sparc x86<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+<span style="float: left;">13: </span>
+<span style="float: left;">14: </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">RDEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>sys-libs/ncurses:0=
+<span style="float: left;">15: </span>	<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span>dev-libs/libbsd-0.7.0<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+<span style="float: left;">16: </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">${RDEPEND}</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+<span style="float: left;">17: </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">BDEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>virtual/pkgconfig<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+<span style="float: left;">18: </span>
+<span style="float: left;">19: </span><span xmlns="http://www.w3.org/1999/xhtml" class="Special">src_install()</span>  <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">{</span>
+<span style="float: left;">20: </span>	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">dobin</span> mg
+<span style="float: left;">21: </span>	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">doman</span> mg.1
+<span style="float: left;">22: </span>	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">dodoc</span> README tutorial
+<span style="float: left;">23: </span><span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">}</span>
+</span></pre>
+
+</div>
+<div class="section">
+<h3 id="uri">&lt;uri&gt;</h3>
+
+<p>
+The <code class="docutils literal"><span class="pre">&lt;uri&gt;</span></code> tag is used to point to files/locations on the Internet.
+It has two forms — the first can be used when you want to have the actual URI
+displayed in the body text, such as this link to
+<a class="" href="https://www.gentoo.org/">https://www.gentoo.org/</a>. To create this link, I typed
+<code class="docutils literal"><span class="pre">&lt;uri&gt;https://www.gentoo.org/&lt;/uri&gt;</span></code>. The alternate form is
+when you want to associate a URI with some other text — for example,
+<a class="" href="https://www.gentoo.org/">the Gentoo Linux website</a>. To create
+<i>this</i> link, I typed <code class="docutils literal"><span class="pre">&lt;uri link="https://www.gentoo.org/"&gt;the
+Gentoo Linux website&lt;/uri&gt;</span></code>.
+</p>
+
+<p>
+Please avoid the <a class="" href="https://en.wikipedia.org/wiki/Click_here">click here
+syndrome</a> as recommended by the <a class="" href="https://www.w3.org/QA/Tips/noClickHere">W3C</a>.
+</p>
+
+</div>
+<div class="section">
+<h3 id="figures">Figures</h3>
+
+<p>
+Here's how to insert a figure into a document — <code class="docutils literal"><span class="pre">&lt;figure
+link="mygfx.png" short="my picture" caption="my favorite picture of all
+time"/&gt;</span></code>.  The <code class="docutils literal"><span class="pre">link</span></code> attribute points to the actual graphic image,
+the <code class="docutils literal"><span class="pre">short</span></code> attribute specifies a short description (currently used for
+the image's HTML <code class="docutils literal"><span class="pre">alt</span></code> attribute), and a caption.  Not too difficult
+:)  We also support the standard HTML-style &lt;img src="foo.gif"/&gt; tag
+for adding images without captions, borders, etc.
+</p>
+
+</div>
+<div class="section">
+<h3 id="tables">Tables</h3>
+
+<p>
+DevBook XML supports a simplified table syntax similar to that of HTML. To start
+a table, use a <code class="docutils literal"><span class="pre">&lt;table&gt;</span></code> tag. Start a row with a <code class="docutils literal"><span class="pre">&lt;tr&gt;</span></code>
+tag. However, for inserting actual table data, we <i>don't</i> support the HTML
+&lt;td&gt; tag; instead, use the <code class="docutils literal"><span class="pre">&lt;th&gt;</span></code> if you are inserting a
+header, and <code class="docutils literal"><span class="pre">&lt;ti&gt;</span></code> if you are inserting a normal informational
+block. You can use a <code class="docutils literal"><span class="pre">&lt;th&gt;</span></code> anywhere you can use a <code class="docutils literal"><span class="pre">&lt;ti&gt;</span></code>
+— there's no requirement that <code class="docutils literal"><span class="pre">&lt;th&gt;</span></code> elements appear only in the
+first row.
+</p>
+
+<p>
+Besides, both table headers (<code class="docutils literal"><span class="pre">&lt;th&gt;</span></code>) and table items
+(<code class="docutils literal"><span class="pre">&lt;ti&gt;</span></code>) accept the <code class="docutils literal"><span class="pre">colspan</span></code> and <code class="docutils literal"><span class="pre">rowspan</span></code> attributes to
+span their content across rows, columns or both.
+</p>
+
+<p>
+Furthermore, table cells (<code class="docutils literal"><span class="pre">&lt;ti&gt;</span></code> &amp; <code class="docutils literal"><span class="pre">&lt;th&gt;</span></code>) can be
+right-aligned, left-aligned or centered with the <code class="docutils literal"><span class="pre">align</span></code> attribute.
+</p>
+
+<table class="table">
+  <tr>
+    <th colspan="4" style="text-align:center">This title spans 4 columns</th>
+  </tr>
+  <tr>
+    <th rowspan="6">This title spans 6 rows</th>
+    <td>Item A1</td>
+    <td>Item A2</td>
+    <td>Item A3</td>
+  </tr>
+  <tr>
+    <td>Item B1</td>
+    <th colspan="2" style="text-align:center" rowspan="2">Blocky 2x2 title</th>
+  </tr>
+  <tr>
+    <td>Item C1</td>
+  </tr>
+  <tr>
+    <td colspan="3">Item D1..D3</td>
+  </tr>
+  <tr>
+    <td rowspan="2">Item E1..F1</td>
+    <td colspan="2">Item E2..E3</td>
+  </tr>
+  <tr>
+    <td colspan="2">Item F2..F3</td>
+  </tr>
+</table>
+
+</div>
+<div class="section">
+<h3 id="lists">Lists</h3>
+
+<p>
+To create ordered or unordered lists, simply use the XHTML-style
+<code class="docutils literal"><span class="pre">&lt;ol&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;ul&gt;</span></code> and <code class="docutils literal"><span class="pre">&lt;li&gt;</span></code> tags. Lists may only
+appear inside the <code class="docutils literal"><span class="pre">&lt;body&gt;</span></code> and <code class="docutils literal"><span class="pre">&lt;li&gt;</span></code> tags which means
+that you can have lists inside lists. Don't forget that you are writing XML and
+that you must close all tags including list items unlike in HTML.
+</p>
+
+<p>
+Definition lists (<code class="docutils literal"><span class="pre">&lt;dl&gt;</span></code>) are also supported. Please note that
+the definition term tag (<code class="docutils literal"><span class="pre">&lt;dt&gt;</span></code>) does not accept any other block
+level tag such as paragraphs or admonitions. A definition list comprises:
+</p>
+
+<dl>
+  <dt><code class="docutils literal"><span class="pre">&lt;dl&gt;</span></code></dt>
+  <dd>A <b>D</b>efinition <b>L</b>ist Tag containing</dd>
+  <dt><code class="docutils literal"><span class="pre">&lt;dt&gt;</span></code></dt>
+  <dd>
+<b>D</b>efinition <b>T</b>erm Tags</dd>
+  <dt><code class="docutils literal"><span class="pre">&lt;dd&gt;</span></code></dt>
+  <dd>and <b>D</b>efinition <b>D</b>ata Tags.</dd>
+</dl>
+
+<p>
+The following example copied from
+<a class="" href="https://www.w3.org/TR/REC-html40/struct/lists.html">w3.org</a>
+shows that lists may also be nested and different list types may be used
+together:
+</p>
+
+<dl>
+  <dt>The ingredients:</dt>
+  <dd>
+    <ul>
+      <li>100 g flour</li>
+      <li>10 g sugar</li>
+      <li>1 cup water</li>
+      <li>2 eggs</li>
+      <li>salt, pepper</li>
+    </ul>
+  </dd>
+  <dt>The procedure:</dt>
+  <dd>
+    <ol>
+      <li>Mix dry ingredients thoroughly.</li>
+      <li>Pour in wet ingredients.</li>
+      <li>Mix for 10 minutes.</li>
+      <li>Bake for one hour at 300 degrees.</li>
+    </ol>
+  </dd>
+  <dt>Notes:</dt>
+  <dd>The recipe may be improved by adding raisins.</dd>
+</dl>
+
+</div>
+<div class="section">
+<h3 id="intra-document-references">Intra-document references</h3>
+
+<p>
+DevBook XML makes it really easy to reference other parts of the document using
+hyperlinks. You can create a link pointing to another chapter, like
+<a class="" href="../../ebuild-writing/file-format/index.html">Ebuild File Format</a>, by typing
+<code class="docutils literal"><span class="pre">&lt;uri link="::ebuild-writing/file-format/"&gt;Ebuild File
+Format&lt;/uri&gt;</span></code>, i.e., two colons followed by the relative path from
+the root node. To refer to a section in another chapter, like
+<a class="" href="../../quickstart/index.html#first-ebuild">First Ebuild</a>, type
+<code class="docutils literal"><span class="pre">&lt;uri link="::quickstart/#First Ebuild"&gt;First Ebuild&lt;/uri&gt;</span></code>.
+</p>
+
+<p>
+If the link target's chapter (or section etc.) title is to be used as the link
+text, an empty <code class="docutils literal"><span class="pre">&lt;uri&gt;</span></code> element can be used. As a matter of fact,
+I could have written the two examples above in more compact form:
+<code class="docutils literal"><span class="pre">&lt;uri link="::ebuild-writing/file-format/"/&gt;</span></code> and
+<code class="docutils literal"><span class="pre">&lt;uri link="::quickstart/#First Ebuild"/&gt;</span></code> render as
+<a class="" href="../../ebuild-writing/file-format/index.html">Ebuild File Format</a> and
+<a class="" href="../../quickstart/index.html#first-ebuild">First Ebuild</a>, respectively.
+</p>
+
+</div>
+</div>
+<div class="section">
+<h2 id="coding-style">Coding Style</h2>
+
+<p>
+Since all Gentoo Documentation is a joint effort and several people will
+most likely change existing documentation, a coding style is needed.
+A coding style contains two sections. The first one is regarding
+internal coding — how the XML-tags are placed. The second one is
+regarding the content — how not to confuse the reader.
+</p>
+
+<p>
+Both sections are described next.
+</p>
+
+<div class="section">
+<h3 id="internal-coding-style">Internal Coding Style</h3>
+
+<p>
+<b>Newlines</b> must be placed immediately after <i>every</i> DevBook XML tag
+(both opening as closing), except for:
+<code class="docutils literal"><span class="pre">&lt;title&gt;</span></code>,
+<code class="docutils literal"><span class="pre">&lt;th&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;ti&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;li&gt;</span></code>,
+<code class="docutils literal"><span class="pre">&lt;dt&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;dd&gt;</span></code>,
+<code class="docutils literal"><span class="pre">&lt;b&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;c&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;e&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;d/&gt;</span></code>,
+<code class="docutils literal"><span class="pre">&lt;uri&gt;</span></code>.
+</p>
+
+<p>
+<b>Blank lines</b> must be placed immediately after <i>every</i>
+<code class="docutils literal"><span class="pre">&lt;body&gt;</span></code> (opening tag only) and before <i>every</i>
+<code class="docutils literal"><span class="pre">&lt;section&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;p&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;pre&gt;</span></code>,
+<code class="docutils literal"><span class="pre">&lt;codesample&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;figure&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;table&gt;</span></code>,
+<code class="docutils literal"><span class="pre">&lt;ul&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;ol&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;dl&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;note&gt;</span></code>,
+<code class="docutils literal"><span class="pre">&lt;important&gt;</span></code> and <code class="docutils literal"><span class="pre">&lt;warning&gt;</span></code> (opening tags only).
+</p>
+
+<p>
+<b>Word-wrapping</b> must be applied at 80 characters except inside
+<code class="docutils literal"><span class="pre">&lt;pre&gt;</span></code> and <code class="docutils literal"><span class="pre">&lt;codesample&gt;</span></code>. You may only deviate from
+this rule when there is no other choice (for instance when a URL exceeds the
+maximum amount of characters). The editor must then wrap whenever the first
+whitespace occurs. You should try to keep the <i>rendered</i> content of
+<code class="docutils literal"><span class="pre">&lt;pre&gt;</span></code> and <code class="docutils literal"><span class="pre">&lt;codesample&gt;</span></code> elements within 80 columns
+to help console users.
+</p>
+
+<p>
+<b>Indentation</b> may not be used, except with the XML-constructs of which the
+parent XML-tags are <code class="docutils literal"><span class="pre">&lt;tr&gt;</span></code> (from <code class="docutils literal"><span class="pre">&lt;table&gt;</span></code>),
+<code class="docutils literal"><span class="pre">&lt;ul&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;ol&gt;</span></code> and <code class="docutils literal"><span class="pre">&lt;dl&gt;</span></code>. If indentation
+is used, it <i>must</i> be two spaces for each indentation. That means
+<i>no tabs</i> and <i>not</i> more spaces. Besides, tabs are not allowed in
+DevBook XML documents.
+</p>
+
+<p>
+In case word-wrapping happens in <code class="docutils literal"><span class="pre">&lt;ti&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;th&gt;</span></code>,
+<code class="docutils literal"><span class="pre">&lt;li&gt;</span></code> or <code class="docutils literal"><span class="pre">&lt;dd&gt;</span></code> constructs, indentation must be used for
+the content.
+</p>
+
+<p>
+An example for indentation is:
+</p>
+
+<pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">table</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">tr</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+  <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">th</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>Foo<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/th</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+  <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">th</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>Bar<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/th</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/tr</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">tr</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+  <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">ti</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>This is an example for indentation<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/ti</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+  <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">ti</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+    In case text cannot be shown within an 80-character wide line, you
+    must use indentation if the parent tag allows it
+  <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/ti</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/tr</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/table</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">ul</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+  <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">li</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>First option<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/li</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+  <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">li</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>Second option<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/li</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/ul</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+</span></pre>
+
+<p>
+<b>Opening tags</b> with a single attribute may not be split between lines.
+For example, don't put a newline between <code class="docutils literal"><span class="pre">&lt;uri</span></code> and its <code class="docutils literal"><span class="pre">link</span></code>
+attribute. Break the line before the <code class="docutils literal"><span class="pre">&lt;uri&gt;</span></code> tag instead.
+</p>
+
+<p>
+<b>Attributes</b> may not have spaces in between the attribute, the "=" mark,
+and the attribute value. As an example:
+</p>
+
+<pre><span class="">Wrong  :     <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">uri</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">link</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier"></span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier"></span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">https://www.gentoo.org/</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+Correct:     <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">uri</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">link</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">https://www.gentoo.org/</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+</span></pre>
+
+<p>
+<b>Dashes</b> used as in-sentence punctuation — like this — should be
+written as a <code class="docutils literal"><span class="pre">&lt;d/&gt;</span></code> tag surrounded by spaces. It would be difficult
+to distinguish a Unicode em-dash from a hyphen when editing the source using a
+fixed-width font.
+</p>
+
+</div>
+<div class="section">
+<h3 id="external-coding-style">External Coding Style</h3>
+
+<p>
+Inside tables (<code class="docutils literal"><span class="pre">&lt;table&gt;</span></code>) and listings (<code class="docutils literal"><span class="pre">&lt;ul&gt;</span></code>,
+<code class="docutils literal"><span class="pre">&lt;ol&gt;</span></code> and <code class="docutils literal"><span class="pre">&lt;dl&gt;</span></code>), periods (".") should not be used
+unless multiple sentences are used. In that case, every sentence should end
+with a period (or other reading marks).
+</p>
+
+<p>
+Every sentence, including those inside tables and listings, should start
+with a capital letter.
+</p>
+
+<pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">ul</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+  <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">li</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>No period<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/li</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+  <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">li</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>With period. Multiple sentences, remember?<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/li</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&lt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">/ul</span><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span>
+</span></pre>
+
+<p>
+Try to use <code class="docutils literal"><span class="pre">&lt;uri&gt;</span></code> with the <code class="docutils literal"><span class="pre">link</span></code> attribute as much as
+possible. In other words, the
+<a class="" href="https://www.gentoo.org/">Gentoo website</a> is preferred over
+<a class="" href="https://www.gentoo.org/">https://www.gentoo.org/</a>.
+</p>
+
+</div>
+</div>
+</div></main><footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+                Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+              </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script><script src="/assets.gentoo.org/lunr/lunr.min.js"></script><script>var documentsSrc = "../../documents.js"</script><script src="../../search.js"></script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>rebar.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>REBAR.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+rebar.eclass - Build Erlang/OTP projects using dev-util/rebar.
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+An eclass providing functions to build Erlang/OTP projects using
+dev-util/rebar.
+<P>
+rebar is a tool which tries to resolve dependencies itself which is by
+cloning remote git repositories. Dependant projects are usually expected to
+be in sub-directory 'deps' rather than looking at system Erlang lib
+directory. Projects relying on rebar usually don't have 'install' make
+targets. The eclass workarounds some of these problems. It handles
+installation in a generic way for Erlang/OTP structured projects.
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+6
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>get_erl_libs</B> <DD>
+Get the full path without EPREFIX to Erlang lib directory.
+<P>
+Return value: the path to Erlang lib directory
+<DT><B>rebar_disable_coverage</B> [&lt;rebar_config&gt;]<DD>
+Disable coverage in rebar.config. This is a workaround for failing coverage.
+Coverage is not relevant in this context, so there's no harm to disable it,
+although the issue should be fixed.
+<DT><B>erebar</B> &lt;targets&gt;<DD>
+Run rebar with verbose flag. Die on failure.
+<DT><B>rebar_fix_include_path</B> &lt;project_name&gt; [&lt;rebar_config&gt;]<DD>
+Fix path in rebar.config to 'include' directory of dependant project/package,
+so it points to installation in system Erlang lib rather than relative 'deps'
+directory.
+<P>
+&lt;rebar_config&gt; is optional. Default is 'rebar.config'.
+<P>
+The function dies on failure.
+<DT><B>rebar_remove_deps</B> [&lt;rebar_config&gt;]<DD>
+Remove dependencies list from rebar.config and deceive build rules that any
+dependencies are already fetched and built. Otherwise rebar tries to fetch
+dependencies and compile them.
+<P>
+&lt;rebar_config&gt; is optional. Default is 'rebar.config'.
+<P>
+The function dies on failure.
+<DT><B>rebar_set_vsn</B> [&lt;version&gt;]<DD>
+Set version in project description file if it's not set.
+<P>
+&lt;version&gt; is optional. Default is PV stripped from version suffix.
+<P>
+The function dies on failure.
+<DT><B>rebar_src_prepare</B> <DD>
+Prevent rebar from fetching and compiling dependencies. Set version in
+project description file if it's not set.
+<P>
+Existence of rebar.config is optional, but file description file must exist
+at 'src/${PN}.app.src'.
+<DT><B>rebar_src_configure</B> <DD>
+Configure with ERL_LIBS set.
+<DT><B>rebar_src_compile</B> <DD>
+Compile project with rebar.
+<DT><B>rebar_src_test</B> <DD>
+Run unit tests.
+<DT><B>rebar_src_install</B> <DD>
+Install BEAM files, include headers, executables and native libraries.
+Install standard docs like README or defined in DOCS variable.
+<P>
+Function expects that project conforms to Erlang/OTP structure.
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>REBAR_APP_SRC</B> = <I>&quot;${REBAR_APP_SRC-src/${PN}.app.src}&quot;</I><DD>
+Relative path to .app.src description file.
+</DL>
+
+<H2 ID="lbAG">AUTHORS</H2>
+
+Amadeusz Żołnowski &lt;<A HREF="mailto:aidecoe@gentoo.org">aidecoe@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">MAINTAINERS</H2>
+
+<A HREF="mailto:maintainer-needed@gentoo.org">maintainer-needed@gentoo.org</A>
+
+<H2 ID="lbAI">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAJ">FILES</H2>
+
+<B>rebar.eclass</B>
+
+
+<H2 ID="lbAK">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/rebar.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/rebar.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAH">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAI">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAJ">FILES</A><DD>
+<DT><A HREF="index.html#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

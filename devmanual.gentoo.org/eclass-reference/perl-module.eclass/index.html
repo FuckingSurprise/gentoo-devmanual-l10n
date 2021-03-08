@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>perl-module.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>PERL-MODULE.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+perl-module.eclass - eclass for installing Perl module distributions
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+The perl-module eclass is designed to allow easier installation of Perl
+module distributions, and their incorporation into the Gentoo Linux system.
+All exported functions from perl-functions.eclass (inherited here)
+explicitly also belong to the interface of perl-module.eclass.
+If your package does not use any Perl-specific build system (as, e.g.,
+ExtUtils::MakeMaker or Module::Build), we recommend to use perl-functions.eclass
+instead.
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+5 6 7
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>perl-module_src_unpack</B> <DD>
+Unpack the ebuild tarball(s).
+This function is to be called during the ebuild src_unpack() phase.
+<DT><B>perl-module_src_prepare</B> <DD>
+Get the ebuild sources ready.
+This function is to be called during the ebuild src_prepare() phase.
+<DT><B>perl-module_src_configure</B> <DD>
+Configure the ebuild sources.
+This function is to be called during the ebuild src_configure() phase.
+<DT><B>perl-module_src_compile</B> <DD>
+Compile the ebuild sources.
+This function is to be called during the ebuild src_compile() phase.
+<DT><B>perl-module_src-test</B> <DD>
+This code attempts to work out your threadingness and runs tests
+according to the settings of DIST_TEST using Test::Harness.
+<DT><B>perl-module_src_install</B> <DD>
+Install a Perl ebuild.
+This function is to be called during the ebuild src_install() phase.
+<DT><B>perl-module_pkg_postinst</B> <DD>
+This function is to be called during the pkg_postinst() phase. It only does
+useful things for the perl-core category, where it handles the file renaming and symbolic
+links that prevent file collisions for dual-life packages installing scripts.
+In any other category it immediately exits.
+<DT><B>perl-module_pkg_postrm</B> <DD>
+This function is to be called during the pkg_postrm() phase. It only does
+useful things for the perl-core category, where it handles the file renaming and symbolic
+links that prevent file collisions for dual-life packages installing scripts.
+In any other category it immediately exits.
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>GENTOO_DEPEND_ON_PERL</B><DD>
+This variable controls whether a runtime and build time dependency on
+dev-lang/perl is automatically added by the eclass. It defaults to yes.
+Set to no to disable, set to noslotop to add a perl dependency without
+slot operator (EAPI=6). All packages installing into the vendor_perl
+path must use yes here.
+<DT><B>DIST_NAME</B><DD>
+(EAPI=6 and later) This variable provides a way to override PN for the calculation of S,
+SRC_URI, and HOMEPAGE. If unset, defaults to PN.
+<DT><B>DIST_VERSION</B><DD>
+(EAPI=6 and later) This variable provides a way to override PV for the calculation of S and SRC_URI.
+Use it to provide the non-normalized, upstream version number. If unset, defaults to PV.
+Named MODULE_VERSION in EAPI=5.
+<DT><B>DIST_A_EXT</B><DD>
+(EAPI=6 and later) This variable provides a way to override the distfile extension for the calculation of
+SRC_URI. If unset, defaults to tar.gz. Named MODULE_A_EXT in EAPI=5.
+<DT><B>DIST_A</B><DD>
+(EAPI=6 and later) This variable provides a way to override the distfile name for the calculation of
+SRC_URI. If unset, defaults to ${DIST_NAME}-${DIST_VERSION}.${DIST_A_EXT} Named MODULE_A in EAPI=5.
+<DT><B>DIST_AUTHOR</B><DD>
+(EAPI=6 and later) This variable sets the module author name for the calculation of
+SRC_URI. Named MODULE_AUTHOR in EAPI=5.
+<DT><B>DIST_SECTION</B><DD>
+(EAPI=6 and later) This variable sets the module section for the calculation of
+SRC_URI. Only required in rare cases for very special snowflakes.
+Named MODULE_SECTION in EAPI=5.
+<DT><B>DIST_EXAMPLES</B><DD>
+(EAPI=6 and later) This Bash array allows passing a list of example files to be installed
+in /usr/share/doc/${PF}/examples. If set before inherit, automatically adds
+a use-flag examples, if not you'll have to add the useflag in your ebuild.
+Examples are installed only if the useflag examples exists and is activated.
+<DT><B>DIST_TEST</B><DD>
+(EAPI=6 and later) Variable that controls if tests are run in the test phase
+at all, and if yes under which conditions. If unset, defaults to &quot;do parallel&quot;
+If neither &quot;do&quot; nor &quot;parallel&quot; is recognized, tests are skipped.
+(In EAPI=5 the variable is called SRC_TEST, defaults to &quot;skip&quot;, and
+recognizes fewer options.)
+The following space-separated keywords are recognized:
+<BR>&nbsp;&nbsp;do&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;run&nbsp;tests
+<BR>&nbsp;&nbsp;parallel&nbsp;:&nbsp;run&nbsp;tests&nbsp;in&nbsp;parallel
+<BR>&nbsp;&nbsp;verbose&nbsp;&nbsp;:&nbsp;increase&nbsp;test&nbsp;verbosity
+<BR>&nbsp;&nbsp;network&nbsp;&nbsp;:&nbsp;do&nbsp;not&nbsp;try&nbsp;to&nbsp;disable&nbsp;network&nbsp;tests
+<DT><B>DIST_TEST_OVERRIDE</B><DD>
+(EAPI=6 and later) Variable that controls if tests are run in the test phase
+at all, and if yes under which conditions. It is intended for use in
+make.conf or the environment by ebuild authors during testing, and
+accepts the same values as DIST_TEST. If set, it overrides DIST_TEST
+completely. DO NOT USE THIS IN EBUILDS!
+</DL>
+
+<H2 ID="lbAG">AUTHORS</H2>
+
+Seemant Kulleen &lt;<A HREF="mailto:seemant@gentoo.org">seemant@gentoo.org</A>&gt;
+<BR>
+
+Andreas K. Hüttel &lt;<A HREF="mailto:dilfridge@gentoo.org">dilfridge@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">MAINTAINERS</H2>
+
+<A HREF="mailto:perl@gentoo.org">perl@gentoo.org</A>
+
+<H2 ID="lbAI">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAJ">FILES</H2>
+
+<B>perl-module.eclass</B>
+
+
+<H2 ID="lbAK">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/perl-module.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/perl-module.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAH">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAI">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAJ">FILES</A><DD>
+<DT><A HREF="index.html#lbAK">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

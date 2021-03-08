@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>selinux-policy-2.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>SELINUX-POLICY-2.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+selinux-policy-2.eclass - This eclass supports the deployment of the various SELinux modules in sec-policy
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+The selinux-policy-2.eclass supports deployment of the various SELinux modules
+defined in the sec-policy category. It is responsible for extracting the
+specific bits necessary for single-module deployment (instead of full-blown
+policy rebuilds) and applying the necessary patches.
+<P>
+Also, it supports for bundling patches to make the whole thing just a bit more
+manageable.
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+6 7
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>selinux-policy-2_src_unpack</B> <DD>
+Unpack the policy sources as offered by upstream (refpolicy).
+<DT><B>selinux-policy-2_src_prepare</B> <DD>
+Patch the reference policy sources with our set of enhancements. Start with
+the base patchbundle referred to by the ebuilds through the BASEPOL variable,
+then apply the additional patches as offered by the ebuild.
+<P>
+Next, extract only those files needed for this particular module (i.e. the .te
+and .fc files for the given module in the MODS variable).
+<P>
+Finally, prepare the build environments for each of the supported SELinux
+types (such as targeted or strict), depending on the POLICY_TYPES variable
+content.
+<DT><B>selinux-policy-2_src_compile</B> <DD>
+Build the SELinux policy module (.pp file) for just the selected module, and
+this for each SELinux policy mentioned in POLICY_TYPES
+<DT><B>selinux-policy-2_src_install</B> <DD>
+Install the built .pp (or copied .cil) files in the correct subdirectory within
+/usr/share/selinux.
+<DT><B>selinux-policy-2_pkg_postinst</B> <DD>
+Install the built .pp (or copied .cil) files in the SELinux policy stores, effectively
+activating the policy on the system.
+<DT><B>selinux-policy-2_pkg_postrm</B> <DD>
+Uninstall the module(s) from the SELinux policy stores, effectively
+deactivating the policy on the system.
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>MODS</B> ?= <I>&quot;_illegal&quot;</I><DD>
+This variable contains the (upstream) module name for the SELinux module.
+This name is only the module name, not the category!
+<DT><B>BASEPOL</B> ?= <I>${PVR}</I><DD>
+This variable contains the version string of the selinux-base-policy package
+that this module build depends on. It is used to patch with the appropriate
+patch bundle(s) that are part of selinux-base-policy.
+<DT><B>POLICY_PATCH</B> ?= <I>&quot;&quot;</I><DD>
+This variable contains the additional patch(es) that need to be applied on top
+of the patchset already contained within the BASEPOL variable. The variable
+can be both a simple string (space-separated) or a bash array.
+<DT><B>POLICY_FILES</B> ?= <I>&quot;&quot;</I><DD>
+When defined, this contains the files (located in the ebuilds' files/
+directory) which should be copied as policy module files into the store.
+Generally, users would want to include at least a .te and .fc file, but .if
+files are supported as well. The variable can be both a simple string
+(space-separated) or a bash array.
+<DT><B>POLICY_TYPES</B> ?= <I>&quot;targeted strict mcs mls&quot;</I><DD>
+This variable informs the eclass for which SELinux policies the module should
+be built. Currently, Gentoo supports targeted, strict, mcs and mls.
+This variable is the same POLICY_TYPES variable that we tell SELinux
+users to set in make.conf. Therefore, it is not the module that should
+override it, but the user.
+<DT><B>SELINUX_GIT_REPO</B> ?= <I>&quot;<A HREF="https://anongit.gentoo.org/git/proj/hardened-refpolicy.git">https://anongit.gentoo.org/git/proj/hardened-refpolicy.git</A>&quot;;</I><DD>
+When defined, this variable overrides the default repository URL as used by
+this eclass. It allows end users to point to a different policy repository
+using a single variable, rather than having to set the packagename_LIVE_REPO
+variable for each and every SELinux policy module package they want to install.
+The default value is Gentoo's hardened-refpolicy repository.
+<DT><B>SELINUX_GIT_BRANCH</B> ?= <I>&quot;master&quot;;</I><DD>
+When defined, this variable sets the Git branch to use of the repository. This
+allows for users and developers to use a different branch for the entire set of
+SELinux policy packages, rather than having to override them one by one with the
+packagename_LIVE_BRANCH variable.
+The default value is the 'master' branch.
+</DL>
+
+<H2 ID="lbAG">MAINTAINERS</H2>
+
+<A HREF="mailto:selinux@gentoo.org">selinux@gentoo.org</A>
+
+<H2 ID="lbAH">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAI">FILES</H2>
+
+<B>selinux-policy-2.eclass</B>
+
+
+<H2 ID="lbAJ">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/selinux-policy-2.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/selinux-policy-2.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAH">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAI">FILES</A><DD>
+<DT><A HREF="index.html#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

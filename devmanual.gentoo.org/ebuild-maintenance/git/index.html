@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Git for Gentoo Developers – Gentoo Development Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span> Home</a></li>
+<li class="dropdown">
+<a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></a><ul class="dropdown-menu">
+<li><a class="reference" href="index.html#preparing-a-development-checkout">Preparing a development checkout</a></li>
+<li><a class="reference" href="index.html#committing-to-gentoo.git">Committing to gentoo.git</a></li>
+</ul>
+</li>
+<li><a class="w-250 text-center" href="../new-ebuild/index.html"><span class="fa fa-arrow-left"></span><span class="truncated-text d-inline-block max-w-200 ml-2">Adding a New Ebuild</span></a></li>
+<li><a class="w-250 text-center" href="../package-moves/index.html"><span class="truncated-text d-inline-block max-w-200 mr-2">Package and Slot Moves</span><span class="fa fa-arrow-right"></span></a></li>
+</ul></div>
+</div></div></nav><nav class="navbar navbar-grey navbar-stick" id="devmanual-actions" role="navigation"><div class="container"><div class="row"><div class="input-group">
+<input type="search" name="search" placeholder="Search" title="Search Gentoo Developer Manual [f]" accesskey="f" id="searchInput" class="form-control" onclick="fetchDocuments()"><div class="input-group-btn"><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton btn btn-default" onclick="search()"></div>
+</div></div></div></nav><div id="searchResults" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Search Results</h4>
+</div>
+<div class="modal-body"><p>No results found.</p></div>
+<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+</div></div></div>
+<div class="container"><div class="row"><div class="col-md010"><ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Ebuild Maintenance</a></li>
+</ol></div></div></div></header><main><div class="container">
+<h1 class="first-header">Git for Gentoo Developers</h1>
+<p>
+This guide covers git usage instructions and policies specific to Gentoo ebuild
+development. It assumes that the readers possess basic git knowledge.
+For a generic guide, please see the official
+<a class="" href="https://git-scm.com/book/">git book</a>.
+</p>
+<div class="section">
+<h2 id="preparing-a-development-checkout">Preparing a development checkout</h2>
+<div class="section">
+<h3 id="cloning-the-gentoo.git-repository">Cloning the gentoo.git repository</h3>
+
+<p>
+The ebuild development happens on the official git repository. You can push
+your changes only through the SSH protocol. Therefore, clone the repository
+using:
+</p>
+
+<pre>
+git clone git@git.gentoo.org:repo/gentoo.git
+</pre>
+
+<p>
+If you do not have SSH access to the Gentoo git service, you can use the anongit
+mirror for read-only access instead:
+</p>
+
+<pre>
+git clone https://anongit.gentoo.org/git/repo/gentoo.git
+</pre>
+
+<p>
+Normally git will fetch the complete history from the start of git repository
+(Aug 2015). This can require a significant amount of disk space. If you do not
+need the full history, you can use the <code class="docutils literal"><span class="pre">--depth</span></code> option to create a shallow
+clone, including only a subset containing the the newest commits. For example,
+<code class="docutils literal"><span class="pre">--depth=50</span></code> will include the 50 newest commits.
+</p>
+
+<p>
+Please note that git version 1.9 or newer is required to push when using
+a shallow clone.
+</p>
+
+</div>
+<div class="section">
+<h3 id="configuration-specific-to-the-gentoo-repository">Configuration specific to the Gentoo repository</h3>
+
+<p>
+To ensure that the Gentoo policies are followed, you should set the following
+configuration variables:
+</p>
+
+<pre>
+git config --local user.name "${YOUR_FULL_NAME}"
+# use your @gentoo.org address even if you have a different default
+git config --local user.email "${YOUR_NICKNAME}@gentoo.org"
+
+# enable commit and push signing
+git config --local user.signingkey "0x${LONG_OPENPGP_KEY_ID}"
+git config --local commit.gpgsign 1
+git config --local push.gpgsign 1
+
+# prevent implicit merges on 'git pull'
+git config --local pull.ff only
+</pre>
+
+</div>
+<div class="section">
+<h3 id="grafting-converted-cvs-history-into-the-clone">Grafting converted CVS history into the clone</h3>
+
+<p>
+To include the converted CVS history in the git repository, you can
+graft it into the repository:
+</p>
+
+<pre>
+git remote add history https://anongit.gentoo.org/git/repo/gentoo/historical.git/
+git fetch history
+git replace --graft 56bd759df1d0c750a065b8c845e93d5dfa6b549d history/master
+</pre>
+
+<p>
+Once this is done, git commands such as <code class="docutils literal"><span class="pre">git log</span></code> will include
+the historical commits after the initial git commit.
+</p>
+
+</div>
+</div>
+<div class="section">
+<h2 id="committing-to-gentoo.git">Committing to gentoo.git</h2>
+<div class="section">
+<h3 id="committing-and-verifying-commits">Committing and verifying commits</h3>
+
+<p>
+The recommended way of committing to the Gentoo repository is to use <code class="docutils literal"><span class="pre">repoman
+commit</span></code>. It automatically performs the necessary QA checks on the package
+being committed and has other features helping with the Gentoo workflow.
+However, it is currently limited to creating a single commit to a single
+package.
+</p>
+
+<p>
+For any other use case, <code class="docutils literal"><span class="pre">git commit</span></code> and other git commands need to be
+used. The valid uses of git include:
+</p>
+
+<ul>
+<li>creating commits spanning multiple packages and/or multiple areas
+of the Gentoo repository (eclasses, licenses, profiles…),</li>
+<li>amending a commit created via <code class="docutils literal"><span class="pre">repoman commit</span></code> with additional files
+or fixups,</li>
+<li>combining multiple commits created via <code class="docutils literal"><span class="pre">repoman commit</span></code> using <code class="docutils literal"><span class="pre">git
+rebase</span></code>.</li>
+</ul>
+
+<p>
+Whenever repoman is not used to commit, you need to manually verify all
+packages affected by the commit using <code class="docutils literal"><span class="pre">repoman full</span></code>. Since repoman
+is not aware of staged changes, please make sure that all files are included
+in the commit. Also when not using repoman, you must perform a manual sign-off
+to the <a class="" href="https://www.gentoo.org/glep/glep-0076.html#certificate-of-origin">
+Certificate of Origin</a> using the <code class="docutils literal"><span class="pre">-s</span></code> or <code class="docutils literal"><span class="pre">--signoff</span></code> option
+with your git commit commands. Make sure you have read and understand the
+actual Certificate.
+</p>
+
+</div>
+<div class="section">
+<h3 id="atomic-commits">Atomic commits</h3>
+
+<p>
+Whenever possible, use atomic commits. Try to split your changes into logical
+commits, abiding by the following three rules as much as possible:
+</p>
+
+<ol>
+<li>
+Do not include multiple irrelevant changes in a single commit. However, make
+sure not to split relevant changes unnecessarily. For example, if a version bump
+requires changes in the ebuild, it is correct to perform them in a single
+commit. However, if you are fixing an additional bug that has been present
+in the previous version, the fix belongs in a separate commit.
+</li>
+
+<li>
+Split commits at logical unit boundaries. When updating multiple packages,
+preferably use a single commit for each package. Avoid combining changes
+to ebuilds, eclasses, licenses, profiles etc. in a single commit. However,
+do not split relevant or interdependent changes within a single package.
+</li>
+
+<li>
+Avoid creating commits introducing a temporary breakage. Unless impossible,
+add packages in dependency install order. Add licenses before the packages
+needing them. Commit <code class="docutils literal"><span class="pre">package.mask</span></code> and other profile changes before
+ebuilds relying on them. Usually it is also acceptable to include those changes
+along with the commit adding the package.
+</li>
+</ol>
+
+<p>
+Please note that revision bumps count as side effects of the changes requiring
+them and do not belong in separate commits. When doing multiple irrelevant
+changes that require a revision bump, it is only necessary to bump the revision
+in the first commit in the series introduced by a single push.
+</p>
+
+</div>
+<div class="section">
+<h3 id="git-commit-message-format">Git Commit Message Format</h3>
+
+<p>
+It is important to format the commit messages properly so that they
+communicate the changes to the reader in a clear and concise
+way. Additionally, consistency in message format allows for easier
+parsing by external tools. The first line of the commit message should
+contain a brief summary of the changes, followed by an empty new
+line. From the third line onward should be a detailed, multiline
+explanation of the changes introduced by the commit. At the very end,
+auxiliary information such as the bugs related to the commit,
+contributors, and reviewers should be listed using RFC822/git style
+tags. The sign-off agreement will be added there as well when applied
+with the commit action. The length of the lines in the message should
+be 70-75 characters at maximum.
+</p>
+
+<p>
+The summary line should start with referencing what is affected by the
+change followed by a colon ':' character. Use the rules in the
+following list to determine the proper format based on what has
+changed, substituting the package, category and eclass names
+appropriately:
+</p>
+
+<ul>
+<li>
+<code class="docutils literal"><span class="pre">${CATEGORY}/${PN}:</span></code>Single Package (Note that <code class="docutils literal"><span class="pre">repoman commit</span></code>
+automatically inserts this for you)</li>
+<li>
+<code class="docutils literal"><span class="pre">${CATEGORY}:</span></code> Package Category</li>
+<li>
+<code class="docutils literal"><span class="pre">profiles:</span></code> Profile Directory</li>
+<li>
+<code class="docutils literal"><span class="pre">${ECLASS}.eclass:</span></code> Eclass Directotry</li>
+<li>
+<code class="docutils literal"><span class="pre">licenses:</span></code> Licenses Directory</li>
+<li>
+<code class="docutils literal"><span class="pre">metadata:</span></code> Metadata Directory</li>
+</ul>
+
+<p>
+For packages where <code class="docutils literal"><span class="pre">${CATEGORY}/${PN}:</span></code> is long, the line length
+limit can be exceeded, if absolutely necessary, to ensure a more
+useful summary line. If a commit affects multiple directories, prepend
+the message with which reflects the intention of the change best. If
+there are any bugs on Gentoo Bugzilla associated with the commit, the id
+of the bug can be appended to the summary line using the format
+<code class="docutils literal"><span class="pre">#nnnnnn</span></code>. If you are modifying keywords, clearly state what
+keywords are added/removed.
+</p>
+
+<div class="alert alert-danger" role="alert">
+<strong>Warning:</strong>
+By default, lines starting with <code class="docutils literal"><span class="pre">#</span></code> are considered to be comments
+by git and not included in the commit message. Make sure that a new
+line does not start with <code class="docutils literal"><span class="pre">#nnnnnn</span></code>. Optionally, git can be
+configured to use a different character for comments by changing the
+<code class="docutils literal"><span class="pre">commentchar</span></code> option.
+</div>
+
+<p>
+For non-trivial commits, the message should contain a detailed
+explanation of what the commit intends to change, why it is required,
+and how it is accomplished, along with any other supplementary
+information.
+</p>
+
+<p>
+Finally the commit message should list auxiliary information such as
+people who are involved in authoring, suggesting, reviewing and
+testing the changes, and revelant bugs. Use RFC822/git style tags as
+explained in the
+<a class="" href="https://kernel.org/doc/html/latest/process/submitting-patches.html">
+Linux Kernel patch guideline</a>. Additionally, the following tags
+are optionally used in Gentoo:
+</p>
+
+<ul>
+<li>
+<code class="docutils literal"><span class="pre">Bug:</span></code> Use this to reference bugs <i>without</i> closing them.
+The value is a URL to the bug. If multiple bugs need to be referenced,
+each one should be listed in a separate <code class="docutils literal"><span class="pre">Bug</span></code> tag. If a bug
+on Gentoo Bugzilla, or an issue or a pull request on GitHub
+is referenced, a reference to the commit will be added
+automatically.</li>
+<li>
+<code class="docutils literal"><span class="pre">Closes:</span></code> Use this to reference bugs and close them
+automatically. Alike <code class="docutils literal"><span class="pre">Bug:</span></code>, the value is a single URL to the bug,
+and multiple tags can be used to close multiple bugs. If a bug on Gentoo
+Bugzilla, or an issue or a pull request on a GitHub repository
+mirrored by Gentoo is referenced, it will be closed (as fixed)
+automatically with reference to the commit.</li>
+<li>
+<code class="docutils literal"><span class="pre">Package-Manager:</span></code> This is automatically inserted by
+<code class="docutils literal"><span class="pre">repoman commit</span></code> and it specifies the version of
+<code class="docutils literal"><span class="pre">sys-apps/portage</span></code> on the system.</li>
+<li>
+<code class="docutils literal"><span class="pre">RepoMan-Options:</span></code> This is automatically inserted by
+<code class="docutils literal"><span class="pre">repoman commit</span></code> and records the options passed to repoman (such
+as --force) for the commit.</li>
+</ul>
+
+<p>
+When committing <a class="" href="../../ebuild-writing/user-submitted/index.html">user
+contributions</a>, make sure to credit them in your commit message
+with the user's full name and email address. Be aware and respectful
+of their privacy: some users prefer to be only known by a
+nickname. Take advantage of the tags such as <code class="docutils literal"><span class="pre">Suggested-By</span></code> or
+<code class="docutils literal"><span class="pre">Reported-By:</span></code>when entering such information to the commit
+message.
+</p>
+
+<p>
+An example commit message is shown below:
+</p>
+
+<pre>
+app-misc/foo: version bump to 0.5
+
+This also adds a new USE flag 'bar' which controls the
+new bar functionality introduced with this version.
+
+Bug: https://bugs.gentoo.org/00000
+Closes: https://bugs.gentoo.org/00001
+Signed-off-by: Alice Bar &lt;a.bar@example.org&gt;
+</pre>
+
+</div>
+</div>
+</div></main><footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+                Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+              </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script><script src="/assets.gentoo.org/lunr/lunr.min.js"></script><script>var documentsSrc = "../../documents.js"</script><script src="../../search.js"></script>
+</body>
+</html>

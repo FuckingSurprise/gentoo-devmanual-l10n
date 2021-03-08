@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>java-pkg-simple.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>JAVA-PKG-SIMPLE.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+java-pkg-simple.eclass - Eclass for packaging Java software with ease.
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+This class is intended to build pure Java packages from Java sources
+without the use of any build instructions shipped with the sources.
+There is no support for generating source files, or for controlling
+the META-INF of the resulting jar, although these issues may be
+addressed by an ebuild by putting corresponding files into the target
+directory before calling the src_compile function of this eclass.
+
+<H2 ID="lbAD">FUNCTIONS</H2>
+
+<DL>
+<DT><B>java-pkg-simple_src_compile</B> <DD>
+src_compile for simple bare source java packages. Finds all *.java
+sources in ${JAVA_SRC_DIR}, compiles them with the classpath
+calculated from ${JAVA_GENTOO_CLASSPATH}, and packages the resulting
+classes to a single ${JAVA_JAR_FILENAME}. If the file
+target/META-INF/MANIFEST.MF exists, it is used as the manifest of the
+created jar.
+<P>
+If USE FLAG 'binary' exists and is set, it will just copy
+${JAVA_BINJAR_FILENAME} to ${S} and skip the rest of src_compile.
+<DT><B>java-pkg-simple_src_install</B> <DD>
+src_install for simple single jar java packages. Simply installs
+${JAVA_JAR_FILENAME}. It will also install a launcher if
+${JAVA_MAIN_CLASS} is set.
+<DT><B>java-pkg-simple_src_test</B> <DD>
+src_test for simple single java jar file.
+It will perform test with frameworks that are defined in
+${JAVA_TESTING_FRAMEWORKS}.
+</DL>
+
+<H2 ID="lbAE">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>JAVA_GENTOO_CLASSPATH</B><DD>
+Comma or space separated list of java packages to include in the
+class path. The packages will also be registered as runtime
+dependencies of this new package. Dependencies will be calculated
+transitively. See &quot;java-config -l&quot; for appropriate package names.
+<P>
+<PRE>
+JAVA_GENTOO_CLASSPATH=&quot;foo,bar-2&quot;
+</PRE>
+
+<DT><B>JAVA_GENTOO_CLASSPATH_EXTRA</B><DD>
+Extra list of colon separated path elements to be put on the
+classpath when compiling sources.
+<DT><B>JAVA_CLASSPATH_EXTRA</B><DD>
+An extra comma or space separated list of java packages
+that are needed only during compiling sources.
+<DT><B>JAVA_NEEDS_TOOLS</B><DD>
+Add tools.jar to the gentoo.classpath. Should only be used
+for build-time purposes, the dependency is not recorded to
+package.env.
+<DT><B>JAVA_SRC_DIR</B><DD>
+An array of directories relative to ${S} which contain the sources
+of the application. If you set ${JAVA_SRC_DIR} to a string it works
+as well. The default value &quot;&quot; means it will get all source files
+inside ${S}.
+For the generated source package (if source is listed in
+${JAVA_PKG_IUSE}), it is important that these directories are
+actually the roots of the corresponding source trees.
+<P>
+<PRE>
+JAVA_SRC_DIR=( &quot;impl/src/main/java/&quot;
+        &quot;arquillian/weld-ee-container/src/main/java/&quot;
+)
+</PRE>
+
+<DT><B>JAVA_RESOURCE_DIRS</B><DD>
+An array of directories relative to ${S} which contain the
+resources of the application. If you do not set the variable,
+there will be no resources added to the compiled jar file.
+<P>
+<PRE>
+JAVA_RESOURCE_DIRS=(&quot;src/java/resources/&quot;)
+</PRE>
+
+<DT><B>JAVA_ENCODING</B> ?= <I>UTF-8</I><DD>
+The character encoding used in the source files.
+<DT><B>JAVAC_ARGS</B><DD>
+Additional arguments to be passed to javac.
+<DT><B>JAVA_MAIN_CLASS</B><DD>
+If the java has a main class, you are going to set the
+variable so that we can generate a proper MANIFEST.MF
+and create a launcher.
+<P>
+<PRE>
+JAVA_MAIN_CLASS=&quot;org.gentoo.java.ebuilder.Main&quot;
+</PRE>
+
+<DT><B>JAVADOC_ARGS</B><DD>
+Additional arguments to be passed to javadoc.
+<DT><B>JAVA_JAR_FILENAME</B> ?= <I>${PN}.jar</I><DD>
+The name of the jar file to create and install.
+<DT><B>JAVA_BINJAR_FILENAME</B><DD>
+The name of the binary jar file to be installed if
+USE FLAG 'binary' is set.
+<DT><B>JAVA_LAUNCHER_FILENAME</B> ?= <I>${PN}-${SLOT}</I><DD>
+If ${JAVA_MAIN_CLASS} is set, we will create a launcher to
+execute the jar, and ${JAVA_LAUNCHER_FILENAME} will be the
+name of the script.
+<DT><B>JAVA_TESTING_FRAMEWORKS</B><DD>
+A space separated list that defines which tests it should launch
+during src_test.
+<P>
+<PRE>
+JAVA_TESTING_FRAMEWORKS=&quot;junit pkgdiff&quot;
+</PRE>
+
+<DT><B>JAVA_TEST_EXCLUDES</B><DD>
+A array of classes that should not be executed during src_test().
+<P>
+<PRE>
+JAVA_TEST_EXCLUDES=( &quot;net.sf.cglib.CodeGenTestCase&quot; &quot;net.sf.cglib.TestAll&quot; )
+</PRE>
+
+<DT><B>JAVA_TEST_GENTOO_CLASSPATH</B><DD>
+The extra classpath we need while compiling and running the
+source code for testing.
+<DT><B>JAVA_TEST_SRC_DIR</B><DD>
+An array of directories relative to ${S} which contain the
+sources for testing. It is almost equivalent to
+${JAVA_SRC_DIR} in src_test.
+<DT><B>JAVA_TEST_RESOURCE_DIRS</B><DD>
+It is almost equivalent to ${JAVA_RESOURCE_DIRS} in src_test.
+</DL>
+
+<H2 ID="lbAF">AUTHORS</H2>
+
+Java maintainers (<A HREF="mailto:java@gentoo.org">java@gentoo.org</A>)
+
+<H2 ID="lbAG">MAINTAINERS</H2>
+
+<A HREF="mailto:java@gentoo.org">java@gentoo.org</A>
+
+<H2 ID="lbAH">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAI">FILES</H2>
+
+<B>java-pkg-simple.eclass</B>
+
+
+<H2 ID="lbAJ">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/java-pkg-simple.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/java-pkg-simple.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAE">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAF">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAG">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAH">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAI">FILES</A><DD>
+<DT><A HREF="index.html#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

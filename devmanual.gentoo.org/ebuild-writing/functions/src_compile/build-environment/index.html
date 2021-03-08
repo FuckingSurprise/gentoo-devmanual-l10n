@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Configuring Build Environment – Gentoo Development Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../../../../devmanual.css" type="text/css">
+<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../../../index.html"><span class="fa fa-home"></span> Home</a></li>
+<li class="dropdown">
+<a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></a><ul class="dropdown-menu">
+<li><a class="reference" href="index.html#guidelines-for-flag-filtering">Guidelines for Flag Filtering</a></li>
+<li><a class="reference" href="index.html#simple-flag-stripping">Simple Flag Stripping</a></li>
+<li><a class="reference" href="index.html#flag-replacement">Flag Replacement</a></li>
+<li><a class="reference" href="index.html#adding-additional-flags">Adding Additional Flags</a></li>
+</ul>
+</li>
+<li><a class="w-250 text-center" href="../index.html"><span class="fa fa-arrow-left"></span><span class="truncated-text d-inline-block max-w-200 ml-2">src_compile</span></a></li>
+<li><a class="w-250 text-center" href="../building/index.html"><span class="truncated-text d-inline-block max-w-200 mr-2">Building a Package</span><span class="fa fa-arrow-right"></span></a></li>
+</ul></div>
+</div></div></nav><nav class="navbar navbar-grey navbar-stick" id="devmanual-actions" role="navigation"><div class="container"><div class="row"><div class="input-group">
+<input type="search" name="search" placeholder="Search" title="Search Gentoo Developer Manual [f]" accesskey="f" id="searchInput" class="form-control" onclick="fetchDocuments()"><div class="input-group-btn"><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton btn btn-default" onclick="search()"></div>
+</div></div></div></nav><div id="searchResults" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Search Results</h4>
+</div>
+<div class="modal-body"><p>No results found.</p></div>
+<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+</div></div></div>
+<div class="container"><div class="row"><div class="col-md010"><ol class="breadcrumb">
+<li><a href="../../../../index.html">Master Index</a></li>
+<li><a href="../../../index.html">Ebuild Writing</a></li>
+<li><a href="../../index.html">Ebuild Phase Functions</a></li>
+<li><a href="../index.html">src_compile</a></li>
+</ol></div></div></div></header><main><div class="container">
+<h1 class="first-header">Configuring Build Environment</h1>
+<p>
+Sometimes it is necessary to manipulate certain aspects of the user's
+build environment before running <code class="docutils literal"><span class="pre">./configure</span></code>. The <code class="docutils literal"><span class="pre">flag-o-matic</span></code>
+eclass is the best choice for manipulating <code class="docutils literal"><span class="pre">CFLAGS</span></code>, <code class="docutils literal"><span class="pre">LDFLAGS</span></code>
+and suchlike.
+</p>
+
+<div class="alert alert-info" role="alert">
+<strong>Note:</strong>
+Except where otherwise specified, any function which operates on
+<code class="docutils literal"><span class="pre">CFLAGS</span></code> also operates on <code class="docutils literal"><span class="pre">CXXFLAGS</span></code>.
+</div>
+
+<p>
+Ebuilds must not simply ignore user CFLAGS, CXXFLAGS or LDFLAGS — see
+<a class="" href="../../../../general-concepts/user-environment/index.html#not-filtering-variables">Not Filtering Variables</a>.
+</p>
+<div class="section">
+<h2 id="guidelines-for-flag-filtering">Guidelines for Flag Filtering</h2>
+
+<p>
+If a package breaks with any reasonable <code class="docutils literal"><span class="pre">CFLAGS</span></code>, it is best to filter the
+problematic flag if a bug report is received. Reasonable <code class="docutils literal"><span class="pre">CFLAGS</span></code> are
+<code class="docutils literal"><span class="pre">-march=</span></code>, <code class="docutils literal"><span class="pre">-mcpu=</span></code>, <code class="docutils literal"><span class="pre">-mtune=</span></code> (depending upon
+arch), <code class="docutils literal"><span class="pre">-O2</span></code>, <code class="docutils literal"><span class="pre">-Os</span></code> and <code class="docutils literal"><span class="pre">-fomit-frame-pointer</span></code>. Note that
+<code class="docutils literal"><span class="pre">-Os</span></code> should usually be replaced with <code class="docutils literal"><span class="pre">-O2</span></code> rather than being
+stripped entirely. The <code class="docutils literal"><span class="pre">-fstack-protector</span></code> flag should probably be
+in this group too, although our hardened team claim that this flag
+never ever breaks anything...
+</p>
+
+<p>
+The <code class="docutils literal"><span class="pre">-pipe</span></code> flag doesn't affect the generated code, so it's not really
+relevant here, but it's a sensible flag to have set globally.
+</p>
+
+<p>
+If a package breaks with other (insane) <code class="docutils literal"><span class="pre">CFLAGS</span></code>, it is perfectly
+OK to close the bug with a <b>WONTFIX</b> suggesting that the user
+picks more sensible global <code class="docutils literal"><span class="pre">CFLAGS</span></code>. Similarly, if you suspect
+that a bug is caused by insane <code class="docutils literal"><span class="pre">CFLAGS</span></code>, an <b>INVALID</b> resolution is
+suitable.
+</p>
+
+<p>
+All of the following assumes that the ebuild has an <code class="docutils literal"><span class="pre">inherit flag-o-matic</span></code>
+line in the correct place.
+</p>
+
+</div>
+<div class="section">
+<h2 id="simple-flag-stripping">Simple Flag Stripping</h2>
+
+<p>
+The <code class="docutils literal"><span class="pre">filter-flags</span></code> function can be used to remove a particular flag from
+<code class="docutils literal"><span class="pre">{C,CPP,CXX,CCAS,F,FC,LD}FLAGS</span></code>. Multiple arguments can be supplied; each is the name of a flag to
+remove.
+</p>
+
+<pre><span class="Constant">	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> -fomit-frame-pointer leads to nasty broken code on sparc thanks to a
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> rather icky asm function
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">use</span> sparc <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">&amp;&amp;</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">filter-flags</span> -fomit-frame-pointer
+</span></pre>
+
+<p>
+There is a <code class="docutils literal"><span class="pre">filter-ldflags</span></code> function available which does the equivalent
+for <code class="docutils literal"><span class="pre">LDFLAGS</span></code>.
+</p>
+
+<p>
+If a package is known to be very <code class="docutils literal"><span class="pre">CFLAGS</span></code> sensitive, the
+<code class="docutils literal"><span class="pre">strip-flags</span></code> function will remove most flags, leaving only a minimal
+conservative set of flags.
+</p>
+
+<pre><span class="Constant">	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> Our app hates screwy flags
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">strip-flags</span>
+</span></pre>
+
+</div>
+<div class="section">
+<h2 id="flag-replacement">Flag Replacement</h2>
+
+<p>
+To replace a flag with a different one, use <code class="docutils literal"><span class="pre">replace-flags</span></code>. This
+is most commonly used to replace <code class="docutils literal"><span class="pre">-Os</span></code> with <code class="docutils literal"><span class="pre">-O2</span></code>
+(or <code class="docutils literal"><span class="pre">-O3</span></code> with <code class="docutils literal"><span class="pre">-O2</span></code> if you are feeling kind).
+</p>
+
+<pre><span class="Constant">	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> Seems to have issues with -Os, switch to -O2
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">replace-flags</span> -Os -O2
+</span></pre>
+
+<p>
+There is also a special function named <code class="docutils literal"><span class="pre">replace-cpu-flags</span></code> for
+replacing CPU (<code class="docutils literal"><span class="pre">-mtune</span></code>, <code class="docutils literal"><span class="pre">-mcpu</span></code>, <code class="docutils literal"><span class="pre">-march</span></code>) designation
+flags. The last argument is the flag to use; previous arguments are
+the flags to be replaced.
+</p>
+
+<pre><span class="Constant">	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> Can't <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">use</span> ultrasparc or ultrasparc3 code, drop to v9
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">replace-cpu-flags</span> ultrasparc ultrasparc3 v9
+</span></pre>
+
+</div>
+<div class="section">
+<h2 id="adding-additional-flags">Adding Additional Flags</h2>
+<p>
+Sometimes it is necessary to add in additional <code class="docutils literal"><span class="pre">CFLAGS</span></code>
+or <code class="docutils literal"><span class="pre">LDFLAGS</span></code>. The <code class="docutils literal"><span class="pre">append-flags</span></code> and <code class="docutils literal"><span class="pre">append-ldflags</span></code>
+functions can be used here.
+</p>
+
+<pre><span class="Constant">	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> If we're using selinux, we need to add a -D
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">use</span> selinux <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">&amp;&amp;</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">append-flags</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>-DWITH_SELINUX<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
+
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span> Secure linking needed, since we're setuid root
+	<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">append-ldflags</span> -Wl,-z,now
+</span></pre>
+
+<p>
+See <a class="" href="../../../../eclass-reference/flag-o-matic.eclass/index.html">flag-o-matic.eclass</a> for a full reference.
+</p>
+</div>
+</div></main><footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+                Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+              </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script><script src="/assets.gentoo.org/lunr/lunr.min.js"></script><script>var documentsSrc = "../../../../documents.js"</script><script src="../../../../search.js"></script>
+</body>
+</html>

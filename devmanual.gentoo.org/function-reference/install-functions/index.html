@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Install Functions Reference – Gentoo Development Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span> Home</a></li>
+<li class="dropdown"><a href="index.html#" class="dropdown-toggle" data-toggle="dropdown">Index <span class="caret"></span></a></li>
+<li><a class="w-250 text-center" href="../error-functions/index.html"><span class="fa fa-arrow-left"></span><span class="truncated-text d-inline-block max-w-200 ml-2">Error Functions Reference</span></a></li>
+<li><a class="w-250 text-center" href="../message-functions/index.html"><span class="truncated-text d-inline-block max-w-200 mr-2">Message Functions Reference</span><span class="fa fa-arrow-right"></span></a></li>
+</ul></div>
+</div></div></nav><nav class="navbar navbar-grey navbar-stick" id="devmanual-actions" role="navigation"><div class="container"><div class="row"><div class="input-group">
+<input type="search" name="search" placeholder="Search" title="Search Gentoo Developer Manual [f]" accesskey="f" id="searchInput" class="form-control" onclick="fetchDocuments()"><div class="input-group-btn"><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton btn btn-default" onclick="search()"></div>
+</div></div></div></nav><div id="searchResults" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">x</button><h4 class="modal-title">Search Results</h4>
+</div>
+<div class="modal-body"><p>No results found.</p></div>
+<div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
+</div></div></div>
+<div class="container"><div class="row"><div class="col-md010"><ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Function Reference</a></li>
+</ol></div></div></div></header><main><div class="container">
+<h1 class="first-header">Install Functions Reference</h1>
+
+<p>
+The following functions are provided by the package manager to handle various
+install-related tasks. <code class="docutils literal"><span class="pre">${ED}</span></code> is prepended automatically to the install location.
+</p>
+
+<p>
+The <code class="docutils literal"><span class="pre">do*</span></code> functions, when given multiple arguments, will work upon multiple
+targets. The <code class="docutils literal"><span class="pre">new*</span></code> functions take exactly two arguments (except as noted) —
+the first is the source name, the second the name to use when installing.
+</p>
+
+<p>
+The <code class="docutils literal"><span class="pre">*into</span></code> functions create the directory if it does not already exist.
+</p>
+
+<table class="table">
+  <tr>
+    <th>
+      Function
+    </th>
+    <th>
+      Details
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">into</span></code>
+    </td>
+    <td>
+      Change install location for
+      <code class="docutils literal"><span class="pre">dobin</span></code>, <code class="docutils literal"><span class="pre">newbin</span></code>,
+      <code class="docutils literal"><span class="pre">dosbin</span></code>, <code class="docutils literal"><span class="pre">newsbin</span></code>,
+      <code class="docutils literal"><span class="pre">dolib</span></code>,
+      <code class="docutils literal"><span class="pre">dolib.a</span></code>, <code class="docutils literal"><span class="pre">newlib.a</span></code>,
+      <code class="docutils literal"><span class="pre">dolib.so</span></code>, <code class="docutils literal"><span class="pre">newlib.so</span></code>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">insinto</span></code>
+    </td>
+    <td>
+      Change install location for <code class="docutils literal"><span class="pre">doins</span></code>, <code class="docutils literal"><span class="pre">newins</span></code>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">exeinto</span></code>
+    </td>
+    <td>
+      Change install location for <code class="docutils literal"><span class="pre">doexe</span></code>, <code class="docutils literal"><span class="pre">newexe</span></code>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">docinto</span></code>
+    </td>
+    <td>
+      Change install location for <code class="docutils literal"><span class="pre">dodoc</span></code>, <code class="docutils literal"><span class="pre">newdoc</span></code>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">insopts</span></code>
+    </td>
+    <td>
+      Specify arguments passed to <code class="docutils literal"><span class="pre">install</span></code> (eg <code class="docutils literal"><span class="pre">-s</span></code>, <code class="docutils literal"><span class="pre">-m644</span></code>)
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">diropts</span></code>
+    </td>
+    <td>
+      Specify arguments passed to <code class="docutils literal"><span class="pre">install</span></code> for directories
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">exeopts</span></code>
+    </td>
+    <td>
+      Specify arguments passed to <code class="docutils literal"><span class="pre">install</span></code> for executables
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">libopts</span></code>
+    </td>
+    <td>
+      Specify arguments passed to <code class="docutils literal"><span class="pre">install</span></code> for libraries
+      <b>Note:</b> Banned in EAPI=7
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">dobin</span></code>
+    </td>
+    <td>
+      Install a binary into <code class="docutils literal"><span class="pre">/usr/bin</span></code>, set the file mode to 0755
+      and set the ownership to superuser or its equivalent on the
+      system or installation at hand.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">doconfd</span></code>
+    </td>
+    <td>
+      Install an <code class="docutils literal"><span class="pre">/etc/conf.d</span></code> file
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">dodir</span></code>
+    </td>
+    <td>
+      Install a directory that will be non-empty when the package is
+      merged. For directories that will be empty, please use
+      <code class="docutils literal"><span class="pre">keepdir</span></code> instead.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">dodoc</span></code>
+    </td>
+    <td>
+      Install a documentation file into <code class="docutils literal"><span class="pre">/usr/share/doc/${PF}</span></code>.
+      The <code class="docutils literal"><span class="pre">-r</span></code> option allows directories to be installed recursively.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">einstalldocs</span></code>
+    </td>
+    <td>
+      Installs the files and directories specified by the <code class="docutils literal"><span class="pre">DOCS</span></code>
+      and <code class="docutils literal"><span class="pre">HTML_DOCS</span></code> variables into <code class="docutils literal"><span class="pre">/usr/share/doc/${PF}</span></code>
+      recursively using <code class="docutils literal"><span class="pre">dodoc -r</span></code>. <b>Note</b>: Approved in EAPI
+      6.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">doenvd</span></code>
+    </td>
+    <td>
+      Install an <code class="docutils literal"><span class="pre">/etc/env.d</span></code> file
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">doexe</span></code>
+    </td>
+    <td>
+      Install an executable into the location provided by <code class="docutils literal"><span class="pre">exeinto</span></code>,
+      by default with mode 0755 or with the install options set by
+      <code class="docutils literal"><span class="pre">exeopts</span></code>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">doheader</span></code>
+    </td>
+    <td>
+      Install a header file into <code class="docutils literal"><span class="pre">/usr/include</span></code>.
+      The <code class="docutils literal"><span class="pre">-r</span></code> option allows directories to be installed recursively.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">dohtml</span></code>
+    </td>
+    <td>
+      Installs HTML document files into <code class="docutils literal"><span class="pre">/usr/share/doc/${PF}/html</span></code>
+      The <code class="docutils literal"><span class="pre">-r</span></code> option allows directories to be installed recursively.
+      <b>Note</b>: Deprecated in EAPI 6, switch to <code class="docutils literal"><span class="pre">einstalldocs</span></code>
+      instead.
+      <b>Note:</b> Banned in EAPI=7
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">doinfo</span></code>
+    </td>
+    <td>
+      Install a GNU Info document
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">doinitd</span></code>
+    </td>
+    <td>
+      Install an <code class="docutils literal"><span class="pre">/etc/init.d</span></code> file
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">doins</span></code>
+    </td>
+    <td>
+      Install a miscellaneous file.
+      The <code class="docutils literal"><span class="pre">-r</span></code> option allows directories to be installed recursively.
+      Any symlinks encountered are installed as symlinks, when installing
+      recursively.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">dolib</span></code>
+    </td>
+    <td>
+      Install a library file
+      <b>Note:</b> Banned in EAPI=7
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">dolib.a</span></code>
+    </td>
+    <td>
+      Install a library (<code class="docutils literal"><span class="pre">.a</span></code>) file
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">dolib.so</span></code>
+    </td>
+    <td>
+      Install a library (shared object) file
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">doman</span></code>
+    </td>
+    <td>
+      <p>
+      Install a man page into the appropriate section of <code class="docutils literal"><span class="pre">/usr/share/man</span></code>.
+      e.g., <code class="docutils literal"><span class="pre">foo.1</span></code> will be installed in <code class="docutils literal"><span class="pre">/usr/share/man/man1/foo.1</span></code>.
+      </p>
+      <p>
+      If the man page is named <code class="docutils literal"><span class="pre">foo.&lt;lang&gt;.1</span></code> then it will be
+      installed in <code class="docutils literal"><span class="pre">/usr/share/man/&lt;lang&gt;/man1/foo.1</span></code>, where
+      <code class="docutils literal"><span class="pre">&lt;lang&gt;</span></code> is a language code. Option <code class="docutils literal"><span class="pre">-i18n=&lt;lang&gt;</span></code>
+      can be used to explicitly specify a subdirectory (or to suppress it, if
+      empty).
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">domo</span></code>
+    </td>
+    <td>
+      Install a Gettext <code class="docutils literal"><span class="pre">.mo</span></code> file.
+      (EAPI=7) No longer looks at the value of <code class="docutils literal"><span class="pre">into</span></code>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">dosbin</span></code>
+    </td>
+    <td>
+      Install an <code class="docutils literal"><span class="pre">sbin/</span></code> file
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">dosym</span></code>
+    </td>
+    <td>
+      Create a symlink to the target specified as the first parameter,
+      at the path specified by the second parameter. Note that
+      the target is interpreted <i>verbatim</i>; it needs to either
+      specify a relative path or an absolute path including
+      <code class="docutils literal"><span class="pre">${EPREFIX}</span></code>.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">fowners</span></code>
+    </td>
+    <td>
+      Call <code class="docutils literal"><span class="pre">chown</span></code> on the specified files in <code class="docutils literal"><span class="pre">${ED}</span></code>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">fperms</span></code>
+    </td>
+    <td>
+      Call <code class="docutils literal"><span class="pre">chmod</span></code> on the specified files in <code class="docutils literal"><span class="pre">${ED}</span></code>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">keepdir</span></code>
+    </td>
+    <td>
+      Install a directory that will be empty when the package is
+      merged. This is like <code class="docutils literal"><span class="pre">dodir</span></code>, but for empty directories
+      instead. <a class="" href="https://projects.gentoo.org/pms/7/pms.html#x1-14200013.2.2">The
+      handling of empty directories is undefined by the package
+      manager specification</a>, and the <code class="docutils literal"><span class="pre">keepdir</span></code> function
+      exists to ensure that the (otherwise empty) directory is
+      tracked. This is accomplished by installing a hidden file
+      prefixed with <code class="docutils literal"><span class="pre">.keep</span></code> to the directory in question.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">newbin</span></code>
+    </td>
+    <td>
+      Install a binary using the second argument as the name
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">newconfd</span></code>
+    </td>
+    <td>
+      Install an <code class="docutils literal"><span class="pre">/etc/conf.d</span></code> entry using the second argument as the name
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">newdoc</span></code>
+    </td>
+    <td>
+      Install a documentation file using the second argument as the name
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">newenvd</span></code>
+    </td>
+    <td>
+      Install an <code class="docutils literal"><span class="pre">/etc/env.d</span></code> file using the second argument as the name
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">newexe</span></code>
+    </td>
+    <td>
+      Install an executable file using the second argument as the name
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">newheader</span></code>
+    </td>
+    <td>
+      Install a header file using the second argument as the name
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">newinitd</span></code>
+    </td>
+    <td>
+      Install an <code class="docutils literal"><span class="pre">/etc/init.d</span></code> file using the second argument as the name
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">newins</span></code>
+    </td>
+    <td>
+      Install a miscellaneous file using the second argument as the name
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">newlib.a</span></code>
+    </td>
+    <td>
+      Install a <code class="docutils literal"><span class="pre">.a</span></code> library file using the second argument as the name
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">newlib.so</span></code>
+    </td>
+    <td>
+      Install a <code class="docutils literal"><span class="pre">.so</span></code> library file using the second argument as the name
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">newman</span></code>
+    </td>
+    <td>
+      Install a manual page using the second argument as the name
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">newsbin</span></code>
+    </td>
+    <td>
+      Install an <code class="docutils literal"><span class="pre">sbin</span></code> file using the second argument as the name
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">docompress</span></code>
+    </td>
+    <td>
+      Controls compression of files. Normally executed to exclude from
+      compression, e.g., <code class="docutils literal"><span class="pre">docompress -x /usr/share/doc/${PF}/examples</span></code>.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <code class="docutils literal"><span class="pre">dostrip</span></code>
+    </td>
+    <td>
+      Introduced with EAPI=7, controls the stripping of executables.
+      Normally executed to exclude from stripping.
+      Eg. <code class="docutils literal"><span class="pre">dostrip -x /path/to/important.so</span></code>.  May also be used to include binaries
+      to strip when <code class="docutils literal"><span class="pre">RESTRICT=strip</span></code> without the -x option.
+    </td>
+  </tr>
+</table>
+
+
+</div></main><footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+                Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+              </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script><script src="/assets.gentoo.org/lunr/lunr.min.js"></script><script>var documentsSrc = "../../documents.js"</script><script src="../../search.js"></script>
+</body>
+</html>

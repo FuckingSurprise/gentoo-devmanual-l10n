@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>cvs.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>CVS.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+cvs.eclass - This eclass provides generic cvs fetching functions
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+This eclass provides the generic cvs fetching functions. To use this from an
+ebuild, set the ECLASS VARIABLES as specified below in your ebuild before
+inheriting. Then either leave the default src_unpack or extend over
+cvs_src_unpack. If you find that you need to call the cvs_* functions
+directly, I'd be interested to hear about it.
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+4 5 6 7
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>cvs_src_unpack</B> <DD>
+The cvs src_unpack function, which will be exported
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>ECVS_CVS_COMPRESS</B> ?= <I>-z1</I><DD>
+Set the default compression level.  Has no effect when ECVS_CVS_COMMAND
+is defined by ebuild/user.
+<DT><B>ECVS_CVS_OPTIONS</B> ?= <I>&quot;-q -f&quot;</I><DD>
+Additional options to the cvs commands.  Has no effect when ECVS_CVS_COMMAND
+is defined by ebuild/user.
+<DT><B>ECVS_CVS_COMMAND</B> ?= <I>&quot;cvs ${ECVS_CVS_OPTIONS} ${ECVS_CVS_COMPRESS}&quot;</I><DD>
+CVS command to run
+<P>
+You can set, for example, &quot;cvs -t&quot; for extensive debug information
+on the cvs connection.  The default of &quot;cvs -q -f -z4&quot; means to be
+quiet, to disregard the ~/.cvsrc config file and to use maximum
+compression.
+<DT><B>ECVS_UP_OPTS</B> ?= <I>-dP</I><DD>
+CVS options given after the cvs update command. Don't remove &quot;-dP&quot; or things
+won't work.
+<DT><B>ECVS_CO_OPTS</B><DD>
+CVS options given after the cvs checkout command.
+<DT><B>ECVS_OFFLINE</B> ?= <I>${EVCS_OFFLINE}</I><DD>
+Set this variable to a non-empty value to disable the automatic updating of
+a CVS source tree. This is intended to be set outside the cvs source
+tree by users.
+<DT><B>ECVS_LOCAL</B><DD>
+If this is set, the CVS module will be fetched non-recursively.
+Refer to the information in the CVS man page regarding the -l
+command option (not the -l global option).
+<DT><B>ECVS_LOCALNAME</B><DD>
+Local name of checkout directory
+<P>
+This is useful if the module on the server is called something
+common like 'driver' or is nested deep in a tree, and you don't like
+useless empty directories.
+<P>
+WARNING: Set this only from within ebuilds!  If set in your shell or
+some such, things will break because the ebuild won't expect it and
+have e.g. a wrong $S setting.
+<DT><B>ECVS_TOP_DIR</B> ?= <I>&quot;${PORTAGE_ACTUAL_DISTDIR-${DISTDIR}}/cvs-src&quot;</I><DD>
+The directory under which CVS modules are checked out.
+<DT><B>ECVS_SERVER</B> ?= <I>&quot;offline&quot;</I><DD>
+CVS path
+<P>
+The format is &quot;server:/dir&quot;, e.g. &quot;anoncvs.kde.org:/home/kde&quot;.
+Remove the other parts of the full CVSROOT, which might look like
+&quot;:pserver:<A HREF="mailto:anonymous@anoncvs.kde.org">anonymous@anoncvs.kde.org</A>:/home/kde&quot;; this is generated
+using other settings also.
+<P>
+Set this to &quot;offline&quot; to disable fetching (i.e. to assume the module
+is already checked out in ECVS_TOP_DIR).
+<DT><B>ECVS_MODULE</B> (REQUIRED)<DD>
+The name of the CVS module to be fetched
+<P>
+This must be set when cvs_src_unpack is called.  This can include
+several directory levels, i.e. &quot;foo/bar/baz&quot;
+[[ -z ${ECVS_MODULE} ]] &amp;&amp; die &quot;$ECLASS: error: ECVS_MODULE not set, cannot continue&quot;
+<DT><B>ECVS_DATE</B><DD>
+The date of the checkout.  See the -D date_spec option in the cvs
+man page for more details.
+<DT><B>ECVS_BRANCH</B><DD>
+The name of the branch/tag to use
+<P>
+The default is &quot;HEAD&quot;.  The following default _will_ reset your
+branch checkout to head if used.
+: ${ECVS_BRANCH:=&quot;HEAD&quot;}
+<DT><B>ECVS_AUTH</B> ?= <I>&quot;pserver&quot;</I><DD>
+Authentication method to use
+<P>
+Possible values are &quot;pserver&quot; and &quot;ext&quot;.  If `ext' authentication is
+used, the remote shell to use can be specified in CVS_RSH (SSH is
+used by default).  Currently, the only supported remote shell for
+`ext' authentication is SSH.
+<P>
+Armando Di Cianno &lt;<A HREF="mailto:fafhrd@gentoo.org">fafhrd@gentoo.org</A>&gt; 2004/09/27
+- Added &quot;no&quot; as a server type, which uses no AUTH method, nor
+<BR>&nbsp;&nbsp;&nbsp;does&nbsp;it&nbsp;login
+<BR>&nbsp;e.g.
+<BR>&nbsp;&nbsp;&quot;cvs&nbsp;<A HREF="mailto:-danoncvs@savannah.gnu.org">-danoncvs@savannah.gnu.org</A>:/cvsroot/backbone&nbsp;co&nbsp;System&quot;
+<BR>&nbsp;&nbsp;(&nbsp;from&nbsp;gnustep-apps/textedit&nbsp;)
+<DT><B>ECVS_USER</B> ?= <I>&quot;anonymous&quot;</I><DD>
+Username to use for authentication on the remote server.
+<DT><B>ECVS_PASS</B><DD>
+Password to use for authentication on the remote server
+<DT><B>ECVS_SSH_HOST_KEY</B><DD>
+If SSH is used for `ext' authentication, use this variable to
+specify the host key of the remote server.  The format of the value
+should be the same format that is used for the SSH known hosts file.
+<P>
+WARNING: If a SSH host key is not specified using this variable, the
+remote host key will not be verified.
+<DT><B>ECVS_CLEAN</B><DD>
+Set this to get a clean copy when updating (passes the
+-C option to cvs update)
+</DL>
+
+<H2 ID="lbAG">MAINTAINERS</H2>
+
+<A HREF="mailto:vapier@gentoo.org">vapier@gentoo.org</A> (and anyone who wants to help)
+
+<H2 ID="lbAH">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAI">FILES</H2>
+
+<B>cvs.eclass</B>
+
+
+<H2 ID="lbAJ">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/cvs.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/cvs.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAH">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAI">FILES</A><DD>
+<DT><A HREF="index.html#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

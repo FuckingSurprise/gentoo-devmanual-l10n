@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>libretro-core.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>LIBRETRO-CORE.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+libretro-core.eclass - Simplify libretro core ebuilds
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+The libretro eclass is designed to streamline the construction of
+ebuilds for Libretro core ebuilds.
+<P>
+Libretro cores can be found under <A HREF="https://github.com/libretro/">https://github.com/libretro/</A>
+<P>
+They all use the same basic make based build system, are located
+in the same github account, and do not release named or numbered
+versions (so ebuild versions for git commits are keys).
+This eclass covers those commonalities reducing much duplication
+between the ebuilds.
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+6 7
+
+<H2 ID="lbAE">EXAMPLE</H2>
+
+<PRE>
+EAPI=7
+
+LIBRETRO_CORE_NAME=&quot;2048&quot;
+LIBRETRO_COMMIT_SHA=&quot;45655d3662e4cbcd8afb28e2ee3f5494a75888de&quot;
+KEYWORDS=&quot;~amd64 ~x86&quot;
+inherit libretro-core
+
+DESCRIPTION=&quot;Port of 2048 puzzle game to the libretro API&quot;
+LICENSE=&quot;Unlicense&quot;
+SLOT=&quot;0&quot;
+</PRE>
+
+
+<H2 ID="lbAF">FUNCTIONS</H2>
+
+<DL>
+<DT><B>libretro-core_src_unpack</B> <DD>
+The libretro-core src_unpack function which is exported.
+<P>
+This function retrieves the remote Libretro core info files.
+<DT><B>libretro-core_src_prepare</B> <DD>
+The libretro-core src_prepare function which is exported.
+<P>
+This function prepares the source by making custom modifications.
+<DT><B>myemakeargs</B><DD>
+Optional emake arguments as a bash array. Should be defined before calling
+src_compile.
+<PRE>
+src_compile() {
+local myemakeargs=(
+        $(usex neon &quot;HAVE_NEON=1&quot; &quot;&quot;)
+)
+libretro-core_src_compile
+}
+</PRE>
+
+<DT><B>libretro-core_src_compile</B> <DD>
+The libretro-core src_compile function which is exported.
+<P>
+This function compiles the shared library for this Libretro core.
+<DT><B>LIBRETRO_CORE_LIB_FILE</B><DD>
+Absolute path of this Libretro core's shared library.
+src_install.
+<PRE>
+src_install() {
+        local LIBRETRO_CORE_LIB_FILE=&quot;${S}/somecore_libretro.so&quot;
+
+        libretro-core_src_install
+}
+</PRE>
+
+<DT><B>libretro-core_src_install</B> <DD>
+The libretro-core src_install function which is exported.
+<P>
+This function installs the shared library for this Libretro core.
+</DL>
+
+<H2 ID="lbAG">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>LIBRETRO_CORE_NAME</B> (REQUIRED)<DD>
+Name of this Libretro core. The libretro-core_src_install() phase function
+will install the shared library &quot;${S}/${LIBRETRO_CORE_NAME}_libretro.so&quot; as a
+Libretro core. Defaults to the name of the current package with the
+&quot;libretro-&quot; prefix excluded and hyphens replaced with underscores
+(e.g. genesis_plus_gx for libretro-genesis-plus-gx)
+<DT><B>LIBRETRO_COMMIT_SHA</B><DD>
+Commit SHA used for SRC_URI will die if not set in &lt;9999 ebuilds.
+Needs to be set before inherit.
+<DT><B>LIBRETRO_REPO_NAME</B> ?= <I>&quot;libretro/libretro-${LIBRETRO_CORE_NAME}&quot;</I> (REQUIRED)<DD>
+Contains the real repo name of the core formatted as &quot;repouser/reponame&quot;.
+Needs to be set before inherit. Otherwise defaults to &quot;libretro/${PN}&quot;
+</DL>
+
+<H2 ID="lbAH">AUTHORS</H2>
+
+Cecil Curry &lt;<A HREF="mailto:leycec@gmail.com">leycec@gmail.com</A>&gt;
+<BR>
+
+Craig Andrews &lt;<A HREF="mailto:candrews@gentoo.org">candrews@gentoo.org</A>&gt;
+
+<H2 ID="lbAI">MAINTAINERS</H2>
+
+<A HREF="mailto:candrews@gentoo.org">candrews@gentoo.org</A>
+
+<H2 ID="lbAJ">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAK">FILES</H2>
+
+<B>libretro-core.eclass</B>
+
+
+<H2 ID="lbAL">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/libretro-core.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/libretro-core.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">EXAMPLE</A><DD>
+<DT><A HREF="index.html#lbAF">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAG">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAH">AUTHORS</A><DD>
+<DT><A HREF="index.html#lbAI">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAJ">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAK">FILES</A><DD>
+<DT><A HREF="index.html#lbAL">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:01 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>

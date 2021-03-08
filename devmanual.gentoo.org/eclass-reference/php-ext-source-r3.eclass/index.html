@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>php-ext-source-r3.eclass &#x2013; Gentoo Development Guide</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
+	<link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/assets.gentoo.org/tyrian/tyrian.min.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet" href="../../devmanual.css" type="text/css">
+	<link rel="icon" href="/www.gentoo.org/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<header><div class="site-title"><div class="container"><div class="row">
+<div class="site-title-buttons"><div class="btn-group btn-group-sm">
+<a href="https://get.gentoo.org/" role="button" class="btn get-gentoo"><span class="fa fa-fw fa-download"></span><strong> Get Gentoo!</strong></a><div class="btn-group btn-group-sm">
+<a class="btn gentoo-org-sites dropdown-toggle" data-toggle="dropdown" data-target="#" href="index.html#"><span class="fa fa-fw fa-map-o"></span><span class="hidden-xs"> gentoo.org sites </span><span class="caret"></span></a><ul class="dropdown-menu dropdown-menu-right">
+<li><a href="https://www.gentoo.org/" title="Main Gentoo website"><span class="fa fa-home fa-fw"></span> gentoo.org</a></li>
+<li><a href="https://wiki.gentoo.org/" title="Find and contribute documentation"><span class="fa fa-file-text-o fa-fw"></span> Wiki</a></li>
+<li><a href="https://bugs.gentoo.org/" title="Report issues and find common issues"><span class="fa fa-bug fa-fw"></span> Bugs</a></li>
+<li><a href="https://forums.gentoo.org/" title="Discuss with the community"><span class="fa fa-comments-o fa-fw"></span> Forums</a></li>
+<li><a href="https://packages.gentoo.org/" title="Find software for your Gentoo"><span class="fa fa-hdd-o fa-fw"></span> Packages</a></li>
+<li class="divider">
+<li><a href="https://planet.gentoo.org/" title="Find out what's going on in the developer community"><span class="fa fa-rss fa-fw"></span> Planet</a></li>
+<li><a href="https://archives.gentoo.org/" title="Read up on past discussions"><span class="fa fa-archive fa-fw"></span> Archives</a></li>
+<li><a href="https://sources.gentoo.org/" title="Browse our source code"><span class="fa fa-code fa-fw"></span> Sources</a></li>
+<li class="divider">
+<li><a href="https://infra-status.gentoo.org/" title="Get updates on the services provided by Gentoo"><span class="fa fa-server fa-fw"></span> Infra Status</a></li>
+</ul>
+</div>
+</div></div>
+<div>
+<a href="../../index.html" title="Back to the homepage" class="site-logo"><object data="/assets.gentoo.org/tyrian/site-logo.svg" type="image/svg+xml"><img src="/assets.gentoo.org/tyrian/site-logo.png" alt="Gentoo Linux Logo"></object></a><span class="site-label">Development Guide</span>
+</div>
+</div></div></div>
+<nav class="tyrian-navbar" role="navigation"><div class="container"><div class="row">
+<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+<div class="collapse navbar-collapse navbar-main-collapse"><ul class="nav navbar-nav">
+<li><a href="../../index.html"><span class="fa fa-home"></span>&nbsp;Home</a></li>
+<li><a href="../index.html"><span class="fa fa-arrow-up"></span>&nbsp;Eclass Reference</a></li>
+</ul></div>
+</div></div></nav>
+<div class="container"><div class="row"><div class="col-md010">
+<ol class="breadcrumb">
+<li><a href="../../index.html">Master Index</a></li>
+<li><a href="../index.html">Eclass Reference</a></li>
+</ol>
+</div></div></div>
+</header>
+<main><div class="container">
+<H1>PHP-EXT-SOURCE-R3.ECLASS</H1>
+Section: eclass-manpages (5)<BR>Updated: Feb 2021<BR><A HREF="index.html#index">Index</A>
+<A HREF="../index.html">Return to Main Contents</A><HR>
+
+
+<H2 ID="lbAB">NAME</H2>
+
+php-ext-source-r3.eclass - Compile and install standalone PHP extensions.
+
+<H2 ID="lbAC">DESCRIPTION</H2>
+
+A unified interface for compiling and installing standalone PHP
+extensions.
+
+<H2 ID="lbAD">SUPPORTED EAPIS</H2>
+
+6 7
+
+<H2 ID="lbAE">FUNCTIONS</H2>
+
+<DL>
+<DT><B>php-ext-source-r3_src_prepare</B> <DD>
+Runs the default src_prepare() for PATCHES/eapply_user() support (optional),
+and for each PHP slot, makes a copy of sources, initializes the environment,
+and calls php-ext-source-r3_phpize().
+<DT><B>php-ext-source-r3_phpize</B> <DD>
+Subject to PHP_EXT_SKIP_PHPIZE, this function runs phpize and
+autoreconf in a manner that avoids warnings.
+<DT><B>php-ext-source-r3_src_configure</B> <DD>
+Takes care of standard configure for PHP extensions (modules).
+<DT><B>php-ext-source-r3_src_compile</B> <DD>
+Compile a standard standalone PHP extension.
+<DT><B>php-ext-source-r3_src_install</B> <DD>
+Install a standard standalone PHP extension. Uses einstalldocs()
+to support the DOCS variable/array.
+<DT><B>php-ext-source-r3_src_test</B> <DD>
+Run tests delivered with the standalone PHP extension. Phpize will have generated
+a run-tests.php file to be executed by `make test`. We only need to
+force the test suite to run in non-interactive mode.
+<DT><B>php_get_slots</B> <DD>
+Get a list of PHP slots contained in both the ebuild's USE_PHP and the
+user's PHP_TARGETS.
+<DT><B>php_init_slot_env</B> &lt;slot&gt;<DD>
+Takes a slot name, and initializes some global variables to values
+corresponding to that slot. For example, it sets the path to the &quot;php&quot;
+and &quot;phpize&quot; binaries, which will differ for each slot. This function
+is intended to be called while looping through a list of slots
+obtained from php_get_slots().
+<P>
+Calling this function will change the working directory to the
+temporary build directory for the given slot.
+<DT><B>php-ext-source-r3_createinifiles</B> <DD>
+Builds INI files for every enabled slot and SAPI.
+<DT><B>php-ext-source-r3_addtoinifiles</B> &lt;setting-or-section-name&gt; [setting-value] [message]<DD>
+Add settings to every php.ini file installed by this extension.
+You can also add new [Section]s -- see the example below.
+<P>
+<PRE>
+Add some settings for the extension:
+
+php-ext-source-r3_addtoinifiles &quot;zend_optimizer.optimization_level&quot; &quot;15&quot;
+php-ext-source-r3_addtoinifiles &quot;zend_optimizer.enable_loader&quot; &quot;0&quot;
+php-ext-source-r3_addtoinifiles &quot;zend_optimizer.disable_licensing&quot; &quot;0&quot;
+
+Adding values to a section in php.ini file installed by the extension:
+
+php-ext-source-r3_addtoinifiles &quot;[Debugger]&quot;
+php-ext-source-r3_addtoinifiles &quot;debugger.enabled&quot; &quot;on&quot;
+php-ext-source-r3_addtoinifiles &quot;debugger.profiler_enabled&quot; &quot;on&quot;
+</PRE>
+
+</DL>
+
+<H2 ID="lbAF">ECLASS VARIABLES</H2>
+
+<DL>
+<DT><B>PHP_EXT_NAME</B> (REQUIRED)<DD>
+The extension name. This must be set, otherwise the eclass dies.
+Only automagically set by php-ext-pecl-r3.eclass, so unless your ebuild
+inherits that eclass, you must set this manually before inherit.
+<DT><B>PHP_EXT_INI</B> = <I>&quot;yes&quot;</I><DD>
+Controls whether or not to add a line to php.ini for the extension.
+Defaults to &quot;yes&quot; and should not be changed in most cases.
+<DT><B>PHP_EXT_ZENDEXT</B> = <I>&quot;no&quot;</I><DD>
+Controls whether the extension is a ZendEngine extension or not.
+Defaults to &quot;no&quot;. If you don't know what this is, you don't need it.
+<DT><B>USE_PHP</B> (REQUIRED)<DD>
+Lists the PHP slots compatible the extension is compatible with.
+Example:
+<PRE>
+USE_PHP=&quot;php5-6 php7-0&quot;
+</PRE>
+
+<DT><B>PHP_EXT_OPTIONAL_USE</B><DD>
+If set, all of the dependencies added by this eclass will be
+conditional on USE=${PHP_EXT_OPTIONAL_USE}. This is needed when
+ebuilds have to inherit this eclass unconditionally, but only
+actually use it when (for example) the user has USE=php.
+<DT><B>PHP_EXT_S</B> = <I>&quot;${S}&quot;</I><DD>
+The relative location of the temporary build directory for the PHP
+extension within the source package. This is useful for packages that
+bundle the PHP extension. Defaults to ${S}.
+<DT><B>PHP_EXT_SAPIS</B> = <I>&quot;apache2 cli cgi fpm embed phpdbg&quot;</I><DD>
+A list of SAPIs for which we will install this extension. Formerly
+called PHPSAPILIST. The default includes every SAPI currently used in
+the tree.
+<DT><B>PHP_INI_NAME</B> ?= <I>${PHP_EXT_NAME}</I><DD>
+An optional file name of the saved ini file minis the ini extension
+This allows ordering of extensions such that one is loaded before
+or after another.  Defaults to the PHP_EXT_NAME.
+Example (produces 40-foo.ini file):
+<PRE>
+PHP_INI_NAME=&quot;40-foo&quot;
+</PRE>
+
+<DT><B>PHP_EXT_NEEDED_USE</B><DD>
+A list of USE flags to append to each PHP target selected
+as a valid USE-dependency string.  The value should be valid
+for all targets so USE defaults may be necessary.
+Example:
+<PRE>
+PHP_EXT_NEEDED_USE=&quot;mysql?,pdo,pcre(+)&quot;
+</PRE>
+
+<P>
+The PHP dependencies will result in:
+<PRE>
+php_targets_php7-0? ( dev-lang/php:7.0[mysql?,pdo,pcre(+)] )
+</PRE>
+
+<DT><B>PHP_EXT_SKIP_PHPIZE</B><DD>
+By default, we run &quot;phpize&quot; in php-ext-source-r3_src_prepare(). Set
+PHP_EXT_SKIP_PHPIZE=&quot;yes&quot; in your ebuild if you do not want to run
+phpize (and the autoreconf that becomes necessary afterwards).
+<DT><B>PHP_EXT_SKIP_PATCHES</B><DD>
+By default, we run default_src_prepare to PHP_EXT_S.
+Set PHP_EXT_SKIP_PATCHES=&quot;yes&quot; in your ebuild if you
+want to apply patches yourself.
+<DT><B>PHP_EXT_ECONF_ARGS</B><DD>
+Set this in the ebuild to pass additional configure options to
+econf. Formerly called my_conf. Either a string or an array of
+--flag=value parameters is supported.
+</DL>
+
+<H2 ID="lbAG">MAINTAINERS</H2>
+
+Gentoo PHP team &lt;<A HREF="mailto:php-bugs@gentoo.org">php-bugs@gentoo.org</A>&gt;
+
+<H2 ID="lbAH">REPORTING BUGS</H2>
+
+Please report bugs via <A HREF="https://bugs.gentoo.org/">https://bugs.gentoo.org/</A>
+
+<H2 ID="lbAI">FILES</H2>
+
+<B>php-ext-source-r3.eclass</B>
+
+
+<H2 ID="lbAJ">SEE ALSO</H2>
+
+<B><A HREF="../ebuild/index.html">ebuild</A></B>(5)
+
+<BR>
+
+<A HREF="https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/php-ext-source-r3.eclass">https://gitweb.gentoo.org/repo/gentoo.git/log/eclass/php-ext-source-r3.eclass</A>
+<P>
+
+<HR>
+<H2 ID="index">Index</H2>
+<DL>
+<DT><A HREF="index.html#lbAB">NAME</A><DD>
+<DT><A HREF="index.html#lbAC">DESCRIPTION</A><DD>
+<DT><A HREF="index.html#lbAD">SUPPORTED EAPIS</A><DD>
+<DT><A HREF="index.html#lbAE">FUNCTIONS</A><DD>
+<DT><A HREF="index.html#lbAF">ECLASS VARIABLES</A><DD>
+<DT><A HREF="index.html#lbAG">MAINTAINERS</A><DD>
+<DT><A HREF="index.html#lbAH">REPORTING BUGS</A><DD>
+<DT><A HREF="index.html#lbAI">FILES</A><DD>
+<DT><A HREF="index.html#lbAJ">SEE ALSO</A><DD>
+</DL>
+<HR>
+This document was created by
+man2html,
+using the manual pages.<BR>
+Time: 03:27:02 GMT, February 22, 2021
+</div></main>
+<footer><div class="container">
+<div class="row">
+<div class="col-xs-12 col-md-offset-2 col-md-7"></div>
+<div class="col-xs-12 col-md-3">
+<h3 class="footerhead">Questions or comments?</h3>
+              Please feel free to <a href="https://www.gentoo.org/inside-gentoo/contact/">contact us</a>.
+            </div>
+</div>
+<div class="row">
+<div class="col-xs-2 col-sm-3 col-md-2"><ul class="footerlinks three-icons">
+<li><a href="https://twitter.com/gentoo" title="@Gentoo on Twitter"><span class="fa fa-twitter fa-fw"></span></a></li>
+<li><a href="https://www.facebook.com/gentoo.org" title="Gentoo on Facebook"><span class="fa fa-facebook fa-fw"></span></a></li>
+</ul></div>
+<div class="col-xs-10 col-sm-9 col-md-10">
+<strong>Copyright (C) 2001-2021 Gentoo Authors</strong><br><small>
+                Gentoo is a trademark of the Gentoo Foundation, Inc.
+                The text of this document is distributed under the
+                <a href="https://www.gnu.org/licenses/gpl-2.0.html">GNU General Public License, version 2</a>.
+                The <a href="https://www.gentoo.org/inside-gentoo/foundation/name-logo-guidelines.html">Gentoo Name and Logo Usage Guidelines</a> apply.
+              </small>
+</div>
+</div>
+</div></footer><script src="/assets.gentoo.org/tyrian/jquery.min.js"></script><script src="/assets.gentoo.org/tyrian/bootstrap.min.js"></script>
+</body>
+</html>
