@@ -180,7 +180,7 @@ Portage 会在<i>配置</i>软件包的时候调用它。
 
 <p>
 <code class="docutils literal"><span class="pre">src_install</span></code> 函数在 Portage <i>安装</i> 软件包的时候调用。
-这里有一点点微妙 — 我们需要安装到由 <code class="docutils literal"><span class="pre">${D}</span></code> 变量（由 Portage 赋值 — 参阅
+这里有一点点微妙 —— 我们需要安装到由 <code class="docutils literal"><span class="pre">${D}</span></code> 变量（由 Portage 赋值 —— 参阅
 <a class="" href="../general-concepts/install-destinations/index.html">Install Destinations</a> 和
 <a class="" href="../general-concepts/sandbox/index.html">Sandbox</a>）指定的特殊路径下，而不是直接安装到当前的文件系统中。
 </p>
@@ -314,7 +314,7 @@ Ebuild 可以定义其他的函数（参阅 <a class="" href="../ebuild-writing/
 <code class="docutils literal"><span class="pre">detox-1.1.0-destdir.patch</span></code>，它存放在 Gentoo 仓库的
 <code class="docutils literal"><span class="pre">files/</span></code> 子目录中。更大的补丁文件需要放到
 <code class="docutils literal"><span class="pre">dev.gentoo.org</span></code> 上你的开发空间中而不是
-<code class="docutils literal"><span class="pre">files/</span></code> 目录或镜像站中 — 参阅
+<code class="docutils literal"><span class="pre">files/</span></code> 目录或镜像站中 —— 参阅
 <a class="" href="../general-concepts/mirrors/index.html#gentoo-mirrors">Gentoo Mirrors</a> 和
 <a class="" href="../ebuild-writing/functions/src_prepare/epatch/index.html">Patching with epatch and eapply</a>。
 </p>
@@ -427,7 +427,7 @@ Ebuild 可以定义其他的函数（参阅 <a class="" href="../ebuild-writing/
 </span></pre>
 
 <p>
-注意可选依赖。某几行的 <code class="docutils literal"><span class="pre">use_enable</span></code> 使用了2个参数的版本 — 这在 USE 标志的名称不能精确匹配
+注意可选依赖。某几行的 <code class="docutils literal"><span class="pre">use_enable</span></code> 使用了2个参数的版本 —— 这在 USE 标志的名称不能精确匹配
 <code class="docutils literal"><span class="pre">./configure</span></code> 参数的时候非常有用。
 </p>
 </div>

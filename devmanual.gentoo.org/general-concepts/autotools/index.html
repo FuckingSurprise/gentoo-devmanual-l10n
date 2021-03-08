@@ -205,7 +205,7 @@ autotools.eclass 包含了一些用来调用单个工具的辅助函数，这些
 <p>
 <code class="docutils literal"><span class="pre">configure.ac</span></code> 是一个简单的文本文件。
 缩进和空格在很大程度上无关紧要。注释由字符串 <code class="docutils literal"><span class="pre">dnl</span></code>
-标识（<code class="docutils literal"><span class="pre">dnl</span></code> 实际上是一个用来丢弃剩余输入的宏 — 它代表“丢弃新行”）。
+标识（<code class="docutils literal"><span class="pre">dnl</span></code> 实际上是一个用来丢弃剩余输入的宏 —— 它代表“丢弃新行”）。
 </p>
 
 <p>
@@ -296,7 +296,7 @@ autotools.eclass 包含了一些用来调用单个工具的辅助函数，这些
 </span></pre>
 
 <p>
-这些东西常常会混杂在一起而不带任何有用的注释。有些情况下，很多检查甚至都不是应用所必须的 — 大多数 autotools 代码都是复制/粘贴，而不是从头开始手写的，
+这些东西常常会混杂在一起而不带任何有用的注释。有些情况下，很多检查甚至都不是应用所必须的 —— 大多数 autotools 代码都是复制/粘贴，而不是从头开始手写的，
 并且 <code class="docutils literal"><span class="pre">autoscan</span></code>（一个用来帮助撰写 <code class="docutils literal"><span class="pre">configure.ac</span></code> 的工具）有时过分渴望添加检查。
 </p>
 
@@ -350,28 +350,27 @@ autotools.eclass 包含了一些用来调用单个工具的辅助函数，这些
 
 <div class="alert alert-warning" role="alert">
 <strong>重要：</strong>
-The third argument is used when a <code class="docutils literal"><span class="pre">--enable</span></code> or <code class="docutils literal"><span class="pre">--disable</span></code>
-switch to <code class="docutils literal"><span class="pre">./configure</span></code> is provided, and the fourth is used when such a
-switch is <i>not</i> passed. A common misconception is that the third is enable
-and the fourth is disable — this is <b>not</b> the case. You may encounter
-packages that get this wrong.
+第三、第四个参数是2段代码，第三个参数在给出了 <code class="docutils literal"><span class="pre">./configure</span></code> 的
+<code class="docutils literal"><span class="pre">--enable</span></code> 或 <code class="docutils literal"><span class="pre">--disable</span></code>
+开关时执行，而第四个参数在<i>没有</i>给出这2个开关时执行。一个常见的误解是第三个参数是 enable 的，第四个参数是 disable 的 —— 事实<b>并非</b>如此。
+你可能会遇到有的软件包在这个地方弄错。
 </div>
 
 <p>
-A simple way to check that a package is using this macro properly is to
-install the optional dependency, and then try all of <code class="docutils literal"><span class="pre">./configure</span></code>.
-<code class="docutils literal"><span class="pre">./configure --enable-foo</span></code> and <code class="docutils literal"><span class="pre">./configure --disable-foo</span></code>. If the second
-and third runs give the same results, something is wrong. If the first run gives
-a <i>different</i> result to the second and third, there is a good chance that a
-misunderstanding of the <code class="docutils literal"><span class="pre">AC_ARG_ENABLE</span></code> arguments is to blame.
+一个检查软件包是否正确使用这个宏的简单方法是安装可选项的依赖，然后尝试
+<code class="docutils literal"><span class="pre">./configure</span></code>，
+<code class="docutils literal"><span class="pre">./configure --enable-foo</span></code> 和
+<code class="docutils literal"><span class="pre">./configure --disable-foo</span></code>，
+如果第二次和第三次运行产生了相同的结果，就说明某个地方写错了。如果第一次运行的结果和后两次都<i>不相同</i>，那很有可能是对
+<code class="docutils literal"><span class="pre">AC_ARG_ENABLE</span></code> 参数的误解造成的。
 </p>
 
 </div>
 <div class="section">
-<h3 id="with-and-without-checks">With and Without Checks</h3>
+<h3 id="with-and-without-checks">With 与 Without 检查</h3>
 
 <p>
-A simple <code class="docutils literal"><span class="pre">--with</span></code> / <code class="docutils literal"><span class="pre">--without</span></code> check might look like:
+一个简单的 <code class="docutils literal"><span class="pre">--with</span></code> / <code class="docutils literal"><span class="pre">--without</span></code> 检查如下所示：
 </p>
 
 <pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">AC_MSG_CHECKING</span><span xmlns="http://www.w3.org/1999/xhtml" class="Special">(</span><span xmlns="http://www.w3.org/1999/xhtml" class="Special">[</span>whether to enable foo]<span xmlns="http://www.w3.org/1999/xhtml" class="Special">)</span>
@@ -383,8 +382,8 @@ A simple <code class="docutils literal"><span class="pre">--with</span></code> /
 </span></pre>
 
 <p>
-Again, the third argument is for 'specified' and the fourth for 'not specified',
-and there are standard macros which include <code class="docutils literal"><span class="pre">with</span></code> options.
+同样的，第三个参数在‘指定’时执行，第四个参数在‘未指定’时执行，并且有一些包含了
+<code class="docutils literal"><span class="pre">with</span></code> 选项的标准宏。
 </p>
 
 </div>
