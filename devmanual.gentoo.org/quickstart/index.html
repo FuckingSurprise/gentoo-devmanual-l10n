@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Quickstart Ebuild Guide – Gentoo Development Guide</title>
@@ -58,30 +58,26 @@
 <div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>
 </div></div></div>
 <div class="container"><div class="row"><div class="col-md010"><ol class="breadcrumb"><li><a href="../index.html">Master Index</a></li></ol></div></div></div></header><main><div class="container">
-<h1 class="first-header">Quickstart Ebuild Guide</h1>
+<h1 class="first-header">Ebuild 快速入门指南</h1>
 <p>
-This page provides a <i>very</i> brief introduction to ebuild
-writing. It does not attempt to cover many of the details or problems
-that will be encountered by developers — rather, it gives some
-trivial examples which may be of use when trying to grasp the basic
-idea of how ebuilds work.
+此页面<i>非常</i>简明地介绍了如何编写 ebuild。
+它不会试图涵盖大量的细节或者只有开发人员才会接触到的问题，
+而是给出一些有助于掌握 ebuild 工作原理的基本思想的小例子。
 </p>
 
 <p>
-For proper coverage of all the ins and outs, see <a class="" href="../ebuild-writing/index.html">Ebuild Writing</a>.
-The <a class="" href="../general-concepts/index.html">General Concepts</a> chapter will also be of use.
+有关所有输入输出的全面介绍，请阅读 <a class="" href="../ebuild-writing/index.html">Ebuild Writing</a> 章节。
+<a class="" href="../general-concepts/index.html">General Concepts</a> 章节也很有用。
 </p>
 
 <p>
-Note that the examples used here, whilst based upon real tree ebuilds,
-have had several parts chopped out, changed and simplified.
+需要说明的是本文中用到的例子，都在真正的 ebuild 树的基础上，对若干个部分做了阉割、修改与简化。
 </p>
 <div class="section">
-<h2 id="first-ebuild">First Ebuild</h2>
+<h2 id="first-ebuild">第一个 Ebuild</h2>
 <p>
-We'll start with an ebuild for the <i>Exuberant Ctags</i> utility, a source code
-indexing tool. Here's a simplified <code class="docutils literal"><span class="pre">dev-util/ctags/ctags-5.5.4.ebuild</span></code> (you
-can see real ebuilds in the main tree).
+我们从源码索引工具 <i>Exuberant Ctags</i> 的 ebuild 开始入门。
+下面是一个简化的 <code class="docutils literal"><span class="pre">dev-util/ctags/ctags-5.5.4.ebuild</span></code>（你可以在主树中查看真正的 ebuild）。
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Copyright</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">1999-2021</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Gentoo</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Authors</span>
@@ -108,133 +104,126 @@ can see real ebuilds in the main tree).
 <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">}</span>
 </span></pre>
 <div class="section">
-<h3 id="basic-format">Basic Format</h3>
+<h3 id="basic-format">基本格式</h3>
 <p>
-As you can see, ebuilds are just <code class="docutils literal"><span class="pre">bash</span></code> scripts that are executed within a
-special environment.
+如你所见，ebuild 只是一个在特殊环境下执行的 <code class="docutils literal"><span class="pre">bash</span></code> 脚本。
 </p>
 
 <p>
-At the top of the ebuild is a header block. This is present in all ebuilds.
+ebuild 最顶上那2行是 ebuild 头。在任何 ebuild 中都会出现。
 </p>
 
 <p>
-Ebuilds are indented using tabs, with each tab representing four places. See
-<a class="" href="../ebuild-writing/file-format/index.html">Ebuild File Format</a>.
+ebuild 使用制表符缩进，每个制表符代表4个空格。参阅
+<a class="" href="../ebuild-writing/file-format/index.html">Ebuild File Format</a>。
 </p>
 </div>
 <div class="section">
-<h3 id="information-variables">Information Variables</h3>
+<h3 id="information-variables">变量</h3>
 <p>
-Next, there are a series of variables. These tell Portage various things about
-the ebuild and package in question.
+接下来是一系列变量。这些变量告诉了 Portage 关于 ebuild 和所提及软件包的各种信息。
 </p>
 
 <p>
-The <code class="docutils literal"><span class="pre">EAPI</span></code> of the ebuild, see <a class="" href="../ebuild-writing/eapi/index.html">EAPI Usage and Description</a>.
+<code class="docutils literal"><span class="pre">EAPI</span></code>：
+ebuild 的 EAPI，参阅 <a class="" href="../ebuild-writing/eapi/index.html">EAPI Usage and Description</a>。
 </p>
 
 <p>
-The <code class="docutils literal"><span class="pre">DESCRIPTION</span></code> variable is set to a <i>short</i> description
-of the package and its purpose.
+<code class="docutils literal"><span class="pre">DESCRIPTION</span></code>：
+对软件包及其用途的<i>简短</i>描述。
 </p>
 
 <p>
-The <code class="docutils literal"><span class="pre">HOMEPAGE</span></code> is a link to the package's homepage (remember to
-include the URI scheme, for example <code class="docutils literal"><span class="pre">https://</span></code>).
+<code class="docutils literal"><span class="pre">HOMEPAGE</span></code>：
+软件包主页的链接（记得包含 URI 协议名，例如
+<code class="docutils literal"><span class="pre">https://</span></code>）。
 </p>
 
 <p>
-The <code class="docutils literal"><span class="pre">SRC_URI</span></code> tells Portage the address to use for downloading
-the source tarball. Here, <code class="docutils literal"><span class="pre">mirror://sourceforge/</span></code> is a special
-notation meaning "any of the Sourceforge mirrors".
-<code class="docutils literal"><span class="pre">${P}</span></code> is a read-only variable set by Portage which is the package's
-name and version — in this case, it would be <code class="docutils literal"><span class="pre">ctags-5.5.4</span></code>.
+<code class="docutils literal"><span class="pre">SRC_URI</span></code>：
+告诉 Portage 用来下载源码的链接。
+在此处，<code class="docutils literal"><span class="pre">mirror://sourceforge/</span></code> 是一种特殊的记法，意为“任何一个 Sourceforge 镜像站”。
+<code class="docutils literal"><span class="pre">${P}</span></code> 是一个由 Portage 赋值的只读变量，其值为软件包的名称与版本。
+在这个例子中，它将是 <code class="docutils literal"><span class="pre">ctags-5.5.4</span></code>。
 </p>
 
 <p>
-The <code class="docutils literal"><span class="pre">LICENSE</span></code> is <code class="docutils literal"><span class="pre">GPL-2+</span></code> (the GNU General Public License version 2
-or (at your option) any later version).
+<code class="docutils literal"><span class="pre">LICENSE</span></code>：
+许可证，<code class="docutils literal"><span class="pre">GPL-2+</span></code>（GNU通用公共许可证第2版或更新的版本）。
 </p>
 
 <p>
-The <code class="docutils literal"><span class="pre">SLOT</span></code> variable tells Portage which slot this package installs to.
-If you've not seen slots before, either just use <code class="docutils literal"><span class="pre">"0"</span></code> or read
-<a class="" href="../general-concepts/slotting/index.html">Slotting</a>.
+<code class="docutils literal"><span class="pre">SLOT</span></code>：
+此变量告诉 Portage 应该把软件包安装到哪个槽里。
+如果你以前没见过槽，就写<code class="docutils literal"><span class="pre">"0"</span></code>或参阅
+<a class="" href="../general-concepts/slotting/index.html">Slotting</a>。
 </p>
 
 <p>
-The <code class="docutils literal"><span class="pre">KEYWORDS</span></code> variable is set to archs upon which this ebuild has been
-tested. We use <code class="docutils literal"><span class="pre">~</span></code> keywords for newly written ebuilds — packages are not
-committed straight to stable, even if they seem to work. See <a class="" href="../keywording/index.html">Keywording and Stabilization</a> for
-details.
+<code class="docutils literal"><span class="pre">KEYWORDS</span></code>：
+此变量是 ebuild 在上面测试过的架构。
+对于最近编写的 ebuild 一般使用<code class="docutils literal"><span class="pre">~</span></code>关键字来表示软件包没有直接提交稳定版，
+即使它看上去工作正常。
+更多细节请参阅 <a class="" href="../keywording/index.html">Keywording and Stabilization</a>。
 </p>
 </div>
 <div class="section">
-<h3 id="build-functions">Build Functions</h3>
+<h3 id="build-functions">构建函数</h3>
 <p>
-Next, a function named <code class="docutils literal"><span class="pre">src_configure</span></code>. Portage will call this
-function when it wants to <i>configure</i> the package. The <code class="docutils literal"><span class="pre">econf</span></code>
-function is a wrapper for calling <code class="docutils literal"><span class="pre">./configure</span></code>. If for some reason
-an error occurs in <code class="docutils literal"><span class="pre">econf</span></code>, Portage will stop rather than trying to
-continue with the install.
+接下来是一个叫做 <code class="docutils literal"><span class="pre">src_configure</span></code> 的函数。
+Portage 会在<i>配置</i>软件包的时候调用它。
+<code class="docutils literal"><span class="pre">econf</span></code> 函数是
+<code class="docutils literal"><span class="pre">./configure</span></code> 命令的封装。
+如果出于某种原因 <code class="docutils literal"><span class="pre">econf</span></code> 报错了，Portage 将会停下而不是尝试继续安装。
 </p>
 
 <p>
-The <code class="docutils literal"><span class="pre">src_install</span></code> function is called by Portage when it wants
-to <i>install</i> the package. A slight subtlety here — rather than
-installing straight to the live filesystem, we must install to a
-special location which is given by the <code class="docutils literal"><span class="pre">${D}</span></code> variable (Portage sets
-this — see <a class="" href="../general-concepts/install-destinations/index.html">Install Destinations</a> and
-<a class="" href="../general-concepts/sandbox/index.html">Sandbox</a>).
+<code class="docutils literal"><span class="pre">src_install</span></code> 函数在 Portage <i>安装</i> 软件包的时候调用。
+这里有一点点微妙 — 我们需要安装到由 <code class="docutils literal"><span class="pre">${D}</span></code> 变量（由 Portage 赋值 — 参阅
+<a class="" href="../general-concepts/install-destinations/index.html">Install Destinations</a> 和
+<a class="" href="../general-concepts/sandbox/index.html">Sandbox</a>）指定的特殊路径下，而不是直接安装到当前的文件系统中。
 </p>
 
 <div class="alert alert-info" role="alert">
-<strong>Note:</strong>
-The canonical install method is <code class="docutils literal"><span class="pre">emake DESTDIR="${D}" install</span></code>. This will
-work with any properly written standard <code class="docutils literal"><span class="pre">Makefile</span></code>. If this gives sandbox
-errors, see <a class="" href="../ebuild-writing/functions/src_install/index.html">src_install</a> for how to do
-manual installs.
+<strong>附注：</strong>
+规范的安装方法是 <code class="docutils literal"><span class="pre">emake DESTDIR="${D}" install</span></code>。
+这用在任何正确编写的标准 <code class="docutils literal"><span class="pre">Makefile</span></code> 上都正常。
+如果这导致沙箱报错，请阅读 <a class="" href="../ebuild-writing/functions/src_install/index.html">src_install</a> 来获知如何手动安装。
 </div>
 
 <p>
-The <code class="docutils literal"><span class="pre">dodoc</span></code> is a helper function for installing
-files into the relevant part of <code class="docutils literal"><span class="pre">/usr/share/doc</span></code>.
+<code class="docutils literal"><span class="pre">dodoc</span></code> 是一个辅助函数，用来安装
+<code class="docutils literal"><span class="pre">/usr/share/doc</span></code> 目录下的相关文件。
 </p>
 
 <p>
-Ebuilds can define other functions (see <a class="" href="../ebuild-writing/functions/index.html">Ebuild Phase Functions</a>).
-In all cases, Portage provides a reasonable default implementation which
-quite often does the 'right thing'. There was no need to define
-<code class="docutils literal"><span class="pre">src_unpack</span></code> and <code class="docutils literal"><span class="pre">src_compile</span></code> functions here, for example
-— the <code class="docutils literal"><span class="pre">src_unpack</span></code> function is used to do any unpacking of
-tarballs or patching of source files, but the default implementation
-does everything we need in this case.
-Similarly, the default <code class="docutils literal"><span class="pre">src_compile</span></code> function will call
-<code class="docutils literal"><span class="pre">emake</span></code> which is a wrapper for <code class="docutils literal"><span class="pre">make</span></code>.
+Ebuild 可以定义其他的函数（参阅 <a class="" href="../ebuild-writing/functions/index.html">Ebuild Phase Functions</a>）。
+在所有的情况下，Portage 提供了合理的、通常能做‘正确事情’的默认实现。
+比如本例就无需定义 <code class="docutils literal"><span class="pre">src_unpack</span></code> 和 <code class="docutils literal"><span class="pre">src_compile</span></code> 函数，
+<code class="docutils literal"><span class="pre">src_unpack</span></code> 函数用来解压源码和打补丁，默认的实现就可以完成本例中所需的一切操作。
+类似的，<code class="docutils literal"><span class="pre">src_compile</span></code> 函数会调用 <code class="docutils literal"><span class="pre">make</span></code> 的封装
+<code class="docutils literal"><span class="pre">emake</span></code>。
 </p>
 
 <div class="alert alert-info" role="alert">
-<strong>Note:</strong>
-Formerly, the <code class="docutils literal"><span class="pre">|| die</span></code> construct had to be used after every command
-to check for errors. This is no longer necessary in EAPI 4 —
-functions provided by Portage will die by themselves if something
-failed.
+<strong>附注：</strong>
+以前为了检查错误，在每一条命令后边都要加上 <code class="docutils literal"><span class="pre">|| die</span></code>。
+从 EAPI 4 开始就没必要了，Portage 提供的函数会在某步操作失败后自动终止。
 </div>
 </div>
 </div>
 <div class="section">
-<h2 id="ebuild-with-dependencies">Ebuild with Dependencies</h2>
+<h2 id="ebuild-with-dependencies">带有依赖的 Ebuild</h2>
 <p>
-In the ctags example, we didn't tell Portage about any dependencies. As it
-happens, that's ok, because ctags only needs a basic toolchain to compile and
-run (see <a class="" href="../general-concepts/dependencies/index.html#implicit-system-dependency">Implicit System Dependency</a>
-for why we don't need to depend upon those explicitly). However, life is rarely
-that simple.
+在 ctags 的例子中，我们没有告诉 Portage 它的任何依赖。巧的是，这么做没有问题，
+因为编译和运行 ctags 仅仅只需要基本的工具链（至于为什么不需要显式指定这些依赖，
+请参阅 <a class="" href="../general-concepts/dependencies/index.html#implicit-system-dependency">Implicit System Dependency</a>）。
+然而，人生不如意事十之八九。
 </p>
 
 <p>
-Here's <code class="docutils literal"><span class="pre">app-misc/detox/detox-1.1.1.ebuild</span></code>:
+这是 <code class="docutils literal"><span class="pre">app-misc/detox/detox-1.1.1.ebuild</span></code>：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Copyright</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">1999-2021</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Gentoo</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Authors</span>
@@ -261,33 +250,34 @@ Here's <code class="docutils literal"><span class="pre">app-misc/detox/detox-1.1
 </span></pre>
 
 <p>
-Again, you can see the ebuild header and the various informational variables. In
-<code class="docutils literal"><span class="pre">SRC_URI</span></code>, <code class="docutils literal"><span class="pre">${PN}</span></code> is used to get the package's
-name <i>without</i> the version suffix (there are more of these
-variables — see
-<a class="" href="../ebuild-writing/variables/index.html#predefined-read-only-variables">Predefined Read-Only Variables</a>).
+又一次，你可以看到 ebuild 头和一些变量。
+在 <code class="docutils literal"><span class="pre">SRC_URI</span></code>变量中，
+<code class="docutils literal"><span class="pre">${PN}</span></code> 表示<i>不带</i>版本后缀的软件包名称（这类变量的更多介绍可以参阅
+<a class="" href="../ebuild-writing/variables/index.html#predefined-read-only-variables">Predefined Read-Only Variables</a>）。
 </p>
 
 <p>
-We define <code class="docutils literal"><span class="pre">src_configure</span></code> only.  <code class="docutils literal"><span class="pre">src_install</span></code> does not need to
-be defined since the default implementation calling <code class="docutils literal"><span class="pre">emake install</span></code>
-and installing common documentation files works correctly for the package.
+我们只定义了 <code class="docutils literal"><span class="pre">src_configure</span></code> 函数。
+<code class="docutils literal"><span class="pre">src_install</span></code> 函数不需要定义，
+因为对于本软件包来说调用 <code class="docutils literal"><span class="pre">emake install</span></code>
+并安装文档的 <code class="docutils literal"><span class="pre">src_install</span></code>
+默认实现可以正确生效。
 </p>
 
 <p>
-The <code class="docutils literal"><span class="pre">DEPEND</span></code> and <code class="docutils literal"><span class="pre">RDEPEND</span></code> variables are how Portage determines which
-packages are needed to build and run the package. The <code class="docutils literal"><span class="pre">DEPEND</span></code> variable lists
-compile-time dependencies, and the <code class="docutils literal"><span class="pre">RDEPEND</span></code> lists runtime dependencies. See
-<a class="" href="../general-concepts/dependencies/index.html">Dependencies</a> for some more complex examples.
+<code class="docutils literal"><span class="pre">DEPEND</span></code> 和
+<code class="docutils literal"><span class="pre">RDEPEND</span></code> 分别是软件包的编译时依赖和运行时依赖。
+查看 <a class="" href="../general-concepts/dependencies/index.html">Dependencies</a> 来获知更多复杂的例子。
 </p>
 
 </div>
 <div class="section">
-<h2 id="ebuild-with-patches">Ebuild with Patches</h2>
+<h2 id="ebuild-with-patches">带有补丁的 Ebuild</h2>
 <p>
-Often we need to apply patches. This is done in the <code class="docutils literal"><span class="pre">src_prepare</span></code>
-function using the <code class="docutils literal"><span class="pre">eapply</span></code> helper function. To use <code class="docutils literal"><span class="pre">eapply</span></code>
-one must use EAPI 7. Here's <code class="docutils literal"><span class="pre">app-misc/detox/detox-1.1.0.ebuild</span></code>:
+通常我们需要给软件包打补丁。这是在 <code class="docutils literal"><span class="pre">src_prepare</span></code> 函数中用
+<code class="docutils literal"><span class="pre">eapply</span></code> 附注函数完成的。
+只有在 EAPI 7 中才能使用 <code class="docutils literal"><span class="pre">eapply</span></code>。
+下面是 <code class="docutils literal"><span class="pre">app-misc/detox/detox-1.1.0.ebuild</span></code>：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Copyright</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">1999-2021</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Gentoo</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Authors</span>
@@ -320,24 +310,26 @@ one must use EAPI 7. Here's <code class="docutils literal"><span class="pre">app
 </span></pre>
 
 <p>
-Note the <code class="docutils literal"><span class="pre">${FILESDIR}/${P}-destdir.patch</span></code> — this refers to
-<code class="docutils literal"><span class="pre">detox-1.1.0-destdir.patch</span></code>, which lives in the <code class="docutils literal"><span class="pre">files/</span></code>
-subdirectory in the Gentoo repository. Larger patch files must go on your
-developer's space at <code class="docutils literal"><span class="pre">dev.gentoo.org</span></code> rather than in <code class="docutils literal"><span class="pre">files/</span></code> or
-mirrors — see <a class="" href="../general-concepts/mirrors/index.html#gentoo-mirrors">Gentoo Mirrors</a> and <a class="" href="../ebuild-writing/functions/src_prepare/epatch/index.html">Patching with epatch and eapply</a>.
+注意 <code class="docutils literal"><span class="pre">${FILESDIR}/${P}-destdir.patch</span></code> 指的是
+<code class="docutils literal"><span class="pre">detox-1.1.0-destdir.patch</span></code>，它存放在 Gentoo 仓库的
+<code class="docutils literal"><span class="pre">files/</span></code> 子目录中。更大的补丁文件需要放到
+<code class="docutils literal"><span class="pre">dev.gentoo.org</span></code> 上你的开发空间中而不是
+<code class="docutils literal"><span class="pre">files/</span></code> 目录或镜像站中 — 参阅
+<a class="" href="../general-concepts/mirrors/index.html#gentoo-mirrors">Gentoo Mirrors</a> 和
+<a class="" href="../ebuild-writing/functions/src_prepare/epatch/index.html">Patching with epatch and eapply</a>。
 </p>
 
 <p>
-When the <code class="docutils literal"><span class="pre">src_prepare</span></code> phase is overridden, it must be ensured
-that <code class="docutils literal"><span class="pre">eapply_user</span></code> is called.
+当你重写了 <code class="docutils literal"><span class="pre">src_prepare</span></code>，
+请确保在函数中调用了 <code class="docutils literal"><span class="pre">eapply_user</span></code>。
 </p>
 
 </div>
 <div class="section">
-<h2 id="ebuild-with-use-flags">Ebuild with USE Flags</h2>
+<h2 id="ebuild-with-use-flags">带有 USE 标志的 Ebuild</h2>
 <p>
-Now for some <code class="docutils literal"><span class="pre">USE</span></code> flags. Here's <code class="docutils literal"><span class="pre">dev-libs/libiconv/libiconv-1.9.2.ebuild</span></code>, a
-replacement iconv for <code class="docutils literal"><span class="pre">libc</span></code> implementations which don't have their own.
+现在我们讨论 <code class="docutils literal"><span class="pre">USE</span></code> 标志。下面是 <code class="docutils literal"><span class="pre">dev-libs/libiconv/libiconv-1.9.2.ebuild</span></code>，
+一个 <code class="docutils literal"><span class="pre">libc</span></code> 没有实现的字符集转换库。
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Copyright</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">1999-2021</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Gentoo</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Authors</span>
@@ -362,20 +354,19 @@ replacement iconv for <code class="docutils literal"><span class="pre">libc</spa
 </span></pre>
 
 <p>
-Note the <code class="docutils literal"><span class="pre">IUSE</span></code> variable. This lists all (non-special) use flags that are used
-by the ebuild. This is used for the <code class="docutils literal"><span class="pre">emerge -pv</span></code> output, amongst other things.
+注意 <code class="docutils literal"><span class="pre">IUSE</span></code> 变量。
+它列出了所有（非特殊的）ebuild 用到的 use 标志。这用在 <code class="docutils literal"><span class="pre">emerge -pv</span></code> 的输出，以及一些其他东西中。
 </p>
 
 <p>
-The package's <code class="docutils literal"><span class="pre">./configure</span></code> script takes the usual <code class="docutils literal"><span class="pre">--enable-nls</span></code> or
-<code class="docutils literal"><span class="pre">--disable-nls</span></code> argument. We use the <code class="docutils literal"><span class="pre">use_enable</span></code> utility function to
-generate this automatically, depending on the user's <code class="docutils literal"><span class="pre">USE</span></code> flags (see
-<a class="" href="../function-reference/query-functions/index.html">Query Functions Reference</a>).
+软件包的 <code class="docutils literal"><span class="pre">./configure</span></code> 脚本通常会读取 <code class="docutils literal"><span class="pre">--enable-nls</span></code> 或
+<code class="docutils literal"><span class="pre">--disable-nls</span></code> 参数。我们使用 <code class="docutils literal"><span class="pre">use_enable</span></code> 工具函数自动生成它，
+生成哪个取决于用户配置的 <code class="docutils literal"><span class="pre">USE</span></code> 标志（参阅 <a class="" href="../function-reference/query-functions/index.html">Query Functions Reference</a>）。
 </p>
 
 <p>
-Another more complicated example, this time based upon
-<code class="docutils literal"><span class="pre">mail-client/sylpheed/sylpheed-1.0.4.ebuild</span></code>:
+另一个更复杂的示例，这次基于
+<code class="docutils literal"><span class="pre">mail-client/sylpheed/sylpheed-1.0.4.ebuild</span></code>：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Copyright</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">1999-2021</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Gentoo</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Authors</span>
@@ -436,9 +427,8 @@ Another more complicated example, this time based upon
 </span></pre>
 
 <p>
-Note the optional dependencies. Some of the <code class="docutils literal"><span class="pre">use_enable</span></code> lines use the
-two-argument version — this is helpful when the USE flag name does not exactly
-match the <code class="docutils literal"><span class="pre">./configure</span></code> argument.
+注意可选依赖。某几行的 <code class="docutils literal"><span class="pre">use_enable</span></code> 使用了2个参数的版本 — 这在 USE 标志的名称不能精确匹配
+<code class="docutils literal"><span class="pre">./configure</span></code> 参数的时候非常有用。
 </p>
 </div>
 </div></main><footer><div class="container">
