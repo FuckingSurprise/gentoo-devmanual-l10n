@@ -65,113 +65,100 @@
 <li><a href="../../index.html">Master Index</a></li>
 <li><a href="../index.html">General Concepts</a></li>
 </ol></div></div></div></header><main><div class="container">
-<h1 class="first-header">The Basics of Autotools</h1>
+<h1 class="first-header">Autotools 基础</h1>
 <div class="alert alert-info" role="alert">
-<strong>Todo:</strong>
-This is too long for <a class="" href="../index.html">General Concepts</a>. It needs to be split up and
-moved somewhere, either to a top-level of its own or into <a class="" href="../../appendices/index.html">Appendices</a>.
+<strong>计划:</strong>
+这篇文档对于 <a class="" href="../index.html">General Concepts</a> 来说太过冗长。需要拆分并移动到它自己的顶层目录，或者是<a class="" href="../../appendices/index.html">附录</a>，或者是别的什么地方。
 </div>
 
 <p>
-An understanding of GNU autotools (<code class="docutils literal"><span class="pre">automake</span></code>, <code class="docutils literal"><span class="pre">autoconf</span></code> etc.) can be useful
-when working with ebuilds:
+理解 GNU autotools (例如<code class="docutils literal"><span class="pre">automake</span></code>, <code class="docutils literal"><span class="pre">autoconf</span></code>) 对于开发 ebuild 来说非常有用：
 </p>
 
 <ul>
   <li>
-    Finding and correcting build issues is often easier if the build system is
-    not seen simply as a scary black box.
+    定位与纠正编译问题通常会更简单，如果构建系统不能简单看作一个吓人的黑盒的话。
   </li>
   <li>
-    The autotools input files can help when determining a package's build-time
-    dependencies.
+    autotools 输入文件可以帮助你确定软件包的编译时依赖。
   </li>
   <li>
-    The risk of accidentally breaking something by patching the wrong file at the
-    wrong time is greatly reduced if the relationship between the build system
-    files is understood.
+    理解构建系统各文件之间的关系会使在错误的时机给错误的文件打补丁而意外搞坏某些东西的风险大大降低。
   </li>
 </ul>
 <div class="section">
-<h2 id="major-autotools-components">Major Autotools Components</h2>
+<h2 id="major-autotools-components">Autotools 的主要组件</h2>
 <p>
-Autotools is a collection of related packages which, when used together, remove
-much of the difficulty involved in creating portable software. These tools,
-together with a few relatively simple upstream-supplied input files, are used to
-create the build system for a package.
+Autotools 是相互关联的工具的集合，当它们一起使用时，可以消除构建可移植软件所涉及到的许多困难。
+这些工具和上游提供的相对简单的输入文件一起，用来为软件包创建构建系统。
 </p>
 
 <div class="figure">
 <div class="image"><img alt="How autotools fits together" src="diagram.png"></div>
-<p class="caption">A basic overview of how the main autotools components fit together.</p>
+<p class="caption">Autotools 主要组件配合使用总览</p>
 </div>
 
 <p>
-In a simple setup:
+在一个简单的设置中：
 </p>
 
 <ul>
   <li>
-    The <code class="docutils literal"><span class="pre">autoconf</span></code> program produces a <code class="docutils literal"><span class="pre">configure</span></code> script from either
-    <code class="docutils literal"><span class="pre">configure.in</span></code> or <code class="docutils literal"><span class="pre">configure.ac</span></code> (see note below).
+    <code class="docutils literal"><span class="pre">autoconf</span></code> 程序根据 <code class="docutils literal"><span class="pre">configure.in</span></code> 或
+    <code class="docutils literal"><span class="pre">configure.ac</span></code> 生成 <code class="docutils literal"><span class="pre">configure</span></code> 脚本（请看下面的附注）。
   </li>
   <li>
-    The <code class="docutils literal"><span class="pre">automake</span></code> program produces a <code class="docutils literal"><span class="pre">Makefile.in</span></code> from a <code class="docutils literal"><span class="pre">Makefile.am</span></code>.
+    <code class="docutils literal"><span class="pre">automake</span></code> 程序根据
+    <code class="docutils literal"><span class="pre">Makefile.am</span></code> 生成 <code class="docutils literal"><span class="pre">Makefile.in</span></code>。
   </li>
   <li>
-    The <code class="docutils literal"><span class="pre">configure</span></code> script is run to produce one or more <code class="docutils literal"><span class="pre">Makefile</span></code> files from
-    <code class="docutils literal"><span class="pre">Makefile.in</span></code> files.
+    运行 <code class="docutils literal"><span class="pre">configure</span></code> 脚本，根据 <code class="docutils literal"><span class="pre">Makefile.in</span></code> 文件生成一个或多个
+    <code class="docutils literal"><span class="pre">Makefile</span></code>。
   </li>
   <li>
-    The <code class="docutils literal"><span class="pre">make</span></code> program uses the <code class="docutils literal"><span class="pre">Makefile</span></code> to compile the program.
+    <code class="docutils literal"><span class="pre">make</span></code> 程序利用 <code class="docutils literal"><span class="pre">Makefile</span></code> 编译软件。
   </li>
 </ul>
 
 
 <div class="alert alert-info" role="alert">
-<strong>Note:</strong>
-The <code class="docutils literal"><span class="pre">configure.in</span></code> name used to be standard. However, the GNU
-documentation now recommends <code class="docutils literal"><span class="pre">configure.ac</span></code> as it is more obvious which
-program should be used when processing it. The files perform the same purpose
-and have the same format — the only difference is the name.
+<strong>附注：</strong>
+按照标准应该使用 <code class="docutils literal"><span class="pre">configure.in</span></code>，然而 GNU 文档现在推荐使用
+<code class="docutils literal"><span class="pre">configure.ac</span></code> 因为处理她的时候使用哪个程序会更加明显。
+这些文件具有相同的用途和相同的格式，唯一的区别是名称。
 </div>
 
 <p>
-You may see autotools being used in a variety of phase functions.
-The <a class="" href="../../ebuild-writing/functions/src_prepare/index.html">src_prepare</a> function is the most
-appropriate place to manipulate the source code prior to configuration
-and compilation. In particular, <code class="docutils literal"><span class="pre">src_prepare</span></code> is called before
-<a class="" href="../../ebuild-writing/functions/src_configure/index.html">src_configure</a>, which usually expects
-the <code class="docutils literal"><span class="pre">configure</span></code> script to exist.
+你可能会见到在多个阶段的函数中使用 autotools。
+<a class="" href="../../ebuild-writing/functions/src_prepare/index.html">src_prepare</a> 函数是最适合在配置和编译之前操作代码的地方，
+尤其是因为 <a class="" href="../../ebuild-writing/functions/src_configure/index.html">src_configure</a> 通常期望
+<code class="docutils literal"><span class="pre">configure</span></code> 脚本存在，
+而 <code class="docutils literal"><span class="pre">src_prepare</span></code> 函数在它之前调用。
 </p>
 
 <p>
-The <code class="docutils literal"><span class="pre">autoreconf</span></code> tool supposedly runs <code class="docutils literal"><span class="pre">autoconf</span></code> (and <code class="docutils literal"><span class="pre">automake</span></code>,
-<code class="docutils literal"><span class="pre">autoheader</span></code>, <code class="docutils literal"><span class="pre">aclocal</span></code>, <code class="docutils literal"><span class="pre">autopoint</span></code> and <code class="docutils literal"><span class="pre">libtoolize</span></code>) as necessary.
-Sometimes it works. Some packages ship a shell script named <code class="docutils literal"><span class="pre">autogen.sh</span></code> which
-does the same thing (this is <i>not</i> related to <code class="docutils literal"><span class="pre">autogen</span></code>).
-The autotools.eclass contains helper functions for the stand-alone tools with their
-corresponding names e.g. <code class="docutils literal"><span class="pre">eautoconf</span></code> and <code class="docutils literal"><span class="pre">eautomake</span></code>.
+据推测 <code class="docutils literal"><span class="pre">autoreconf</span></code> 工具在必要时会运行 <code class="docutils literal"><span class="pre">autoconf</span></code>（还有 <code class="docutils literal"><span class="pre">automake</span></code>，<code class="docutils literal"><span class="pre">autoheader</span></code>，<code class="docutils literal"><span class="pre">aclocal</span></code>，<code class="docutils literal"><span class="pre">autopoint</span></code> 以及 <code class="docutils literal"><span class="pre">libtoolize</span></code>）。
+有时它可以工作。有些软件包会带一个名为 <code class="docutils literal"><span class="pre">autogen.sh</span></code>
+的 shell 脚本来做相同的事情（这和 <code class="docutils literal"><span class="pre">autogen</span></code> 工具<i>无关</i>）。
+autotools.eclass 包含了一些用来调用单个工具的辅助函数，这些辅助函数各自拥有和工具相对应的名称，例如
+<code class="docutils literal"><span class="pre">eautoconf</span></code> 和 <code class="docutils literal"><span class="pre">eautomake</span></code>。
 </p>
 
 <div class="alert alert-danger" role="alert">
-<strong>Warning:</strong>
-You must <b>not</b> attempt to modify any of the generated files in
-between running <code class="docutils literal"><span class="pre">configure</span></code> and <code class="docutils literal"><span class="pre">make</span></code>. This can lead to autotools
-trying to be clever and recreate the files, in turn leading to your changes
-being removed. In some situations this will also result in <code class="docutils literal"><span class="pre">./configure</span></code>
-arguments being silently dropped, which can give broken dependencies.
-The best way to proceed is usually to work with the <code class="docutils literal"><span class="pre">.ac</span></code> / <code class="docutils literal"><span class="pre">.in</span></code> files
-instead.
+<strong>警告：</strong>
+<b>不要</b>在执行 <code class="docutils literal"><span class="pre">configure</span></code> 和 <code class="docutils literal"><span class="pre">make</span></code>
+之间修改任何生成的文件，因为这会让 autotools 智能地重新生成这些文件，导致你的修改被覆盖掉。
+在某些情况下这还会导致 <code class="docutils literal"><span class="pre">./configure</span></code> 的参数神不知鬼不觉的丢失，最终破坏依赖关系。
+所以通常最优的办法是修改 <code class="docutils literal"><span class="pre">.ac</span></code> 或 <code class="docutils literal"><span class="pre">.in</span></code> 文件。
 </div>
 
 </div>
 <div class="section">
-<h2 id="simple-autotools-patching-example">Simple Autotools Patching Example</h2>
+<h2 id="simple-autotools-patching-example">简单的 Autotools 补丁示例</h2>
 
 <p>
-The following snippet illustrates the correct way to proceed after patching
-either <code class="docutils literal"><span class="pre">Makefile.am</span></code> or <code class="docutils literal"><span class="pre">configure.ac</span></code>:
+下列片段说明了给 <code class="docutils literal"><span class="pre">Makefile.am</span></code>
+或 <code class="docutils literal"><span class="pre">configure.ac</span></code> 打上补丁之后正确的处理方式：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">EAPI</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span>5
@@ -195,41 +182,38 @@ either <code class="docutils literal"><span class="pre">Makefile.am</span></code
 </span></pre>
 
 <p>
-The <code class="docutils literal"><span class="pre">einfo</span></code> message before running autotools is not mandatory. However, these
-steps can sometimes take a while and may produce no output, so it may make sense
-to let the user know that something is still happening. See
-<a class="" href="../../ebuild-writing/messages/index.html">Messages</a>.
+运行 autotools 之前的 <code class="docutils literal"><span class="pre">einfo</span></code>
+不是必须的。不过这些步骤有时候会搞了很一段长时间都没有输出，因此让用户知道操作还在进行就很有意义。
+参阅 <a class="" href="../../ebuild-writing/messages/index.html">Messages</a>。
 </p>
 
 </div>
 <div class="section">
-<h2 id="the-configure.ac-file">The <code class="docutils literal"><span class="pre">configure.ac</span></code> File</h2>
+<h2 id="the-configure.ac-file"><code class="docutils literal"><span class="pre">configure.ac</span></code> 文件</h2>
 
 <p>
-The <code class="docutils literal"><span class="pre">configure.ac</span></code> file is used to create the <code class="docutils literal"><span class="pre">./configure</span></code> script. It
-consists of a series of macros which are processed and expanded by <code class="docutils literal"><span class="pre">autoconf</span></code>.
-These macros can check for packages and libraries, handle <code class="docutils literal"><span class="pre">--enable</span></code> and
-<code class="docutils literal"><span class="pre">--with</span></code> switches, and generate various files.
+<code class="docutils literal"><span class="pre">configure.ac</span></code> 用来创建 <code class="docutils literal"><span class="pre">./configure</span></code> 脚本。
+它由一系列的宏组成，这些宏由 <code class="docutils literal"><span class="pre">autoconf</span></code> 处理并展开。
+这些宏可以检查软件包和库，处理 <code class="docutils literal"><span class="pre">--enable</span></code> 和
+<code class="docutils literal"><span class="pre">--with</span></code> 开关，以及生成各种文件。
 </p>
 
 <div class="section">
-<h3 id="basic-format-of-configure.ac">Basic Format of <code class="docutils literal"><span class="pre">configure.ac</span></code>
+<h3 id="basic-format-of-configure.ac"><code class="docutils literal"><span class="pre">configure.ac</span></code> 的基本格式
 </h3>
 
 <p>
-The <code class="docutils literal"><span class="pre">configure.ac</span></code> file is a basic text file. Indenting and whitespace are
-largely irrelevant. Comments are indicated by the string <code class="docutils literal"><span class="pre">dnl</span></code> (<code class="docutils literal"><span class="pre">dnl</span></code> is
-actually a macro which discards the remainder of the input — it stands for
-"discard new line").
+<code class="docutils literal"><span class="pre">configure.ac</span></code> 是一个简单的文本文件。
+缩进和空格在很大程度上无关紧要。注释由字符串 <code class="docutils literal"><span class="pre">dnl</span></code>
+标识（<code class="docutils literal"><span class="pre">dnl</span></code> 实际上是一个用来丢弃剩余输入的宏 — 它代表“丢弃新行”）。
 </p>
 
 <p>
-If the previous sentence made you uneasy, you should probably stop reading this
-page. It gets far worse.
+如果前面的内容让你疑惑，就别再看这个页面了，那样只会让情况更糟。
 </p>
 
 <p>
-A typical file might start with something like the following:
+一个典型的文件开头可能会像下面这样：
 </p>
 
 <pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">dnl</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Process</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">this</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">file</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">with</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">autoconf</span>
@@ -241,28 +225,26 @@ A typical file might start with something like the following:
 </span></pre>
 
 <p>
-The <code class="docutils literal"><span class="pre">AC_PREREQ</span></code> line, if present, tells you which <code class="docutils literal"><span class="pre">autoconf</span></code> version you
-need. This is useful, because <code class="docutils literal"><span class="pre">autoconf</span></code> is not compatible between versions.
-In the above example, we need <code class="docutils literal"><span class="pre">=autoconf-2.5*</span></code>. and we should
-<code class="docutils literal"><span class="pre">export WANT_AUTOCONF="2.5"</span></code> (or use the <code class="docutils literal"><span class="pre">autoconf-2.59</span></code> script) when calling
-<code class="docutils literal"><span class="pre">autoconf</span></code>.
+如果存在的话，<code class="docutils literal"><span class="pre">AC_PREREQ</span></code> 那一行告诉你需要使用什么版本的 <code class="docutils literal"><span class="pre">autoconf</span></code>。
+这非常有用，因为 <code class="docutils literal"><span class="pre">autoconf</span></code> 版本之间不兼容。
+在上面的例子中，调用 <code class="docutils literal"><span class="pre">autoconf</span></code> 时我们需要 <code class="docutils literal"><span class="pre">=autoconf-2.5*</span></code>，还应该
+<code class="docutils literal"><span class="pre">export WANT_AUTOCONF="2.5"</span></code>（或者使用 <code class="docutils literal"><span class="pre">autoconf-2.59</span></code> 脚本）。
 </p>
 
 <p>
-The <code class="docutils literal"><span class="pre">AM_INIT_AUTOMAKE</span></code> line tells us which <code class="docutils literal"><span class="pre">automake</span></code> version we need.
-Again, there is little chance that an <code class="docutils literal"><span class="pre">automake-1.7</span></code> script will work properly
-with <code class="docutils literal"><span class="pre">automake-1.8</span></code>. Setting <code class="docutils literal"><span class="pre">WANT_AUTOMAKE="1.8"</span></code> in the environment can be
-used to make an unversioned <code class="docutils literal"><span class="pre">automake</span></code> call run the correct version.
+<code class="docutils literal"><span class="pre">AM_INIT_AUTOMAKE</span></code> 那一行告诉我们需要使用什么版本的 <code class="docutils literal"><span class="pre">automake</span></code>。
+同样的，<code class="docutils literal"><span class="pre">automake-1.7</span></code> 脚本在<code class="docutils literal"><span class="pre">automake-1.8</span></code>
+下正常工作的可能性很小。设置环境变量 <code class="docutils literal"><span class="pre">WANT_AUTOMAKE="1.8"</span></code> 可以使不带版本的
+<code class="docutils literal"><span class="pre">automake</span></code> 命令运行正确的版本。
 </p>
 
 <div class="alert alert-info" role="alert">
-<strong>Note:</strong>
-The <code class="docutils literal"><span class="pre">WANT_</span></code> variables are a Gentoo feature that originally came from
-Mandrake. Other distributions may handle things differently.
+<strong>附注：</strong>
+<code class="docutils literal"><span class="pre">WANT_</span></code> 开头的变量是一个最初来自 Mandrake 的 Gentoo 功能。其他发行版可能会有不同的处理方式。
 </div>
 
 <p>
-Usually, some standard checks will follow:
+通常，一些标准检查会紧跟如下：
 </p>
 
 <pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">dnl</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Check</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">for</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">toolchain</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">and</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">install</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">components</span>
@@ -273,7 +255,7 @@ Usually, some standard checks will follow:
 </span></pre>
 
 <p>
-For non-standard applications, you may also see manual checks:
+对于不标准的应用，你可能会看到手动检查：
 </p>
 
 <pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">dnl</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Check</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">for</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">sed</span>
@@ -284,7 +266,7 @@ For non-standard applications, you may also see manual checks:
 </span></pre>
 
 <p>
-You may also see checks for compiler features:
+你也可能见到对编译器功能的检查：
 </p>
 
 <pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">dnl</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Check</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">that</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">our</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">compiler</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">can</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">do</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">const</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">and</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">inline</span>
@@ -293,7 +275,7 @@ You may also see checks for compiler features:
 </span></pre>
 
 <p>
-Library and header checks:
+库和头文件的检查：
 </p>
 
 <pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">dnl</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Check</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">for</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">standard</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">headers:</span>
@@ -306,7 +288,7 @@ Library and header checks:
 </span></pre>
 
 <p>
-And function checks:
+以及函数检查：
 </p>
 
 <pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">dnl</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Check</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">for</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">functions:</span>
@@ -314,15 +296,12 @@ And function checks:
 </span></pre>
 
 <p>
-Often these will be all jumbled together without any useful comments. In some
-cases, many of the checks done won't even be necessary for the application in
-question — most autotools code is copy/pasted rather than written from scratch,
-and <code class="docutils literal"><span class="pre">autoscan</span></code> (a tool which helps write <code class="docutils literal"><span class="pre">configure.ac</span></code>) is sometimes
-over-eager to add in checks.
+这些东西常常会混杂在一起而不带任何有用的注释。有些情况下，很多检查甚至都不是应用所必须的 — 大多数 autotools 代码都是复制/粘贴，而不是从头开始手写的，
+并且 <code class="docutils literal"><span class="pre">autoscan</span></code>（一个用来帮助撰写 <code class="docutils literal"><span class="pre">configure.ac</span></code> 的工具）有时过分渴望添加检查。
 </p>
 
 <p>
-The file will finish with some output functions:
+文件会在一些输出函数处结束：
 </p>
 
 <pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">AM_CONFIG_HEADER</span><span xmlns="http://www.w3.org/1999/xhtml" class="Special">(</span>config.h<span xmlns="http://www.w3.org/1999/xhtml" class="Special">)</span>
@@ -330,24 +309,24 @@ The file will finish with some output functions:
 </span></pre>
 
 <p>
-These are used to make the <code class="docutils literal"><span class="pre">./configure</span></code> script generate the relevant files.
+它们用来让 <code class="docutils literal"><span class="pre">./configure</span></code> 脚本生成相关的文件。
 </p>
 
 </div>
 <div class="section">
-<h3 id="enable-and-disable-checks">Enable and Disable Checks</h3>
+<h3 id="enable-and-disable-checks">Enable 与 Disable 检查</h3>
 
 <p>
-So far we've only seen 'hard' dependencies. Many packages have <i>optional</i>
-support for various extras (graphics toolkits, libraries which add
-functionality, interpreters, features, ...). This is (if we're lucky) handled
-via <code class="docutils literal"><span class="pre">--enable-foo</span></code> and <code class="docutils literal"><span class="pre">--disable-foo</span></code> switches to <code class="docutils literal"><span class="pre">./configure</span></code>. which
-are generated from <code class="docutils literal"><span class="pre">autoconf</span></code> rules.
+到目前为止我们只看到了‘硬’依赖。许多软件包都有对各种副产品（图形化工具，功能性的库，解释器，额外特性，...）的<i>可选</i>支持。
+这些支持（如果幸运的话）通过由 <code class="docutils literal"><span class="pre">autoconf</span></code> 规则生成的
+<code class="docutils literal"><span class="pre">./configure</span></code> 脚本的
+<code class="docutils literal"><span class="pre">--enable-foo</span></code> 和
+<code class="docutils literal"><span class="pre">--disable-foo</span></code> 开关处理。
 </p>
 
 <p>
-A simple <code class="docutils literal"><span class="pre">--enable</span></code> / <code class="docutils literal"><span class="pre">--disable</span></code> function might look something like the
-following:
+一个简单的 <code class="docutils literal"><span class="pre">--enable</span></code> / <code class="docutils literal"><span class="pre">--disable</span></code>
+功能看起来应该如下所示：
 </p>
 
 <pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">AC_MSG_CHECKING</span><span xmlns="http://www.w3.org/1999/xhtml" class="Special">(</span>--enable-cscope argument<span xmlns="http://www.w3.org/1999/xhtml" class="Special">)</span>
@@ -362,15 +341,15 @@ following:
 </span></pre>
 
 <p>
-Sometimes more complicated checks are included based upon whether or not an
-option is enabled. There are also some predefined macros which include
-<code class="docutils literal"><span class="pre">AC_ARG_ENABLE</span></code>. so grepping <code class="docutils literal"><span class="pre">configure.ac</span></code> for <code class="docutils literal"><span class="pre">AC_ARG_ENABLE</span></code> may not
-give a complete list. A better way is to use <code class="docutils literal"><span class="pre">./configure --help</span></code> and check
-the output.
+有时候根据一个选项是否启用会进行更复杂的检查。另外还有一些包含了
+<code class="docutils literal"><span class="pre">AC_ARG_ENABLE</span></code>
+的预定义宏。所以用 grep 扫描 <code class="docutils literal"><span class="pre">configure.ac</span></code>
+去找 <code class="docutils literal"><span class="pre">AC_ARG_ENABLE</span></code> 可能会找不全，更好的方法是用
+<code class="docutils literal"><span class="pre">./configure --help</span></code> 然后查看输出。
 </p>
 
 <div class="alert alert-warning" role="alert">
-<strong>Important:</strong>
+<strong>重要：</strong>
 The third argument is used when a <code class="docutils literal"><span class="pre">--enable</span></code> or <code class="docutils literal"><span class="pre">--disable</span></code>
 switch to <code class="docutils literal"><span class="pre">./configure</span></code> is provided, and the fourth is used when such a
 switch is <i>not</i> passed. A common misconception is that the third is enable
