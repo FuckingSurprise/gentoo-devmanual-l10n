@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>The Basics of Autotools – Gentoo Development Guide</title>
@@ -382,45 +382,48 @@ autotools.eclass 包含了一些用来调用单个工具的辅助函数，这些
 </span></pre>
 
 <p>
-同样的，第三个参数在‘指定’时执行，第四个参数在‘未指定’时执行，并且有一些包含了
-<code class="docutils literal"><span class="pre">with</span></code> 选项的标准宏。
+同样的，第三个参数在‘指定’时执行，第四个参数在‘未指定’时执行，并且有一些标准宏包含了
+<code class="docutils literal"><span class="pre">with</span></code> 选项。
 </p>
 
 </div>
 <div class="section">
-<h3 id="automatic-checks">Automatic Checks</h3>
+<h3 id="automatic-checks">自动检查</h3>
 
 <p>
-It's possible to write autoconf rules which bypass the manual enable / disable
-convention (or which just ignore what the user asks for). If your package does
-this, it must be fixed to avoid dependency problems.
+编写能绕开或忽略 enable / disable 的 autoconf 规则是完全有可能的，
+如果你的软件包就是这么做的，请务必修复它以避免出现依赖问题。
 </p>
 
 <p>
-The most common form is packages which simply use <code class="docutils literal"><span class="pre">AC_CHECK_LIB</span></code> to decide
-whether or not to enable a feature. If you find a package which does this, you
-<b>must</b> change the behaviour.
+软件包仅仅使用 <code class="docutils literal"><span class="pre">AC_CHECK_LIB</span></code>
+来决定一项特性启用与否是最常见的形式，如果你发现有软件包这么做，请<b>务必</b>修改。
 </p>
 
 </div>
 <div class="section">
-<h3 id="quoting-rules-for-configure.ac">Quoting Rules for <code class="docutils literal"><span class="pre">configure.ac</span></code>
+<h3 id="quoting-rules-for-configure.ac"><code class="docutils literal"><span class="pre">configure.ac</span></code> 中的引用规则
 </h3>
 
 <p>
-Behind the scenes, <code class="docutils literal"><span class="pre">autoconf</span></code> makes heavy use of the <code class="docutils literal"><span class="pre">m4</span></code> macro processor to
-do the work. The <code class="docutils literal"><span class="pre">m4</span></code> quote characters are set by <code class="docutils literal"><span class="pre">autoconf</span></code> to be <code class="docutils literal"><span class="pre">[</span></code> and
-<code class="docutils literal"><span class="pre">]</span></code> for opening and closing quotes respectively. Using <code class="docutils literal"><span class="pre">"</span></code> or <code class="docutils literal"><span class="pre">'</span></code> may
-produce unexpected results.
+在后台，<code class="docutils literal"><span class="pre">autoconf</span></code> 大量使用
+<code class="docutils literal"><span class="pre">m4</span></code>
+宏处理器来完成操作。<code class="docutils literal"><span class="pre">m4</span></code> 引用字符由
+<code class="docutils literal"><span class="pre">autoconf</span></code> 设置为
+<code class="docutils literal"><span class="pre">[</span></code> 和
+<code class="docutils literal"><span class="pre">]</span></code>，分别代表开始和结束引用。使用
+<code class="docutils literal"><span class="pre">"</span></code> 或
+<code class="docutils literal"><span class="pre">'</span></code> 可能会造成意想不到的结果。
 </p>
 
 <p>
-To include a literal left square bracket, the easiest thing to do is to use the
-special string <code class="docutils literal"><span class="pre">@&lt;:@</span></code>. For a right bracket, use <code class="docutils literal"><span class="pre">@:&gt;@</span></code>.
+要包含一个左方括号字符，最简单的方法是使用特殊字符串
+<code class="docutils literal"><span class="pre">@&lt;:@</span></code>，对于右方括号则是使用
+<code class="docutils literal"><span class="pre">@:&gt;@</span></code>。
 </p>
 
 <p>
-For example:
+例如：
 </p>
 
 <pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">AC_MSG_RESULT</span><span xmlns="http://www.w3.org/1999/xhtml" class="Special">(</span>the first<span xmlns="http://www.w3.org/1999/xhtml" class="Special">)</span>
@@ -431,7 +434,7 @@ For example:
 </span></pre>
 
 <p>
-gives:
+处理为：
 </p>
 
 <pre>
@@ -443,28 +446,31 @@ gives:
 </pre>
 
 <p>
-When in doubt, it is generally safest to quote macro arguments using <code class="docutils literal"><span class="pre">[ ]</span></code>
-rather than leaving things unquoted.
+当拿不准的时候，最保险的方法是用
+<code class="docutils literal"><span class="pre">[ ]</span></code>
+引用宏参数而不是放着不管。
 </p>
 
 </div>
 </div>
 <div class="section">
-<h2 id="the-makefile.am-files">The <code class="docutils literal"><span class="pre">Makefile.am</span></code> Files</h2>
+<h2 id="the-makefile.am-files"><code class="docutils literal"><span class="pre">Makefile.am</span></code> 文件</h2>
 
 <p>
-The <code class="docutils literal"><span class="pre">Makefile.am</span></code> file is processed by <code class="docutils literal"><span class="pre">automake</span></code> to create <code class="docutils literal"><span class="pre">Makefile.in</span></code>,
-which is in turn processed by <code class="docutils literal"><span class="pre">configure</span></code> to create <code class="docutils literal"><span class="pre">Makefile</span></code>, which is in
-turn used by <code class="docutils literal"><span class="pre">make</span></code> to build the software.
+<code class="docutils literal"><span class="pre">Makefile.am</span></code> 由 <code class="docutils literal"><span class="pre">automake</span></code> 处理并生成
+<code class="docutils literal"><span class="pre">Makefile.in</span></code>，<code class="docutils literal"><span class="pre">Makefile.in</span></code> 由
+<code class="docutils literal"><span class="pre">configure</span></code> 处理并生成
+<code class="docutils literal"><span class="pre">Makefile</span></code>，最终 <code class="docutils literal"><span class="pre">make</span></code> 根据
+<code class="docutils literal"><span class="pre">Makefile</span></code> 构建软件。
 </p>
 
 <p>
-The basic format is like that of a <code class="docutils literal"><span class="pre">Makefile</span></code>. However, you will see various
-'special' variables being set, rather than every rule being written manually.
+<code class="docutils literal"><span class="pre">Makefile.am</span></code> 的基本格式类似于
+<code class="docutils literal"><span class="pre">Makefile</span></code>，不过你会看到文件中设置了各种‘特殊的’变量而不是手写每一条规则。
 </p>
 
 <p>
-A very simple example:
+一个非常简单的例子：
 </p>
 
 <pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Type">bin_PROGRAMS</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span> myapp
@@ -472,8 +478,8 @@ A very simple example:
 </span></pre>
 
 <p>
-All the standard GNU rules will be generated, so <code class="docutils literal"><span class="pre">make</span></code>. <code class="docutils literal"><span class="pre">make clean</span></code>.
-<code class="docutils literal"><span class="pre">make distclean</span></code>. <code class="docutils literal"><span class="pre">make dist</span></code> and so on will all work here.
+这样所有的 GNU 标准规则都可以生成，<code class="docutils literal"><span class="pre">make</span></code>、<code class="docutils literal"><span class="pre">make clean</span></code>、<code class="docutils literal"><span class="pre">make distclean</span></code>、<code class="docutils literal"><span class="pre">make dist</span></code>
+以及诸如此类的命令都能正常生效。
 </p>
 
 <p>
