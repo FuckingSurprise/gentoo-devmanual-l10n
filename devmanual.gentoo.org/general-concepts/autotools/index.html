@@ -483,8 +483,8 @@ autotools.eclass 包含了一些用来调用单个工具的辅助函数，这些
 </p>
 
 <p>
-You may also see some standard <code class="docutils literal"><span class="pre">Makefile</span></code> constructs showing up whenever there
-isn't a standard <code class="docutils literal"><span class="pre">automake</span></code> way of handling a certain task. For example:
+每当没有处理某项任务的标准 <code class="docutils literal"><span class="pre">automake</span></code>
+方法时，你还会见到标准的 <code class="docutils literal"><span class="pre">Makefile</span></code> 构造体，例如：
 </p>
 
 <pre><span class=""><span xmlns="http://www.w3.org/1999/xhtml" class="Type">CLEANFILES</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span> glep31check.1
@@ -496,80 +496,75 @@ isn't a standard <code class="docutils literal"><span class="pre">automake</span
 </span></pre>
 
 <p>
-Here, the <code class="docutils literal"><span class="pre">@regex_cmd@</span></code> variable will be substituted with whatever
-<code class="docutils literal"><span class="pre">configure</span></code> detects (<code class="docutils literal"><span class="pre">sed</span></code> in this case) when creating the <code class="docutils literal"><span class="pre">Makefile</span></code>.
-This is handled via the macro <code class="docutils literal"><span class="pre">AC_SUBST(VARNAME)</span></code> in <code class="docutils literal"><span class="pre">configure.ac</span></code>.
+在这里，<code class="docutils literal"><span class="pre">@regex_cmd@</span></code>
+变量会在创建 <code class="docutils literal"><span class="pre">Makefile</span></code> 时由 <code class="docutils literal"><span class="pre">configure</span></code>
+检测（在这个例子中是 <code class="docutils literal"><span class="pre">sed</span></code>）并替换。
+此过程是通过 <code class="docutils literal"><span class="pre">configure.ac</span></code> 文件里的 <code class="docutils literal"><span class="pre">AC_SUBST(VARNAME)</span></code> 宏处理的。
 </p>
 
 <div class="section">
-<h3 id="makefile-variables">Makefile Variables</h3>
+<h3 id="makefile-variables">Makefile 变量</h3>
 
 <p>
-Sometimes, badly behaved <code class="docutils literal"><span class="pre">Makefile.am</span></code> files will override user variables such
-as <code class="docutils literal"><span class="pre">CFLAGS</span></code>. This must not be allowed — see
-<a class="" href="../user-environment/index.html#not-filtering-variables">Not Filtering Variables</a>. There
-are separate special variables which should be used in these situations — for
-setting <code class="docutils literal"><span class="pre">CFLAGS</span></code>. for example, a <code class="docutils literal"><span class="pre">Makefile.am</span></code> should use <code class="docutils literal"><span class="pre">AM_CFLAGS</span></code> so
-that user preferences are not ignored.
+有时候，一些有着不良行为的 <code class="docutils literal"><span class="pre">Makefile.am</span></code> 文件会覆盖用户变量，比如
+<code class="docutils literal"><span class="pre">CFLAGS</span></code>，这可忍不了 —— 参阅
+<a class="" href="../user-environment/index.html#not-filtering-variables">Not Filtering Variables</a>。
+在这种情况下就应该使用一些独立的特殊变量，例如对于 <code class="docutils literal"><span class="pre">CFLAGS</span></code>，在
+<code class="docutils literal"><span class="pre">Makefile.am</span></code> 中应该使用
+<code class="docutils literal"><span class="pre">AM_CFLAGS</span></code> 以免用户的遭到覆盖。
 </p>
 
 <p>
-So, if a <code class="docutils literal"><span class="pre">Makefile.am</span></code> contains, say:
+所以如果 <code class="docutils literal"><span class="pre">Makefile.am</span></code> 包含了这样的一行：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">CFLAGS</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>-Wall<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
 </span></pre>
 
 <p>
-You should <code class="docutils literal"><span class="pre">sed</span></code> or <code class="docutils literal"><span class="pre">patch</span></code> it to use:
+你用该把它改成：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">AM_CFLAGS</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>-Wall<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
 </span></pre>
 
 <p>
-Remember to manually run <code class="docutils literal"><span class="pre">autoconf</span></code> then <code class="docutils literal"><span class="pre">automake</span></code> if you do this.
+改完记得手动运行 <code class="docutils literal"><span class="pre">autoconf</span></code> 然后 <code class="docutils literal"><span class="pre">automake</span></code>。
 </p>
 
 </div>
 </div>
 <div class="section">
-<h2 id="the-config.h.in-file">The <code class="docutils literal"><span class="pre">config.h.in</span></code> File</h2>
+<h2 id="the-config.h.in-file"><code class="docutils literal"><span class="pre">config.h.in</span></code> 文件</h2>
 
 <p>
-The <code class="docutils literal"><span class="pre">config.h.in</span></code> file is generated by <code class="docutils literal"><span class="pre">autoheader</span></code>. You shouldn't have to
-worry about this usually, but occasionally you may need to run <code class="docutils literal"><span class="pre">autoheader</span></code>
-manually as part of the build process if upstream do not ship a pre-generated
-version.
+<code class="docutils literal"><span class="pre">config.h.in</span></code> 文件是由 <code class="docutils literal"><span class="pre">autoheader</span></code> 生成的。
+通常你不用去管它，但偶尔软件包的上游组织没有提供预生成的版本，这时你在构建过程中就需要手动运行 <code class="docutils literal"><span class="pre">autoheader</span></code>。
 </p>
 
 </div>
 <div class="section">
 <h2 id="aclocal-and-m4-files">
-<code class="docutils literal"><span class="pre">aclocal</span></code> and <code class="docutils literal"><span class="pre">m4</span></code> Files</h2>
+<code class="docutils literal"><span class="pre">aclocal</span></code> 与 <code class="docutils literal"><span class="pre">m4</span></code> 文件</h2>
 
 <p>
-In the <code class="docutils literal"><span class="pre">configure.ac</span></code> or <code class="docutils literal"><span class="pre">configure.in</span></code> files you can call not only the
-default macros defined by <code class="docutils literal"><span class="pre">autoconf</span></code> and <code class="docutils literal"><span class="pre">automake</span></code>. but also other
-functions which can be defined by specific packages like libraries and programs
-to check for their features in the correct manner.
+在 <code class="docutils literal"><span class="pre">configure.ac</span></code> 或 <code class="docutils literal"><span class="pre">configure.in</span></code>
+文件中你不仅可以调用由 <code class="docutils literal"><span class="pre">autoconf</span></code> 和 <code class="docutils literal"><span class="pre">automake</span></code>
+定义的默认宏，还可以调用由特定软件包（比如库和程序）定义的其他函数，以正确的方式检查它们的功能。
 </p>
 
 <p>
-Those functions are (usually) defined in <code class="docutils literal"><span class="pre">m4</span></code> files placed in
-the <code class="docutils literal"><span class="pre">/usr/share/aclocal</span></code> directory by packages. Problems can arise when you
-need to regenerate the <code class="docutils literal"><span class="pre">autotools</span></code> files, because the functions used by the
-<code class="docutils literal"><span class="pre">configure.ac</span></code> file can be defined in an <code class="docutils literal"><span class="pre">m4</span></code> macro file which isn't
-installed on the user's system. This is the case for example for some optional
-features which require libraries and are disabled by <code class="docutils literal"><span class="pre">USE</span></code> flags. If the
-<code class="docutils literal"><span class="pre">m4</span></code> files aren't installed in the user's system, the <code class="docutils literal"><span class="pre">autoconf</span></code> step will
-fail.
+这些函数（通常）在软件包置于 <code class="docutils literal"><span class="pre">/usr/share/aclocal</span></code> 目录中的 <code class="docutils literal"><span class="pre">m4</span></code>
+文件中定义。由于 <code class="docutils literal"><span class="pre">configure.ac</span></code> 中用到的函数所在的 <code class="docutils literal"><span class="pre">m4</span></code>
+文件在用户的系统上不一定安装，所以重新生成 <code class="docutils literal"><span class="pre">autotools</span></code> 文件的时候就容易报错。例如，某些需要库且被
+<code class="docutils literal"><span class="pre">USE</span></code> 标志禁用的可选功能就是这种情况。如果
+<code class="docutils literal"><span class="pre">m4</span></code> 文件没有安装在用户的系统上，<code class="docutils literal"><span class="pre">autoconf</span></code> 这一步就会失败。
 </p>
 
 <p>
-To resolve this, most packages just ship the <code class="docutils literal"><span class="pre">m4</span></code> macro files needed for their
-<code class="docutils literal"><span class="pre">configure.ac</span></code> in an <code class="docutils literal"><span class="pre">m4</span></code> subdirectory in the source package. Unfortunately,
-not all <code class="docutils literal"><span class="pre">m4</span></code> directories are complete, even if they are present.
+为了解决这个问题，大多数软件包在源码的 <code class="docutils literal"><span class="pre">m4</span></code> 目录中只提供了
+<code class="docutils literal"><span class="pre">configure.ac</span></code> 所需的 <code class="docutils literal"><span class="pre">m4</span></code>
+宏文件。不幸的是，即使有，也不是所有的 <code class="docutils literal"><span class="pre">m4</span></code> 目录都是完整的。
 </p>
 
 <p>
