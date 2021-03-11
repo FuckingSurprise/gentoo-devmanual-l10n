@@ -81,12 +81,15 @@
 <dl>
   <dt>CBUILD</dt>
   <dd>
-    执行编译过程的系统。「此处删掉了一小段原文」
+    执行编译过程的系统。Dependencies that apply
+    to the CBUILD system can be executed during build time.  When
+    cross-compiling, they are not installed into the system being built.
   </dd>
 
   <dt>CHOST</dt>
   <dd>
-    将要运行软件包的系统。「此处删掉了一小段原文」
+    将要运行软件包的系统。When
+    cross-compiling, dependencies applying to CHOST can not be executed.
   </dd>
 </dl>
 
@@ -112,7 +115,7 @@ i.e. packages that need to be found on built system, e.g. libraries and headers.
 </p>
 
 <p>
-In earlier EAPIs, all build dependencies are placed in <code class="docutils literal"><span class="pre">DEPEND</span></code>.
+在更早的 EAPI 中，所有的编译时依赖都放到 <code class="docutils literal"><span class="pre">DEPEND</span></code> 里。
 </p>
 
 </div>
@@ -120,15 +123,14 @@ In earlier EAPIs, all build dependencies are placed in <code class="docutils lit
 <h3 id="runtime-dependencies">运行时依赖</h3>
 
 <p>
-The <code class="docutils literal"><span class="pre">RDEPEND</span></code> ebuild variable should specify any dependencies which are
-required at runtime. This includes libraries (when dynamically linked), any data
-packages and (for interpreted languages) the relevant interpreter.
+<code class="docutils literal"><span class="pre">RDEPEND</span></code>
+变量指定了运行时所需要的依赖。包括库文件（如果是动态链接的）、数据文件以及（对于解释型语言）相关的解释器。
 </p>
 
 <p>
-Note that when installing from a binary package, only <code class="docutils literal"><span class="pre">RDEPEND</span></code> will be
-checked. It is therefore necessary to include items even if they are also listed
-in <code class="docutils literal"><span class="pre">DEPEND</span></code>.
+注意如果安装的是二进制包，那么将只检查
+<code class="docutils literal"><span class="pre">RDEPEND</span></code>。因此有必要将依赖项包含进来，即使它们已经被列在了
+<code class="docutils literal"><span class="pre">DEPEND</span></code> 里。
 </p>
 
 <p>
