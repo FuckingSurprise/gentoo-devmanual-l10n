@@ -67,7 +67,7 @@
 </ol></div></div></div></header><main><div class="container">
 <h1 class="first-header">Autotools 基础</h1>
 <div class="alert alert-info" role="alert">
-<strong>计划:</strong>
+<strong>待办：</strong>
 这篇文档对于 <a class="" href="../index.html">General Concepts</a> 来说太过冗长。需要拆分并移动到它自己的顶层目录，或者是<a class="" href="../../appendices/index.html">附录</a>，或者是别的什么地方。
 </div>
 
@@ -568,24 +568,22 @@ autotools.eclass 包含了一些用来调用单个工具的辅助函数，这些
 </p>
 
 <p>
-In those cases you need to find out the <code class="docutils literal"><span class="pre">m4</span></code> file, usually installed by the
-dependency in <code class="docutils literal"><span class="pre">/usr/share/aclocal</span></code>. and make sure that the <code class="docutils literal"><span class="pre">src_unpack</span></code>
-stage both makes available those files to the autotools and calls <code class="docutils literal"><span class="pre">aclocal</span></code> to
-recreate the <code class="docutils literal"><span class="pre">aclocal.m4</span></code> file which is used by <code class="docutils literal"><span class="pre">autoconf</span></code> when creating the
-configure script.
+在这种情况下你需要找到 <code class="docutils literal"><span class="pre">m4</span></code> 文件，它们一般由依赖安装在
+<code class="docutils literal"><span class="pre">/usr/share/aclocal</span></code> 目录下。然后在
+<code class="docutils literal"><span class="pre">src_unpack</span></code> 阶段确保这些文件对 autotools 可用，同时调用
+<code class="docutils literal"><span class="pre">aclocal</span></code> 生成 <code class="docutils literal"><span class="pre">aclocal.m4</span></code>
+文件，以便让 <code class="docutils literal"><span class="pre">autoconf</span></code> 用来生成 configure 脚本。
 </p>
 
 <p>
-Usually it's more than one <code class="docutils literal"><span class="pre">m4</span></code> file which is missing, so you probably want to
-package them in a tarball, and add it to <code class="docutils literal"><span class="pre">SRC_URI</span></code>. After making sure that the
-tarball is extracted somewhere in <code class="docutils literal"><span class="pre">${WORKDIR}</span></code> (say, in a <code class="docutils literal"><span class="pre">gentoo-m4</span></code>
-directory), you usually have two general ways to handle those macro files, one
-for packages which ships with an incomplete <code class="docutils literal"><span class="pre">m4</span></code> directory and one for
-packages which ships without the <code class="docutils literal"><span class="pre">m4</span></code> directory.
+通常情况下会缺少不止一个 <code class="docutils literal"><span class="pre">m4</span></code> 文件，所以你可能需要把它们打成一个压缩包并添加到
+<code class="docutils literal"><span class="pre">SRC_URI</span></code>。在确认了该压缩包解压到了 <code class="docutils literal"><span class="pre">${WORKDIR}</span></code>
+的某个地方（例如，在 <code class="docutils literal"><span class="pre">gentoo-m4</span></code> 目录中）后，一般有两种通用方法处理这些宏文件，一种用于带有不完整
+<code class="docutils literal"><span class="pre">m4</span></code> 目录的软件包，而另一种用于不带 <code class="docutils literal"><span class="pre">m4</span></code> 目录的软件包。
 </p>
 
 <p>
-In the first case you usually want to do something like:
+在第一种情况下，你通常需要执行以下操作：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">einfo</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>Regenerating autotools files...<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
@@ -595,7 +593,7 @@ cp <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span><span xm
 </span></pre>
 
 <p>
-and so on. In the second case you can simplify it in this way:
+在第二种情况下，你可以像这样简化操作：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">einfo</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>Regenerating autotools files...<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
@@ -604,13 +602,12 @@ and so on. In the second case you can simplify it in this way:
 </span></pre>
 
 <p>
-without need to copy the files.
+而无需复制文件。
 </p>
 
 <p>
-It's always better inform upstream when the needed <code class="docutils literal"><span class="pre">m4</span></code> files are missing in
-the distribution, asking them to add all the needed files in the source tarball
-to avoid version conflicts if the macro changes.
+当发行版中缺少 <code class="docutils literal"><span class="pre">m4</span></code>
+文件时最好的办法是通知上游组织，让他们在源码包里添加所需的文件以避免宏更改时的版本冲突。
 </p>
 
 </div>
@@ -618,29 +615,26 @@ to avoid version conflicts if the macro changes.
 <h2 id="libtool">Libtool</h2>
 
 <div class="alert alert-info" role="alert">
-<strong>Todo:</strong>
-Stuff about libtool, libtoolize, elibtoolize, libtool.eclass. Which I
-know almost nothing about... Yay!
+<strong>待办：</strong>
+关于 libtool, libtoolize, elibtoolize, libtool.eclass 的东西。原文作者不懂...
 </div>
 
 </div>
 <div class="section">
-<h2 id="further-autotools-reading">Further Autotools Reading</h2>
+<h2 id="further-autotools-reading">Autotools 进一步学习</h2>
 
 <p>
-For more details on autotools:
+更多 autotools 的细节请阅读：
 </p>
 
 <ul>
   <li>
-    The book "GNU Autoconf, Automake and Libtool" by Gary V. Vaughan, Ben
-    Elliston, Tom Tromey  and Ian Lance Taylor   (often called "The Autobook")
-    provides a good but somewhat outdated description of autotools. It is
-    <a class="" href="https://sourceware.org/autobook/">freely available online</a>.
+    书籍《GNU Autoconf, Automake and Libtool》（简称“The Autobook”）。作者 Gary V. Vaughan，Ben
+    Elliston，Tom Tromey，Ian Lance Taylor。讲的不错但略显过时。可以
+    <a class="" href="https://sourceware.org/autobook/">免费在线阅读</a>。
   </li>
   <li>
-    The GNU documentation for the various autotools components is of varying
-    quality and completeness:
+    各种 autotools 组件的 GNU 文档，质量和完成度都参差不齐：
     <ul>
     <li>
       <a class="" href="https://www.gnu.org/software/automake/manual/automake.html">
@@ -662,9 +656,8 @@ For more details on autotools:
     </ul>
   </li>
   <li>
-    There are some good overview lectures available online.
-    <a class="" href="https://www.shlomifish.org/lecture/Autotools/">These slides</a>
-    are one example.
+    一些
+    <a class="" href="https://www.shlomifish.org/lecture/Autotools/">在线课程</a>。
   </li>
 </ul>
 
