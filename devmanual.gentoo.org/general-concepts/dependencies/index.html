@@ -63,57 +63,49 @@
 <li><a href="../../index.html">Master Index</a></li>
 <li><a href="../index.html">General Concepts</a></li>
 </ol></div></div></div></header><main><div class="container">
-<h1 class="first-header">Dependencies</h1>
+<h1 class="first-header">软件包依赖</h1>
 
 <p>
-Automatic dependency resolution is one of the most useful features
-provided by <code class="docutils literal"><span class="pre">emerge</span></code>.
+自动解决依赖是 <code class="docutils literal"><span class="pre">emerge</span></code> 最实用的功能之一。
 </p>
 
 <div class="section">
-<h2 id="dependency-types">Dependency types</h2>
+<h2 id="dependency-types">依赖的类型</h2>
 <div class="section">
-<h3 id="chost-vs-cbuild">CHOST vs CBUILD</h3>
+<h3 id="chost-vs-cbuild">CHOST 与 CBUILD</h3>
 
 <p>
-In order to avoid ambiguity, we use the following terms to indicate different
-systems when cross-compiling:
+为了避免歧义，本文使用以下术语指代交叉编译时不同的系统：
 </p>
 
 <dl>
   <dt>CBUILD</dt>
   <dd>
-    The system on which the build is performed.  Dependencies that apply
-    to the CBUILD system can be executed during build time.  When
-    cross-compiling, they are not installed into the system being built.
+    执行编译过程的系统。「此处删掉了一小段原文」
   </dd>
 
   <dt>CHOST</dt>
   <dd>
-    The system on which the package is going to be executed.  When
-    cross-compiling, dependencies applying to CHOST can not be executed.
+    将要运行软件包的系统。「此处删掉了一小段原文」
   </dd>
 </dl>
 
 <p>
-When not cross-compiling, CBUILD and CHOST have the same value and both classes
-of dependencies are merged.
+如果没有交叉编译，CBUILD 和 CHOST 就是同一个系统，所有类型的依赖都会合并。
 </p>
 
 </div>
 <div class="section">
-<h3 id="build-dependencies">Build Dependencies</h3>
+<h3 id="build-dependencies">编译时依赖</h3>
 
 <p>
-Build dependencies are used to specify any dependencies that are required
-to unpack, patch, compile, test or install the package (but see
-<a class="" href="index.html#implicit-system-dependency">Implicit System Dependency</a> for
-exemptions).
+编译时依赖用来指定软件包在解压缩、打补丁、编译、测试和安装过程中的所有依赖（但是有些不用指定，参阅
+<a class="" href="index.html#implicit-system-dependency">隐式系统依赖</a>）。
 </p>
 
 <p>
-Starting with EAPI 7, build dependencies are split into two variables:
-<code class="docutils literal"><span class="pre">BDEPEND</span></code> and <code class="docutils literal"><span class="pre">DEPEND</span></code>. <code class="docutils literal"><span class="pre">BDEPEND</span></code> specifies dependencies
+从 EAPI 7 开始，编译时依赖被拆分成了 <code class="docutils literal"><span class="pre">BDEPEND</span></code> 和 <code class="docutils literal"><span class="pre">DEPEND</span></code> 两个变量。
+<code class="docutils literal"><span class="pre">BDEPEND</span></code> specifies dependencies
 applicable to CBUILD, i.e. programs that need to be executed during the build,
 e.g. <code class="docutils literal"><span class="pre">virtual/pkgconfig</span></code>. <code class="docutils literal"><span class="pre">DEPEND</span></code> specifies dependencies for CHOST,
 i.e. packages that need to be found on built system, e.g. libraries and headers.
@@ -125,7 +117,7 @@ In earlier EAPIs, all build dependencies are placed in <code class="docutils lit
 
 </div>
 <div class="section">
-<h3 id="runtime-dependencies">Runtime Dependencies</h3>
+<h3 id="runtime-dependencies">运行时依赖</h3>
 
 <p>
 The <code class="docutils literal"><span class="pre">RDEPEND</span></code> ebuild variable should specify any dependencies which are
