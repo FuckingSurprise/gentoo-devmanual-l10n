@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Configuration File Protection – Gentoo Development Guide</title>
@@ -54,27 +54,24 @@
 <li><a href="../../index.html">Master Index</a></li>
 <li><a href="../index.html">General Concepts</a></li>
 </ol></div></div></div></header><main><div class="container">
-<h1 class="first-header">Configuration File Protection</h1>
+<h1 class="first-header">配置文件保护</h1>
 <p>
-  Portage includes a system for configuration file protection which means ebuilds
-  don't have to worry about accidentally clobbering files in <code class="docutils literal"><span class="pre">/etc</span></code>. This is
-  known as 'protection', and it is controlled by the <code class="docutils literal"><span class="pre">CONFIG_PROTECT</span></code> and
-  <code class="docutils literal"><span class="pre">CONFIG_PROTECT_MASK</span></code> variables.
+  Portage 包含了一套配置文件保护系统，这意味着 ebuild 无需担心 <code class="docutils literal"><span class="pre">/etc</span></code>
+  目录下的文件遭到意外破坏。这套‘保护’系统由 <code class="docutils literal"><span class="pre">CONFIG_PROTECT</span></code> 和
+  <code class="docutils literal"><span class="pre">CONFIG_PROTECT_MASK</span></code> 变量控制。
 </p>
 
 <p>
-  Any directory which is listed in <code class="docutils literal"><span class="pre">CONFIG_PROTECT</span></code> (and any subdirectories
-  thereof), except for any which are listed in <code class="docutils literal"><span class="pre">CONFIG_PROTECT_MASK</span></code> (and
-  subdirectories) are automatically 'protected' by Portage when copying an image
-  from <code class="docutils literal"><span class="pre">DESTDIR</span></code> to <code class="docutils literal"><span class="pre">ROOT</span></code>. Rather than installing protected files directly,
-  Portage will install them as <code class="docutils literal"><span class="pre">._cfg0000_filename</span></code>. These can then be processed
-  by the <code class="docutils literal"><span class="pre">etc-update</span></code> or <code class="docutils literal"><span class="pre">dispatch-conf</span></code> files at the user's discretion.
+  当从 <code class="docutils literal"><span class="pre">DESTDIR</span></code> 复制镜像到 <code class="docutils literal"><span class="pre">ROOT</span></code>
+  的时候，除了列在 <code class="docutils literal"><span class="pre">CONFIG_PROTECT_MASK</span></code> 中的目录（包括它的子目录）之外，任何列在
+  <code class="docutils literal"><span class="pre">CONFIG_PROTECT</span></code> 中的目录（包括它的子目录）都会被 Portage 自动‘保护’起来。Portage 会将它们以
+  <code class="docutils literal"><span class="pre">._cfg0000_文件名</span></code> 的名称安装，而不是直接覆盖被保护的文件。随后用户可以使用
+  <code class="docutils literal"><span class="pre">etc-update</span></code> 或 <code class="docutils literal"><span class="pre">dispatch-conf</span></code> 跟据意愿自由处理这些文件。
 </p>
 
 <p>
-  Packages must <b>not</b> attempt to override this system via <code class="docutils literal"><span class="pre">pkg_postinst</span></code> or
-  similar. If you need a file renamed, removed or changed in a particular way, you
-  should display a message informing the user.
+  软件包<b>不应该</b>通过 <code class="docutils literal"><span class="pre">pkg_postinst</span></code>
+  之类的函数覆盖此系统。如果你需要用特定的手段重命名、删除或修改一个文件，你应该显示一条消息通知用户。
 </p>
 
 </div></main><footer><div class="container">
