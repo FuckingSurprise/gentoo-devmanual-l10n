@@ -152,12 +152,12 @@ while in general case <code class="docutils literal"><span class="pre">RDEPEND</
 </div>
 </div>
 <div class="section">
-<h2 id="dependency-syntax">Dependency Syntax</h2>
+<h2 id="dependency-syntax">依赖的语法</h2>
 <div class="section">
-<h3 id="basic-dependency-syntax">Basic Dependency Syntax</h3>
+<h3 id="basic-dependency-syntax">依赖的基本语法</h3>
 
 <p>
-A basic <code class="docutils literal"><span class="pre">DEPEND</span></code> specification might look like the following:
+一个基本的 <code class="docutils literal"><span class="pre">DEPEND</span></code> 规范如下所示：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>dev-lang/ruby
@@ -166,50 +166,47 @@ A basic <code class="docutils literal"><span class="pre">DEPEND</span></code> sp
 </span></pre>
 
 <p>
-Each <i>package dependency specification</i> is the full category and name of
-a package. Dependency specifications are separated by arbitrary whitespace —
-convention is to have one specification per line for readability purposes.
-When specifying names, the category part should be treated as mandatory.
+每一个<i>依赖项</i>是一个完整的目录和软件包名称。依赖项之间由任意的空格分隔
+—— 习惯上为了可读性会把每一个依赖项单独写一行。软件包名称前面的目录不能省略。
 </p>
 
 </div>
 <div class="section">
-<h3 id="version-dependencies">Version Dependencies</h3>
+<h3 id="version-dependencies">版本依赖</h3>
 
 <p>
-Sometimes a particular version of a package is needed. Where this is known, it
-should be specified. A simple example:
+有时候软件包会依赖另一个软件包的特定版本。这时就需要指定版本信息，例如：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>&gt;=dev-libs/openssl-0.9.7d<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
 </span></pre>
 
 <p>
-This states that at least version 0.9.7d of <code class="docutils literal"><span class="pre">openssl</span></code> is required.
+这表示需要版本至少是 0.9.7d 的 <code class="docutils literal"><span class="pre">openssl</span></code>。
 </p>
 <div class="section">
-<h4 id="version-specifiers">Version Specifiers</h4>
+<h4 id="version-specifiers">版本说明符</h4>
 
 <p>
-Available version specifiers are:
+版本说明符有以下几种：
 </p>
 
 <table class="table">
   <tr>
-    <th>Specifier</th>
-    <th>Meaning</th>
+    <th>说明符</th>
+    <th>含义</th>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">&gt;=app-misc/foo-1.23</span></code></td>
-    <td>Version 1.23 or later is required.</td>
+    <td>需要 1.23 或更新的版本。</td>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">&gt;app-misc/foo-1.23</span></code></td>
-    <td>A version strictly later than 1.23 is required.</td>
+    <td>需要版本号严格大于1.23。</td>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">~app-misc/foo-1.23</span></code></td>
-    <td>Version 1.23 (or any <code class="docutils literal"><span class="pre">1.23-r*</span></code>) is required.</td>
+    <td>需要 1.23 版本，任何一个 <code class="docutils literal"><span class="pre">1.23-r*</span></code> 版本也可以。</td>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">=app-misc/foo-1.23</span></code></td>
@@ -220,30 +217,27 @@ Available version specifiers are:
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">&lt;=app-misc/foo-1.23</span></code></td>
-    <td>Version 1.23 or older is required.</td>
+    <td>需要 1.23 或更旧的版本。</td>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">&lt;app-misc/foo-1.23</span></code></td>
-    <td>A version strictly before 1.23 is required.</td>
+    <td>需要版本号严格小于1.23。</td>
   </tr>
 </table>
 
 </div>
 <div class="section">
-<h4 id="ranged-dependencies">Ranged Dependencies</h4>
+<h4 id="ranged-dependencies">范围版本依赖</h4>
 
 <p>
-To specify "version 2.x (not 1.x or 3.x)" of a package, it is necessary to use
-the asterisk postfix. This is most commonly seen in situations like:
+若要依赖“2.x 而不是 1.x 或 3.x 版本”的软件包，就需要使用星号后缀，常见于以下情况：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>gtk? <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> =x11-libs/gtk+-2* <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
 </span></pre>
 
 <p>
-Note that the equals sign is mandatory, and that there is no dot before the
-asterisk. Also note that when selecting all versions in a specific
-<code class="docutils literal"><span class="pre">SLOT</span></code>, <code class="docutils literal"><span class="pre">SLOT</span></code> dependencies should be used (see below).
+注意等号是必须的，而且星号前面没有点。还要注意的是如果你在某个槽里筛选版本，那么插槽依赖也要加上（参阅下文）。
 </p>
 
 </div>
