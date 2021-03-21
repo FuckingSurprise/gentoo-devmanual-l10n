@@ -338,11 +338,11 @@ newer package that caused the issues.
 </div>
 </div>
 <div class="section">
-<h3 id="slot-dependencies">SLOT Dependencies</h3>
+<h3 id="slot-dependencies">插槽依赖</h3>
 
 <p>
-To depend on a specific <code class="docutils literal"><span class="pre">SLOT</span></code>, <code class="docutils literal"><span class="pre">:SLOT</span></code> should be appended to
-the package name, where 'SLOT' is the <code class="docutils literal"><span class="pre">SLOT</span></code> of the package wanted:
+要依赖一个指定的<code class="docutils literal"><span class="pre">插槽</span></code>中的软件包，需要在软件包名称后边加上
+<code class="docutils literal"><span class="pre">:SLOT</span></code>，以表示依赖<code class="docutils literal"><span class="pre">插槽</span></code>‘SLOT’中的软件包：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>qt3? <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> x11-libs/qt:3 <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span>
@@ -350,14 +350,14 @@ the package name, where 'SLOT' is the <code class="docutils literal"><span class
 </span></pre>
 
 <p>
-To depend on a specific version or version-range within a SLOT we use:
+要依赖一个插槽中某一版本或某一版本范围的软件包，就这么写：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>qt3? <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> ~x11-libs/qt-3.3.8:3 <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span>
 	gtk? <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">&gt;</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span>x11-libs/gtk+-2.24.9:2 <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span>
 </span></pre>
 <div class="section">
-<h4 id="slot-operators">Slot Operators</h4>
+<h4 id="slot-operators">插槽操作符</h4>
 
 <p>
 In <code class="docutils literal"><span class="pre">EAPI=5</span></code> and higher, you can use slot operators appended to the package
