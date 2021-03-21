@@ -360,35 +360,25 @@ newer package that caused the issues.
 <h4 id="slot-operators">插槽操作符</h4>
 
 <p>
-In <code class="docutils literal"><span class="pre">EAPI=5</span></code> and higher, you can use slot operators appended to the package
-name to declare whether or not your package should be rebuilt after the versions
-satisfying its runtime dependencies are updated to versions with a different slot
-or <a class="" href="../slotting/index.html#sub-slots">sub-slot</a>:
+在 <code class="docutils literal"><span class="pre">EAPI=5</span></code> 及更高的版本中，
+你可以在软件包的名称后边添加插槽操作符来声明软件包是否应该在满足其运行时依赖的软件包版本更新到不同插槽或<a class="" href="../slotting/index.html#sub-slots">子插槽</a>之后重新构建：
 </p>
 
 <ul>
   <li>
-<code class="docutils literal"><span class="pre">:=</span></code> means that any slot is acceptable, and that your package should be
-  rebuilt if the version best matching the runtime dependency is updated to a
-  version with a different slot or subslot;</li>
+<code class="docutils literal"><span class="pre">:=</span></code> 表示任何插槽都可以接受，并且如果运行时依赖的最佳匹配被更新到了不同的插槽或子插槽中，你的软件包就需要重新构建。</li>
   <li>
-<code class="docutils literal"><span class="pre">:*</span></code> means that any slot is acceptable, and explicitly declares that
-  changes in the slot or sub-slot can be ignored;</li>
+<code class="docutils literal"><span class="pre">:*</span></code> 表示任何插槽都可以接受，并明确声明插槽或子插槽中的变更可以忽略。</li>
   <li>
-<code class="docutils literal"><span class="pre">:SLOT=</span></code> means that only the 'SLOT' slot is acceptable, and that your
-  package should be rebuilt if the version matching the runtime dependency is
-  updated to another version with this slot but with a different subslot;</li>
+<code class="docutils literal"><span class="pre">:SLOT=</span></code> 表示只有插槽‘SLOT’可以接受，并且如果相匹配的运行时依赖被更新到了该插槽的不同子插槽中，你的软件包就需要重新构建。</li>
   <li>
-<code class="docutils literal"><span class="pre">:SLOT</span></code> means that only the 'SLOT' slot is acceptable, and that changes
-  in the sub-slot can be ignored (like in previous EAPIs).</li>
+<code class="docutils literal"><span class="pre">:SLOT</span></code> 表示只有插槽‘SLOT’可以接受，并且子插槽中的变更可以忽略（如同之前的 EAPI）。</li>
   <li>
-<code class="docutils literal"><span class="pre">:SLOT/SUBSLOT</span></code> means a dependency on a specific slot and sub-slot pair,
-  which can be useful for packages installing pre-built binaries that require a
-  library with a particular soname version corresponding to the sub-slot.</li>
+<code class="docutils literal"><span class="pre">:SLOT/SUBSLOT</span></code> 表示特定插槽和子插槽中的依赖，一些预编译二进制文件需要对应子插槽中带有特定so名称的库，该操作符对于含有这类二进制文件的软件包十分有用。</li>
 </ul>
 
 <p>
-For example:
+例如：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">RDEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>media-libs/cogl:1.0=
@@ -398,10 +388,10 @@ For example:
 </div>
 </div>
 <div class="section">
-<h3 id="use-conditional-dependencies">USE-Conditional Dependencies</h3>
+<h3 id="use-conditional-dependencies">USE 条件依赖</h3>
 
 <p>
-To depend upon a certain package if and only if a given <code class="docutils literal"><span class="pre">USE</span></code> flag is set:
+若要在当且仅当设置了给定的 <code class="docutils literal"><span class="pre">USE</span></code> 标志时才依赖某一软件包，可以这么写：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>perl? <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> dev-lang/perl <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span>
@@ -410,22 +400,21 @@ To depend upon a certain package if and only if a given <code class="docutils li
 </span></pre>
 
 <p>
-It is also possible to depend upon a certain package if a given <code class="docutils literal"><span class="pre">USE</span></code> flag is
-<i>not</i> set:
+也可以在当且仅当给定的 <code class="docutils literal"><span class="pre">USE</span></code> 标志<i>没有</i>设置时才依赖某一软件包：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">RDEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>!crypt? <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> net-misc/netkit-rsh <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
 </span></pre>
 
 <p>
-This should <b>not</b> be used for disabling a certain <code class="docutils literal"><span class="pre">USE</span></code> flag on a given
-architecture. In order to do this, the architecture team should add the <code class="docutils literal"><span class="pre">USE</span></code>
-flag to their <code class="docutils literal"><span class="pre">use.mask</span></code> file in the <code class="docutils literal"><span class="pre">profiles/arch</span></code>
-directory of the Gentoo repository.
+这<b>不应该</b>用于在指定的架构上禁用某一 <code class="docutils literal"><span class="pre">USE</span></code>
+标志。要做到这一点，架构团队应该把 <code class="docutils literal"><span class="pre">USE</span></code>
+标志添加到 Gentoo 仓库，<code class="docutils literal"><span class="pre">profiles/arch</span></code>
+目录中的 <code class="docutils literal"><span class="pre">use.mask</span></code> 文件里。
 </p>
 
 <p>
-This can be nested:
+USE 条件依赖可以嵌套：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>!build? <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span>
@@ -448,17 +437,21 @@ This can be nested:
 
 </div>
 <div class="section">
-<h3 id="any-of-many-dependencies">Any of Many Dependencies</h3>
+<h3 id="any-of-many-dependencies">多选一依赖</h3>
 
 <p>
-To depend on either <code class="docutils literal"><span class="pre">foo</span></code> or <code class="docutils literal"><span class="pre">bar</span></code>:
+若要依赖软件包 <code class="docutils literal"><span class="pre">foo</span></code>
+或 <code class="docutils literal"><span class="pre">bar</span></code> 中的任意一个，可以这么写：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>|| <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> app-misc/foo app-misc/bar <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
 </span></pre>
 
 <p>
-To depend on either <code class="docutils literal"><span class="pre">foo</span></code> or <code class="docutils literal"><span class="pre">bar</span></code> if the <code class="docutils literal"><span class="pre">baz</span></code> <code class="docutils literal"><span class="pre">USE</span></code> flag is set:
+若要在设置了 <code class="docutils literal"><span class="pre">USE</span></code>
+标志 <code class="docutils literal"><span class="pre">baz</span></code> 时依赖软件包
+<code class="docutils literal"><span class="pre">foo</span></code> 或
+<code class="docutils literal"><span class="pre">bar</span></code> 中的任意一个，可以这么写：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>baz? <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> || <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> app-misc/foo app-misc/bar <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span> <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
