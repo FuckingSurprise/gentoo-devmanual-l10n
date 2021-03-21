@@ -457,22 +457,25 @@ USE 条件依赖可以嵌套：
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>baz? <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> || <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> app-misc/foo app-misc/bar <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span> <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
 </span></pre>
 <div class="section">
-<h4 id="any-of-many-versus-use">Any of Many Versus USE</h4>
+<h4 id="any-of-many-versus-use">多选一与 USE</h4>
 
 <p>
-Say <code class="docutils literal"><span class="pre">fnord</span></code> can be built against either <code class="docutils literal"><span class="pre">foo</span></code> or <code class="docutils literal"><span class="pre">bar</span></code>. Then a <code class="docutils literal"><span class="pre">USE</span></code>
-flag is not necessary if and only if all of the following hold:
+假设 <code class="docutils literal"><span class="pre">fnord</span></code> 可以根据
+<code class="docutils literal"><span class="pre">foo</span></code> 或
+<code class="docutils literal"><span class="pre">bar</span></code> 构建，那么如果满足以下条件的话
+<code class="docutils literal"><span class="pre">USE</span></code> 标志就显得不必要了：
 </p>
 
 <ul>
   <li>
-    <code class="docutils literal"><span class="pre">fnord</span></code> is merged on a system which has <code class="docutils literal"><span class="pre">foo</span></code> and not <code class="docutils literal"><span class="pre">bar</span></code> installed.
-    <code class="docutils literal"><span class="pre">foo</span></code> is then unmerged, and <code class="docutils literal"><span class="pre">bar</span></code> is installed. <code class="docutils literal"><span class="pre">fnord</span></code> must continue to
-    work correctly.
+    <code class="docutils literal"><span class="pre">fnord</span></code> 被安装在了一个装有 <code class="docutils literal"><span class="pre">foo</span></code>
+    而没有安装 <code class="docutils literal"><span class="pre">bar</span></code> 的系统上，然后卸载 <code class="docutils literal"><span class="pre">foo</span></code>
+    并安装 <code class="docutils literal"><span class="pre">bar</span></code>，<code class="docutils literal"><span class="pre">fnord</span></code> 一定能正常工作。
   </li>
   <li>
-    A binary package of <code class="docutils literal"><span class="pre">fnord</span></code> made on a system with <code class="docutils literal"><span class="pre">foo</span></code> and not <code class="docutils literal"><span class="pre">bar</span></code>
-    can be taken and installed on a system with <code class="docutils literal"><span class="pre">bar</span></code> and not <code class="docutils literal"><span class="pre">foo</span></code>.
+    在一个安装了 <code class="docutils literal"><span class="pre">foo</span></code> 而没有安装 <code class="docutils literal"><span class="pre">bar</span></code>
+    的系统上构建 <code class="docutils literal"><span class="pre">fnord</span></code> 的二进制包，它可以拿到一个安装了 <code class="docutils literal"><span class="pre">bar</span></code> 而没有安装
+    <code class="docutils literal"><span class="pre">foo</span></code> 的系统上安装。
   </li>
 </ul>
 
