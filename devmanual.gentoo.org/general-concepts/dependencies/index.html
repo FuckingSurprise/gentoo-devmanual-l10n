@@ -63,7 +63,7 @@
 <li><a href="../../index.html">Master Index</a></li>
 <li><a href="../index.html">General Concepts</a></li>
 </ol></div></div></div></header><main><div class="container">
-<h1 class="first-header">软件包依赖</h1>
+<h1 class="first-header">软件包依赖关系</h1>
 
 <p>
 自动解决依赖是 <code class="docutils literal"><span class="pre">emerge</span></code> 最实用的功能之一。
@@ -482,39 +482,39 @@ USE 条件依赖可以嵌套：
 </div>
 </div>
 <div class="section">
-<h3 id="built-with-use-dependencies">Built with USE Dependencies</h3>
+<h3 id="built-with-use-dependencies">USE 依赖</h3>
 
 <p>
-Available specifiers are:
+可用的说明符有这些：
 </p>
 
 <table class="table">
   <tr>
-    <th>Specifier</th>
-    <th>Meaning</th>
+    <th>说明符</th>
+    <th>含义</th>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">app-misc/foo[bar]</span></code></td>
-    <td>foo must have bar enabled.</td>
+    <td>foo 必须启用 bar</td>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">app-misc/foo[bar,baz]</span></code></td>
-    <td>foo must have both bar and baz enabled.</td>
+    <td>foo 必须同时启用 bar 和 baz</td>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">app-misc/foo[-bar,baz]</span></code></td>
-    <td>foo must have bar disabled and baz enabled.</td>
+    <td>foo 必须禁用 bar 同时启用 baz</td>
   </tr>
 </table>
 
 <p>
-There are also shortcuts for conditional situations:
+对于 USE 条件依赖的情况，还有一些快捷方式：
 </p>
 
 <table class="table">
   <tr>
-    <th>Compact form</th>
-    <th>Equivalent expanded form</th>
+    <th>紧凑格式</th>
+    <th>等价的展开格式</th>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">app-misc/foo[bar?]</span></code></td>
@@ -534,20 +534,19 @@ There are also shortcuts for conditional situations:
   </tr>
 </table>
 <div class="section">
-<h4 id="use-dependency-defaults">Use dependency defaults</h4>
+<h4 id="use-dependency-defaults">USE 依赖的默认值</h4>
 
 <p>
-If a dependency is introducing or removing a <code class="docutils literal"><span class="pre">USE</span></code> flag in a new package
-version, a <code class="docutils literal"><span class="pre">(+)</span></code> or <code class="docutils literal"><span class="pre">(-)</span></code> may be added to the use-dependency
-specification to define a default value in case the flag does not exist in the
-target package. The <code class="docutils literal"><span class="pre">(+)</span></code> indicates that the missing flag is assumed to be
-enabled, <code class="docutils literal"><span class="pre">(-)</span></code> the opposite.
+如果在软件包新版本的依赖中引入或移除了一个 <code class="docutils literal"><span class="pre">USE</span></code> 标志，可以在 USE 依赖中添加
+<code class="docutils literal"><span class="pre">(+)</span></code> 或 <code class="docutils literal"><span class="pre">(-)</span></code>
+来定义一个默认值以防万一该标志在依赖的软件包中不存在。<code class="docutils literal"><span class="pre">(+)</span></code>
+表示假定缺失的标志启用，<code class="docutils literal"><span class="pre">(-)</span></code> 则相反。
 </p>
 
 <p>
-For example, the following will treat all <code class="docutils literal"><span class="pre">boost</span></code> versions without the
-<code class="docutils literal"><span class="pre">threads</span></code> flag as having it enabled, and all <code class="docutils literal"><span class="pre">gcc</span></code> versions without
-the <code class="docutils literal"><span class="pre">openmp</span></code> as having it disabled:
+举个例子，这么写会把所有不带 <code class="docutils literal"><span class="pre">threads</span></code> 标志的
+<code class="docutils literal"><span class="pre">boost</span></code> 版本视为将该标志启用，把所有不带
+<code class="docutils literal"><span class="pre">openmp</span></code> 标志的 <code class="docutils literal"><span class="pre">gcc</span></code> 版本视为将该标志禁用：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
@@ -559,155 +558,124 @@ the <code class="docutils literal"><span class="pre">openmp</span></code> as hav
 </div>
 </div>
 <div class="section">
-<h2 id="tips-for-checking-dependencies">Tips for Checking Dependencies</h2>
+<h2 id="tips-for-checking-dependencies">检查依赖的小技巧</h2>
 
 <p>
-It is important to ensure that all the dependencies are complete for your
-package:
+确保软件包依赖的完整性是十分重要的。
 </p>
 
 <dl>
-  <dt>Look at installed binaries/libraries</dt>
+  <dt>查看已安装的二进制/库</dt>
   <dd>
-    Use a tool like <code class="docutils literal"><span class="pre">scanelf -n</span></code> (from app-misc/pax-utils) or
-    <code class="docutils literal"><span class="pre">objdump -p</span></code> (from sys-devel/binutils) to list <code class="docutils literal"><span class="pre">DT_NEEDED</span></code>
-    entries
+    使用 <code class="docutils literal"><span class="pre">scanelf -n</span></code>（在 app-misc/pax-utils 中）或
+    <code class="docutils literal"><span class="pre">objdump -p</span></code>（在 sys-devel/binutils 中）之类的命令来列出 <code class="docutils literal"><span class="pre">DT_NEEDED</span></code> 条目。
   </dd>
-  <dt>Look in <code class="docutils literal"><span class="pre">configure.ac</span></code>
+  <dt>查看 <code class="docutils literal"><span class="pre">configure.ac</span></code> 文件
 </dt>
   <dd>
-    Look for checks for packages in here. Things to look out for are pkg-config
-    checks or <code class="docutils literal"><span class="pre">AM_*</span></code> functions that check for a specific version.
+    寻找此文件中要检查的软件包。需要查看的地方是 pkg-config 检查以及那些检查特定版本的
+    <code class="docutils literal"><span class="pre">AM_*</span></code> 函数。
   </dd>
-  <dt>Look at included <code class="docutils literal"><span class="pre">.spec</span></code> files</dt>
+  <dt>查看自带的 <code class="docutils literal"><span class="pre">.spec</span></code> 文件</dt>
   <dd>
-    A good indication of dependencies is to look at the included <code class="docutils literal"><span class="pre">.spec</span></code>
-    files for relevant deps. However, do not trust them to be the definitive
-    complete list of dependencies.
+    从软件包自带的 <code class="docutils literal"><span class="pre">.spec</span></code> 文件中查找相关的依赖可以得到一个很好的指示，然而，千万别把它们当成绝对完整的依赖列表。
   </dd>
-  <dt>Look at the application/library website</dt>
+  <dt>查看应用/库的网站</dt>
   <dd>
-    Check the application website for possible dependencies that they suggest
-    are needed
+    从应用的网站上查看他们建议的依赖。
   </dd>
-  <dt>Read the <code class="docutils literal"><span class="pre">README</span></code> and <code class="docutils literal"><span class="pre">INSTALL</span></code> for the package</dt>
+  <dt>阅读软件包的 <code class="docutils literal"><span class="pre">README</span></code> 和 <code class="docutils literal"><span class="pre">INSTALL</span></code></dt>
   <dd>
-    They usually also contain useful information about building and installing
-    packages
+    这两个文件通常包含关于软件编译和安装的有用信息。
   </dd>
   <dt>
-    Remember non-binary dependencies such as pkg-config, doc generation
-    programs, etc.
+    切记非二进制依赖，例如 pkg-config，文档生成工具等
   </dt>
   <dd>
-    Usually the build process requires some dependencies such as intltool,
-    libtool, pkg-config, doxygen, scrollkeeper, gtk-doc, etc. Make sure those
-    are clearly stated.
+    一般在软件构建过程中会依赖一些工具如 intltool、libtool、pkg-config、doxygen、scrollkeeper、gtk-doc等。确保这些东西都写清楚。
   </dd>
 </dl>
 
 </div>
 <div class="section">
-<h2 id="implicit-system-dependency">Implicit System Dependency</h2>
+<h2 id="implicit-system-dependency">隐式系统依赖</h2>
 
 <p>
-All packages have an implicit compile-time and runtime dependency upon the
-entire <code class="docutils literal"><span class="pre">@system</span></code> set. It is therefore not necessary, nor advisable, to
-specify dependencies upon toolchain packages like <code class="docutils literal"><span class="pre">gcc</span></code>, <code class="docutils literal"><span class="pre">libc</span></code> and
-so on, except where specific versions or packages (for example, <code class="docutils literal"><span class="pre">glibc</span></code>
-over <code class="docutils literal"><span class="pre">uclibc</span></code>) are required. Note that this rule also needs consideration
-for packages like <code class="docutils literal"><span class="pre">flex</span></code>, <code class="docutils literal"><span class="pre">zlib</span></code> and <code class="docutils literal"><span class="pre">libtool</span></code>, which aren't in
-the <code class="docutils literal"><span class="pre">@system</span></code> set for every profile. For example, the embedded profile
-doesn't have <code class="docutils literal"><span class="pre">zlib</span></code> in <code class="docutils literal"><span class="pre">@system</span></code>, the <code class="docutils literal"><span class="pre">libtool</span></code> ABI might
-change and break building order and <code class="docutils literal"><span class="pre">flex</span></code> might get removed from the
-<code class="docutils literal"><span class="pre">@system</span></code> set in future.
+所有软件包都在编译时和运行时隐式依赖整个 <code class="docutils literal"><span class="pre">@system</span></code>
+集合，因此，除非需要特定的版本或软件包（比如，在 <code class="docutils literal"><span class="pre">uclibc</span></code>
+上使用 <code class="docutils literal"><span class="pre">glibc</span></code>），否则没有必要，也不建议依赖如
+<code class="docutils literal"><span class="pre">gcc</span></code>，<code class="docutils literal"><span class="pre">libc</span></code>
+等软件包。注意这条规则也需要考虑不是每一个配置文件中都在 <code class="docutils literal"><span class="pre">@system</span></code>
+集合中的 <code class="docutils literal"><span class="pre">flex</span></code>，<code class="docutils literal"><span class="pre">zlib</span></code>，<code class="docutils literal"><span class="pre">libtool</span></code>
+等软件包。举个例子，嵌入式配置文件的 <code class="docutils literal"><span class="pre">@system</span></code> 集合中就没有
+<code class="docutils literal"><span class="pre">zlib</span></code>，<code class="docutils literal"><span class="pre">libtool</span></code>
+ABI 可能会更改或破坏构建顺序，而且将来 <code class="docutils literal"><span class="pre">flex</span></code> 可能会从 <code class="docutils literal"><span class="pre">@system</span></code> 集合中移除。
 </p>
 
 <p>
-However, packages which are included in the <code class="docutils literal"><span class="pre">@system</span></code> set, or are
-dependencies of <code class="docutils literal"><span class="pre">@system</span></code> set packages, should generally include
-a complete dependency list (excluding bootstrap packages). This makes
-<code class="docutils literal"><span class="pre">emerge -e @system</span></code> possible when installing from a stage 1 or stage 2
-tarball.
+然而，不管是 <code class="docutils literal"><span class="pre">@system</span></code> 集合中的软件包，还是 <code class="docutils literal"><span class="pre">@system</span></code>
+集合中软件包的依赖，一般都要纳入完整的依赖关系列表（不包括引导软件包）。这使得在用 stage 1 或 stage 2 压缩包安装的系统上
+<code class="docutils literal"><span class="pre">emerge -e @system</span></code> 成为可能。
 </p>
 
 </div>
 <div class="section">
-<h2 id="test-dependencies">Test Dependencies</h2>
+<h2 id="test-dependencies">测试依赖</h2>
 
 <p>
-Packages often have optional dependencies that are needed only when running
-tests. These should be specified in DEPEND behind a USE flag. Often, the
-'test' USE flag is used for this purpose.
+软件包通常会有一些只有在测试时才会用到的可选依赖。这些依赖应该在 DEPEND 中一个 USE 标志的后边指定 —— 一般情况下都用‘test’。
 </p>
 
 <p>
-Since testing will likely fail when test dependencies are not installed, the
-test phase should be disabled in this case. This may be accomplished via USE
-conditionals in the RESTRICT variable.
+由于当测试依赖没有安装时测试极有可能失败，所以在这种情况下应该禁用 test 段。这可以通过在 RESTRICT 变量中写 USE 条件来完成。
 </p>
 
 <p>
-If other optional features must be enabled/disabled when testing, REQUIRED_USE
-may be set to express this.
+如果测试时必须启用/禁用其他可选功能，可以写在 REQUIRED_USE 里。
 </p>
 
-<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Define</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">some</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">USE</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">flags</span>
+<pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"># 定义一些 USE 标志</span>
 <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">IUSE</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>debug test<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
 
-<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Require</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">debug</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">support</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">when</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">tests</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">are</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">enabled</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Comment"># 启用测试需要 debug 支持</span>
 <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">REQUIRED_USE</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>test? <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> debug <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
 
-<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Disable</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">test</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">phase</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">when</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">test</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">USE</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">flag</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">is</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">disabled</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Comment"># 当 USE 标志 test 禁用时禁用 test 段</span>
 <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">RESTRICT</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>!test? <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> test <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
 
-<span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">Running</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">tests</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">requires</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">'foo'</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">to</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">be</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">installed</span>
+<span xmlns="http://www.w3.org/1999/xhtml" class="Comment"># 运行测试需要安装‘foo’</span>
 <span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">DEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>test? <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">(</span> dev-util/foo <span xmlns="http://www.w3.org/1999/xhtml" class="PreProc">)</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
 </span></pre>
 
 </div>
 <div class="section">
-<h2 id="circular-dependencies">Circular Dependencies</h2>
+<h2 id="circular-dependencies">环形依赖</h2>
 
 <p>
-Circular dependencies occur if one or more of package's (possibly indirect)
-dependencies depend on the package itself. This creates a dependency cycle where
-each of the packages must technically be installed before the other.
-For example, if package A depends on B, B depends on C and C depends on A, then
-the package manager cannot install A before C, and C before A.
+如果一个软件包（可能不是直接）依赖自身，就会出现环形依赖。这会产生一个依赖环，上面的每一个软件包在技术上必须在另一个软件包之前安装。
+比如说，如果 A 依赖 B，B 依赖 C，C 又依赖 A，那么包管理器就不能在 C 之前安装 A，也不能在 A 之前安装 C。
 </p>
 
 <p>
-There are three kinds of circular dependencies:
+环形依赖分为以下三种：
 </p>
 
 <ol>
   <li>
-    Circular dependencies that occur if only one of the packages strictly needs
-    to be installed before the other. For example, <code class="docutils literal"><span class="pre">dev-python/certifi</span></code>
-    strictly requires <code class="docutils literal"><span class="pre">dev-python/setuptools</span></code> to build but the latter
-    package requires the former for some runtime functionality. As a result,
-    <code class="docutils literal"><span class="pre">dev-python/certifi</span></code> can be installed later than the other package.
-    <code class="docutils literal"><span class="pre">PDEPEND</span></code> is used to express this and automatically resolve
-    the circular dependency.
+    只有一个软件包被严格要求在其他软件包之前安装的环形依赖。例如 <code class="docutils literal"><span class="pre">dev-python/certifi</span></code> 的编译严格依赖
+    <code class="docutils literal"><span class="pre">dev-python/setuptools</span></code>，但是后者又需要前者来实现一些运行时功能。因此，<code class="docutils literal"><span class="pre">dev-python/certifi</span></code>
+    可以在其他软件包之后安装。<code class="docutils literal"><span class="pre">PDEPEND</span></code> 用来表示这种依赖关系以及自动解决环形依赖。
   </li>
 
   <li>
-    Circular dependencies that occur if the cycle applies only to some
-    combination of USE flags on one of the packages. For example, running tests
-    in <code class="docutils literal"><span class="pre">dev-python/setuptools</span></code> requires a number of packages which require
-    <code class="docutils literal"><span class="pre">dev-python/setuptools</span></code> to be installed first. This kind of circular
-    dependency can be resolved by the user by adjusting USE flags on one
-    of the packages, e.g. by disabling tests on <code class="docutils literal"><span class="pre">dev-python/setuptools</span></code>,
-    and reenabling them once the dependency is initially installed.
+    仅由一个软件包的某些 USE 标志的组合造成的环形依赖。例如 <code class="docutils literal"><span class="pre">dev-python/setuptools</span></code> 运行测试需要安装许多要求
+    <code class="docutils literal"><span class="pre">dev-python/setuptools</span></code> 先安装的软件包。这类环形依赖用户可以通过调整其中一个软件包的 USE 标志来解决，比如先禁用
+    <code class="docutils literal"><span class="pre">dev-python/setuptools</span></code> 的测试，等依赖包都装好之后在重新启用。
   </li>
 
   <li>
-    Circular dependencies that cannot be resolved using the regular means.
-    For example, <code class="docutils literal"><span class="pre">dev-util/cmake</span></code> used to depend
-    on <code class="docutils literal"><span class="pre">dev-libs/jsoncpp</span></code>, while the latter package used the former
-    to build. Resolving this kind of dependency usually requires bundling one
-    of the dependencies conditionally, or providing an alternate bootstrap path.
+    无法用常规手段解决的环形依赖。例如 <code class="docutils literal"><span class="pre">dev-util/cmake</span></code> 曾经依赖
+    <code class="docutils literal"><span class="pre">dev-libs/jsoncpp</span></code>，而后者又是用前者构建出来的。解决这种依赖通常需要有条件地绑定其中一个依赖，或者提供一个备用的引导路径。
   </li>
 </ol>
 
