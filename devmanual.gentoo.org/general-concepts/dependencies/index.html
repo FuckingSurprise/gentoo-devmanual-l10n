@@ -242,41 +242,32 @@ while in general case <code class="docutils literal"><span class="pre">RDEPEND</
 
 </div>
 <div class="section">
-<h4 id="blockers">Blockers</h4>
+<h4 id="blockers">阻塞符</h4>
 
 <p>
-When two packages (package slots, versions) can not be installed
-simultaneously, blockers can be used to expose such a conflict
-to the package manager.
+当两个软件包（不同插槽，版本）无法同时安装时，阻塞符可以将此冲突暴露给包管理器。
 </p>
 
 <p>
-There are two kinds of blockers: <i>weak blockers</i> and <i>strong
-blockers</i>.
+阻塞符有两种：<i>弱阻塞符</i>和<i>强阻塞符</i>。
 </p>
 
 <p>
-A weak blocker is defined using the following syntax:
+弱阻塞符由如下语法定义：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">RDEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>!app-misc/foo<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
 </span></pre>
 
 <p>
-The package manager will try to resolve this conflict automatically.
-The package blocked by a weak blocker can be uninstalled <i>after</i>
-installing the package blocking it. However, it exempts the common
-files from file collision checks. Weak blockers are usually used
-to solve file collisions between packages and are meaningful only
-in <code class="docutils literal"><span class="pre">RDEPEND</span></code>.
+包管理器会尝试自动解决这种冲突。被弱阻塞符阻塞的软件包可以在安装了阻塞它的软件包<i>之后</i>卸载。
+然而，这会使2个软件包的共有文件免于文件碰撞检查。弱阻塞符通常用来解决软件包之间的文件碰撞，且只有在
+<code class="docutils literal"><span class="pre">RDEPEND</span></code> 中才有意义。
 </p>
 
 <p>
-More specifically, installation of the newer package may overwrite any
-colliding files that belong to the older package that is explicitly blocked.
-When such file collisions occur, the colliding files cease to belong to the
-older package, and they remain installed after the older package is eventually
-uninstalled. The older package is uninstalled only after any newer blocking
+更具体的说，安装新软件包可能会覆盖任何被阻塞的旧包中那些有碰撞的文件。当发生这种文件碰撞时，有碰撞的文件便不再属于旧软件包，并且旧软件包卸载时会保留这些文件。
+The older package is uninstalled only after any newer blocking
 packages have been merged on top of it.
 </p>
 
@@ -289,10 +280,7 @@ weak blockers in <code class="docutils literal"><span class="pre">RDEPEND</span>
 </div>
 
 <p>
-If it is strictly necessary to resolve the blocker before the package
-is built (installed), a strong blocker must be used instead. In this case,
-temporary simultaneous installation of the conflicting packages is not allowed.
-Strong blockers are expressed using the following syntax:
+如果有必要在软件包构建（安装）时就解决冲突，那么就必须改用强阻塞符。在这种情况下，不允许临时共存有冲突的软件包。强阻塞符的语法如下：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Identifier">RDEPEND</span><span xmlns="http://www.w3.org/1999/xhtml" class="Constant">=</span><span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>!!app-misc/foo<span xmlns="http://www.w3.org/1999/xhtml" class="Statement">"</span>
