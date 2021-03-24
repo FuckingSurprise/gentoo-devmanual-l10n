@@ -54,72 +54,53 @@
 <li><a href="../../index.html">Master Index</a></li>
 <li><a href="../index.html">General Concepts</a></li>
 </ol></div></div></div></header><main><div class="container">
-<h1 class="first-header">Ebuild Revisions</h1>
+<h1 class="first-header">Ebuild 修订</h1>
 <p>
-Ebuilds may have a Gentoo revision number associated with them. This is a
-<code class="docutils literal"><span class="pre">-rX</span></code> suffix, where <code class="docutils literal"><span class="pre">X</span></code> is an integer — see <a class="" href="../../ebuild-writing/file-format/index.html#file-naming-rules">File Naming Rules</a>. This
-component must only be used for Gentoo changes, not upstream releases.
-An ebuild with no explicit revision number has the implicit <code class="docutils literal"><span class="pre">-r0</span></code>
-revision.
+Ebuild 可能具有与之关联的 Gentoo 修订号。这是一个 <code class="docutils literal"><span class="pre">-rX</span></code>
+后缀，其中 <code class="docutils literal"><span class="pre">X</span></code> 是一个整数 —— 参阅
+<a class="" href="../../ebuild-writing/file-format/index.html#file-naming-rules">File Naming Rules</a>。该组件只能用于 Gentoo 更改，不能用于上游发行版。
+没有显式修订号的 ebuild 具有隐式的 <code class="docutils literal"><span class="pre">-r0</span></code> 修订号。
 </p>
 
-<p>Ebuild revisions usually serve two purposes:</p>
+<p>Ebuild 修订通常有两个目的：</p>
 <ol>
   <li>
-    keeping an older copy of an ebuild around when doing a potentially
-    breaking change, and
+    当作出有潜在破坏性更改的时候保留旧版本的 ebuild。
   </li>
 
   <li>
-    propagating the rebuild of a package when performing a meaningful
-    change that would otherwise go unnoticed by users who have installed
-    the current version already.
+    当作出有意义的更改时传播新版本的软件包，不然的话已经安装了当前版本的用户将不会注意到此更改。
   </li>
 </ol>
 
 <p>
-Developers are encouraged to use common sense when determining
-whether to introduce a new <code class="docutils literal"><span class="pre">-rX</span></code> revision. The following rule
-of thumb could be used as a guideline:
+一般鼓励开发人员用常识去决定是否引入一个新的 <code class="docutils literal"><span class="pre">-rX</span></code>
+修订，以下经验法则可以作为指导原则：
 </p>
 <ol>
   <li>
-    If the change can cause the package to be broken to the point
-    of requiring users to revert to the previous version (in the case
-    of packages marked stable, every non-trivial change is classified
-    as such), then a new revision should be introduced and the old one
-    kept. If the package has stable keywords, the new revision should
-    be dropped to <code class="docutils literal"><span class="pre">~arch</span></code> (see
-    <a class="" href="../../keywording/index.html#keywording-on-upgrades">Keywording on Upgrades</a>).
-    For any such revision bump, the new ebuild should be based
-    on the previous revision to ensure that fixes aren't dropped
-    accidentally.
+    如果更改可能导致软件包被破坏到要求用户还原到先前版本的程度（在软件包标记为稳定的情况下，每一个重大更改都归为此类），那么就要引入一个新的修订并保留旧的。
+    如果软件包带有 stable 关键字，则应将新修订版降至 <code class="docutils literal"><span class="pre">~arch</span></code>（参阅
+    <a class="" href="../../keywording/index.html#keywording-on-upgrades">Keywording on Upgrades</a>）。对于任何此类修订，新的 ebuild 应该基于先前的修订，以确保所做的修复工作不会被意外丢弃。
   </li>
 
   <li>
-    If the change makes a substantial difference to the user who already
-    installed the package (fixes runtime issues, changes installed files,
-    etc.) and it would not be propagated using other means, then
-    the ebuild should be renamed to a new revision. If the package has
-    stable keywords, they should be moved to the new revision without
-    dropping. To commit the ebuild, <code class="docutils literal"><span class="pre">repoman commit
-    --straight-to-stable</span></code> option should be used.
+    如果更改对已经安装了软件包的用户产生了重大影响（修复运行时问题，文件变更等）且不会以其他方式传播，则应将 ebuild 重命名为一个新的修订版。
+    如果软件包带有 stable 关键字，则应将其移至新修订版而不是删除。要提交 ebuild，应该使用 <code class="docutils literal"><span class="pre">repoman commit --straight-to-stable</span></code>。
   </li>
 
   <li>
-    Otherwise, the change can be done in place in the current revision
-    of the ebuild.
+    其他情况下，更改可以放在当前修订版中完成。
   </li>
 </ol>
 
-<p>Examples of changes that warrant a new revision are:</p>
+<p>需要引入新修订版的更改示例：</p>
 <ul>
-  <li>adding a patch to fix a runtime issue,</li>
-  <li>installing additional files that could be useful to the user,</li>
+  <li>添加一个用来修复运行时问题的补丁</li>
+  <li>额外安装可能会对用户有用的文件</li>
   <li>adding a missing runtime dependency to one of the existing blocks,</li>
   <li>
-    adding a missing build-time dependency that contributed to
-    a successfully yet incorrect build (e.g. missing some feature),
+    添加一个缺失的编译时依赖从而导致编译成功但不正常（比如缺少某个功能）。
   </li>
   <li>
     restricting a runtime dependency version, unless the <code class="docutils literal"><span class="pre">:=</span></code>
@@ -127,7 +108,7 @@ of thumb could be used as a guideline:
   </li>
 </ul>
 
-<p>Examples of changes that can be done without a revision bump are:</p>
+<p>不需要引入新修订版的更改示例：</p>
 <ul>
   <li>
     adding a patch to fix a build-time issue that prevented users from
