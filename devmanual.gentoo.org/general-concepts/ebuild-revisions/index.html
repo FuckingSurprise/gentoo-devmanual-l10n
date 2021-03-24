@@ -100,22 +100,19 @@ Ebuild 可能具有与之关联的 Gentoo 修订号。这是一个 <code class="
   <li>额外安装可能会对用户有用的文件</li>
   <li>adding a missing runtime dependency to one of the existing blocks,</li>
   <li>
-    添加一个缺失的编译时依赖从而导致编译成功但不正常（比如缺少某个功能）。
+    添加一个缺失的编译时依赖从而导致编译成功但不正常（比如缺少某个功能）
   </li>
   <li>
-    restricting a runtime dependency version, unless the <code class="docutils literal"><span class="pre">:=</span></code>
-    subslot operator is going to trigger a rebuild.
+    限制一个运行时依赖的版本，除非 <code class="docutils literal"><span class="pre">:=</span></code> 子插槽操作符会触发重新编译
   </li>
 </ul>
 
 <p>不需要引入新修订版的更改示例：</p>
 <ul>
   <li>
-    adding a patch to fix a build-time issue that prevented users from
-    building the package (since it does not affect users who already
-    managed to build it),
+    添加一个补丁，解决了让用户编译不了的编译问题（不影响已经完成编译的用户）
   </li>
-  <li>adding a trivial documentation fix,</li>
+  <li>作了一处无关紧要的文档修复</li>
   <li>
     installing an additional file of relatively little value (minor
     documentation, editor syntax file, bash completion) compared
@@ -123,18 +120,16 @@ Ebuild 可能具有与之关联的 Gentoo 修订号。这是一个 <code class="
     is expected soon),
   </li>
   <li>
-    adding a missing build-time dependency that caused a build failure,
+    添加一个导致了编译失败的编译时依赖
   </li>
   <li>
-    adding a new USE flag or removing an existing one (since change
-    in USE flags is going to trigger <code class="docutils literal"><span class="pre">--changed-use</span></code> rebuild),
+    添加或移除一个 USE 标志（因为 USE 标志的改变会触发 <code class="docutils literal"><span class="pre">--changed-use</span></code> 重编译）
   </li>
   <li>
-    a trivial stylistic / ebuild code change (as long as the new code
-    is equivalent to the old code),
+    一处无伤大雅的 ebuild 代码风格的改变（只要新代码和旧代码等价）
   </li>
   <li>
-    a dependency change that is a result of a package move (slot move).
+    一处导致了一个软件包移动（换插槽）的依赖变更
   </li>
 </ul>
 
