@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Filesystem – Gentoo Development Guide</title>
+<title>文件系统 – Gentoo 开发指南</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
 <link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -56,26 +56,26 @@
 <li><a href="../../index.html">Master Index</a></li>
 <li><a href="../index.html">General Concepts</a></li>
 </ol></div></div></div></header><main><div class="container">
-<h1 class="first-header">Filesystem</h1>
+<h1 class="first-header">文件系统</h1>
 <p>
-The basic filesystem layout and purpose is as follows:
+文件系统的基本布局和用途如下：
 </p>
 
 <ul>
   <li>
-<code class="docutils literal"><span class="pre">/bin</span></code>: Boot-critical applications</li>
+<code class="docutils literal"><span class="pre">/bin</span></code>：基本命令的二进制文件</li>
   <li>
-<code class="docutils literal"><span class="pre">/etc</span></code>: System administrator controlled configuration files</li>
+<code class="docutils literal"><span class="pre">/etc</span></code>：由系统管理员控制的配置文件</li>
   <li>
-<code class="docutils literal"><span class="pre">/lib</span></code>: Boot-critical libraries</li>
+<code class="docutils literal"><span class="pre">/lib</span></code>：基本的共享库与内核模块</li>
   <li>
-<code class="docutils literal"><span class="pre">/opt</span></code>: Non-standard layout applications</li>
+<code class="docutils literal"><span class="pre">/opt</span></code>：非标准布局的应用</li>
   <li>
 <code class="docutils literal"><span class="pre">/sbin</span></code>: System administrator boot-critical applications</li>
   <li>
-<code class="docutils literal"><span class="pre">/tmp</span></code>: Temporary data</li>
+<code class="docutils literal"><span class="pre">/tmp</span></code>：临时数据</li>
   <li>
-<code class="docutils literal"><span class="pre">/usr</span></code>: General applications
+<code class="docutils literal"><span class="pre">/usr</span></code>：一般应用
     <ul>
     <li>
 <code class="docutils literal"><span class="pre">/usr/bin</span></code>: Applications</li>
