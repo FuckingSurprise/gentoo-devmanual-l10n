@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Emerge and Ebuild Relationships – Gentoo Development Guide</title>
+<title>Emerge 和 Ebuild 的关系 – Gentoo 开发指南</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
 <link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -54,19 +54,20 @@
 <li><a href="../../index.html">Master Index</a></li>
 <li><a href="../index.html">General Concepts</a></li>
 </ol></div></div></div></header><main><div class="container">
-<h1 class="first-header">Emerge and Ebuild Relationships</h1>
+<h1 class="first-header">Emerge 和 Ebuild 的关系</h1>
 
 <div class="figure"><div class="image"><img alt="How emerge, ebuild and foo.ebuild interact" src="diagram.png"></div></div>
 
 <p>
-The <code class="docutils literal"><span class="pre">emerge</span></code> program is a high level wrapper for <code class="docutils literal"><span class="pre">ebuild.sh</span></code> that handles
-dependency tracking, safe installs and uninstalls and so on. <code class="docutils literal"><span class="pre">emerge</span></code> calls
-<code class="docutils literal"><span class="pre">ebuild.sh</span></code> during the build process, which in turn handles the ebuild file
-and any eclasses. The <code class="docutils literal"><span class="pre">${D}</span></code> to <code class="docutils literal"><span class="pre">${ROOT}</span></code> install is handled by <code class="docutils literal"><span class="pre">emerge</span></code>.
+<code class="docutils literal"><span class="pre">emerge</span></code> 程序是用于处理依赖，安全地安装或卸载软件包的
+<code class="docutils literal"><span class="pre">ebuild.sh</span></code> 脚本的高级封装。在软件包构建过程中
+<code class="docutils literal"><span class="pre">emerge</span></code> 调用 <code class="docutils literal"><span class="pre">ebuild.sh</span></code>
+来处理 ebuild 文件和 eclasse。从 <code class="docutils literal"><span class="pre">${D}</span></code> 到
+<code class="docutils literal"><span class="pre">${ROOT}</span></code> 的安装由 <code class="docutils literal"><span class="pre">emerge</span></code> 执行。
 </p>
 
 <div class="alert alert-info" role="alert">
-<strong>Todo:</strong>https://dev.gentoo.org/~g2boojum/portage.html</div>
+<strong>待办：</strong>https://dev.gentoo.org/~g2boojum/portage.html</div>
 
 
 </div></main><footer><div class="container">
