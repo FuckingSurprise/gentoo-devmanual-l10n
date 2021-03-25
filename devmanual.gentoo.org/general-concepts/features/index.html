@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>FEATURES – Gentoo Development Guide</title>
+<title>FEATURES 变量 – Gentoo 开发指南</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
 <link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -54,59 +54,56 @@
 <li><a href="../../index.html">Master Index</a></li>
 <li><a href="../index.html">General Concepts</a></li>
 </ol></div></div></div></header><main><div class="container">
-<h1 class="first-header">FEATURES</h1>
+<h1 class="first-header">FEATURES 变量</h1>
 <p>
-The <code class="docutils literal"><span class="pre">FEATURES</span></code> variable specifies options which affect how Portage operates
-and how packages are compiled. It is <b>not</b> used for settings which have a
-substantial effect upon the resulting generated package.
+<code class="docutils literal"><span class="pre">FEATURES</span></code> 变量用来指定那些影响 Portage 操作和软件包编译的选项。
+<b>请勿</b>用它来做一些对软件包生成有重大影响的设置。
 </p>
 
 <p>
-Relevant <code class="docutils literal"><span class="pre">FEATURES</span></code> for developers include:
+开发相关的 <code class="docutils literal"><span class="pre">FEATURES</span></code> 选项包括：
 </p>
 
 <table class="table">
   <tr>
-    <th>Feature</th>
-    <th>Explanation</th>
+    <th>选项</th>
+    <th>含义</th>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">collision-protect</span></code></td>
     <td>
-      Raise an error if an installing package attempts to overwrite a file which
-      is provided by a different package.
+      如果正在安装的软件包尝试覆盖一个别的软件包提供的文件，就产生一个错误。
     </td>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">noauto</span></code></td>
-    <td>When utilizing <code class="docutils literal"><span class="pre">ebuild</span></code>, only run the function requested.</td>
+    <td>利用 <code class="docutils literal"><span class="pre">ebuild</span></code> 时只运行请求的函数。</td>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">sandbox</span></code></td>
-    <td>Enable the sandbox.</td>
+    <td>启用沙盒。</td>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">sign</span></code></td>
-    <td>GPG sign <code class="docutils literal"><span class="pre">Manifest</span></code> files.</td>
+    <td>对 <code class="docutils literal"><span class="pre">Manifest</span></code> 文件进行 GPG 签名。</td>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">strict</span></code></td>
     <td>
-      Do some extra checks for potentially dangerous situations (eg missing
-      <code class="docutils literal"><span class="pre">Manifest</span></code> files).
+      对潜在的危险情况（比如丢失 <code class="docutils literal"><span class="pre">Manifest</span></code> 文件）做一些额外的检查。
     </td>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">test</span></code></td>
-    <td>Enable the <code class="docutils literal"><span class="pre">src_test</span></code> phase.</td>
+    <td>启用 <code class="docutils literal"><span class="pre">src_test</span></code> 段。</td>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">userpriv</span></code></td>
-    <td>Drop to non-root privileges for certain phases.</td>
+    <td>降到非 root 权限执行某个段。</td>
   </tr>
   <tr>
     <td><code class="docutils literal"><span class="pre">usersandbox</span></code></td>
-    <td>Enables the sandbox even when running non-privileged.</td>
+    <td>即使以非特权运行也启用沙箱。</td>
   </tr>
 </table>
 
