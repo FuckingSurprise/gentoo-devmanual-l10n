@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Git to RSYNC – Gentoo Development Guide</title>
+<title>从 Git 到 RSYNC – Gentoo 开发指南</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
 <link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -54,39 +54,37 @@
 <li><a href="../../index.html">Master Index</a></li>
 <li><a href="../index.html">General Concepts</a></li>
 </ol></div></div></div></header><main><div class="container">
-<h1 class="first-header">Git to RSYNC</h1>
+<h1 class="first-header">从 Git 到 RSYNC</h1>
 
 <p>
-  Changes made to the tree are propagated to the users in stages:
+  对源码树所做的更改将分以下几个阶段传播给用户：
 </p>
 
 <ul>
   <li>
-    Developer commits to local Git clone and pushes to central remote
-    Git repository. Commits and pushes are signed using Git
-    mechanisms based on GPG.
+    开发者提交代码到本地 Git 仓库，然后推送到远程的中心 Git 仓库。提交和推送都用基于 GPG 的 Git 机制进行签名。
   </li>
   <li>
-    Staging box syncs from central Git repository, generates the metadata cache, ChangeLogs and signed Manifests from Git history.
+    暂存器从中心 Git 仓库同步，从 Git 历史记录中生成元数据、变更日志以及签名清单。
   </li>
   <li>
-    <code class="docutils literal"><span class="pre">rsync1</span></code> syncs from the staging box.
+    <code class="docutils literal"><span class="pre">rsync1</span></code> 从暂存器中同步。
   </li>
   <li>
-    Public rsync servers sync from <code class="docutils literal"><span class="pre">rsync1</span></code>.
+    公共 rsync 服务器从 <code class="docutils literal"><span class="pre">rsync1</span></code>中同步。
   </li>
   <li>
-    Users sync from the public rsync servers.
+    用户从公共 rsync 服务器中同步。
   </li>
 </ul>
 
 <div class="figure">
 <div class="image"><img alt="Git to RSYNC Propagation" src="diagram.png"></div>
-<p class="caption">Diagram showing Git to RSYNC Propagation</p>
+<p class="caption">从 Git 到 RSYNC 的传播示意图</p>
 </div>
 
 <p>
-  The <code class="docutils literal"><span class="pre">emerge-websync</span></code> snapshot is made daily from the staging box.
+  <code class="docutils literal"><span class="pre">emerge-websync</span></code> 快照每天都会在暂存器中制作。
 </p>
 
 
