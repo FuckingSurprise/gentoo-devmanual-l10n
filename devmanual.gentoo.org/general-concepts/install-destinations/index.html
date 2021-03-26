@@ -57,24 +57,23 @@
 <h1 class="first-header">Install Destinations</h1>
 
 <p>
-When an ebuild runs the <code class="docutils literal"><span class="pre">src_install</span></code> phase, it installs an image of the
-package in question from <code class="docutils literal"><span class="pre">${S}</span></code> into <code class="docutils literal"><span class="pre">${D}</span></code>. Ebuilds must <i>not</i> attempt to
-perform any operation upon the live filesystem at this stage — this will break
-binaries, and will (often) cause a sandbox violation notice.
+当执行一个 ebuild 的 <code class="docutils literal"><span class="pre">src_install</span></code>
+段，它就会从 <code class="docutils literal"><span class="pre">${S}</span></code> 安装软件包的镜像到
+<code class="docutils literal"><span class="pre">${D}</span></code>。ebuild 在此阶段<i>不得</i>尝试对正在使用的文件系统做任何操作 ——
+这会破坏二进制文件，而且（通常）还会造成沙箱违规操作。
 </p>
 
 <p>
-When installing, Portage will install the image in <code class="docutils literal"><span class="pre">${D}</span></code> into <code class="docutils literal"><span class="pre">${ROOT}</span></code>. By
-default, <code class="docutils literal"><span class="pre">${ROOT}</span></code> points to <code class="docutils literal"><span class="pre">/</span></code>, although the user can alter this — for
-example, the user may be building a minimal image for another system in a
-different location. If your package must operate on the live filesystem (for
-example, to create some cache files during <code class="docutils literal"><span class="pre">pkg_postinst</span></code>), you must ensure
-that you prefix any paths with <code class="docutils literal"><span class="pre">${ROOT}</span></code>.
+在执行安装的时候，Portage 会将 <code class="docutils literal"><span class="pre">${D}</span></code> 中的镜像安装到
+<code class="docutils literal"><span class="pre">${ROOT}</span></code>。默认情况下，<code class="docutils literal"><span class="pre">${ROOT}</span></code>
+指向 <code class="docutils literal"><span class="pre">/</span></code>，尽管用户可以更改它 ——
+比如，用户可能在别的目录下构建一个用于其他系统的最小镜像。如果你的软件包必须要操作正在使用的文件系统（比如在
+<code class="docutils literal"><span class="pre">pkg_postinst</span></code> 中创建一些缓存文件），那么你必须确保你在任何目录前都加了前缀 <code class="docutils literal"><span class="pre">${ROOT}</span></code>。
 </p>
 
 <p>
-When inside <code class="docutils literal"><span class="pre">pkg_preinst</span></code>, the image to be installed can be accessed under
-<code class="docutils literal"><span class="pre">"${D}"</span></code>.
+在 <code class="docutils literal"><span class="pre">pkg_preinst</span></code>中，将要被安装的镜像可以在
+<code class="docutils literal"><span class="pre">"${D}"</span></code> 下访问。
 </p>
 
 
