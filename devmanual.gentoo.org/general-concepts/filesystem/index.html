@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>文件系统 – Gentoo 开发指南</title>
@@ -58,7 +58,7 @@
 </ol></div></div></div></header><main><div class="container">
 <h1 class="first-header">文件系统</h1>
 <p>
-文件系统的基本布局和用途如下：
+文件系统的基本布局和存储用途如下：
 </p>
 
 <ul>
@@ -71,77 +71,71 @@
   <li>
 <code class="docutils literal"><span class="pre">/opt</span></code>：非标准布局的应用</li>
   <li>
-<code class="docutils literal"><span class="pre">/sbin</span></code>: System administrator boot-critical applications</li>
+<code class="docutils literal"><span class="pre">/sbin</span></code>：系统管理员命令的二进制文件</li>
   <li>
 <code class="docutils literal"><span class="pre">/tmp</span></code>：临时数据</li>
   <li>
 <code class="docutils literal"><span class="pre">/usr</span></code>：一般应用
     <ul>
     <li>
-<code class="docutils literal"><span class="pre">/usr/bin</span></code>: Applications</li>
+<code class="docutils literal"><span class="pre">/usr/bin</span></code>：用户命令的二进制文件</li>
     <li>
-<code class="docutils literal"><span class="pre">/usr/lib</span></code>: Libraries</li>
+<code class="docutils literal"><span class="pre">/usr/lib</span></code>：库文件</li>
     <li>
-<code class="docutils literal"><span class="pre">/usr/local</span></code>: Non-portage applications. <b>Ebuilds must not install here</b>.</li>
+<code class="docutils literal"><span class="pre">/usr/local</span></code>：非 portage 应用，<b>ebuild 不得在此处安装</b></li>
     <li>
-<code class="docutils literal"><span class="pre">/usr/sbin</span></code>: Non-system-critical system administrator applications</li>
+<code class="docutils literal"><span class="pre">/usr/sbin</span></code>：非关键的系统管理员命令的二进制文件</li>
     <li>
-<code class="docutils literal"><span class="pre">/usr/share</span></code>: Architecture independent application data and documentation</li>
+<code class="docutils literal"><span class="pre">/usr/share</span></code>：架构无关的应用数据和文档</li>
     </ul>
   </li>
   <li>
-<code class="docutils literal"><span class="pre">/var</span></code>: Program generated data
+<code class="docutils literal"><span class="pre">/var</span></code>：程序生成的数据
     <ul>
     <li>
-<code class="docutils literal"><span class="pre">/var/cache</span></code>: Long term data which can be regenerated</li>
+<code class="docutils literal"><span class="pre">/var/cache</span></code>：可重新生成的长期数据</li>
     <li>
-<code class="docutils literal"><span class="pre">/var/lib</span></code>: General application generated data</li>
+<code class="docutils literal"><span class="pre">/var/lib</span></code>：一般应用生成的数据</li>
     <li>
-<code class="docutils literal"><span class="pre">/var/log</span></code>: Log files</li>
+<code class="docutils literal"><span class="pre">/var/log</span></code>：日志文件</li>
     </ul>
   </li>
 </ul>
 
 <p>
-Where possible, we prefer to put non-boot-critical applications in <code class="docutils literal"><span class="pre">/usr</span></code>
-rather than <code class="docutils literal"><span class="pre">/</span></code>. If a program is not needed in the boot process until after
-filesystems are mounted then it generally does not belong on <code class="docutils literal"><span class="pre">/</span></code>.
+在可能的情况下，对系统启动非关键的应用更推荐放到 <code class="docutils literal"><span class="pre">/usr</span></code> 而不是
+<code class="docutils literal"><span class="pre">/</span></code> 下。如果某个程序在系统的启动过程中直到文件系统挂在之前都不需要，那么它一般不会安装到
+<code class="docutils literal"><span class="pre">/</span></code> 下。
 </p>
 
 <p>
-Any binary which links against a library under <code class="docutils literal"><span class="pre">/usr</span></code> must itself go into
-<code class="docutils literal"><span class="pre">/usr</span></code> (or possibly <code class="docutils literal"><span class="pre">/opt</span></code>).
+任何链接了 <code class="docutils literal"><span class="pre">/usr</span></code> 下的库的二进制文件都要放到
+<code class="docutils literal"><span class="pre">/usr</span></code> 下（或者 <code class="docutils literal"><span class="pre">/opt</span></code> 下）。
 </p>
 
 <p>
-The <code class="docutils literal"><span class="pre">/opt</span></code> top-level should only be used for applications that
-do not conform to the standard filesystem layout. This particularly includes
-prebuilt software packages that expect being installed in a single directory.
+<code class="docutils literal"><span class="pre">/opt</span></code>
+顶层目录应该只用于存放不符合标准文件系统布局的应用程序。尤其是那些希望被安装到一个单独目录下的预编译软件。
 </p>
 
 <p>
-The <code class="docutils literal"><span class="pre">/usr/local</span></code> hierarchy is for non-portage software. Ebuilds must not
-attempt to put anything in here.
+<code class="docutils literal"><span class="pre">/usr/local</span></code> 用于安装非 portage 软件。ebuild 不得在这里放任何东西。
 </p>
 
 <p>
-The <code class="docutils literal"><span class="pre">/usr/share</span></code> directory is for <i>architecture independent</i> application data
-which is not modified at runtime.
+<code class="docutils literal"><span class="pre">/usr/share</span></code> 目录用于存放<i>架构无关</i>的应用数据，这些数据不会在运行修改。
 </p>
 
 <p>
-Try to avoid installing unnecessary things into <code class="docutils literal"><span class="pre">/etc</span></code> — every file in there
-is additional work for the system administrator. In particular, non-text files
-and files that are not intended for system administrator usage should be moved
-to <code class="docutils literal"><span class="pre">/usr/share</span></code>.
+尽量避免把不必要的东西放到 <code class="docutils literal"><span class="pre">/etc</span></code>
+下 —— 这里的每一个文件对系统管理员来说都是额外的工作负担。特别是非文本文件和不适合系统管理员使用的文件，它们应该移到
+<code class="docutils literal"><span class="pre">/usr/share</span></code> 下。
 </p>
 <div class="section">
-<h2 id="fhs">FHS</h2>
+<h2 id="fhs">文件系统层次结构标准</h2>
 
 <p>
-Gentoo does not consider the <a class="" href="http://www.pathname.com/fhs/">
-Filesystem Hierarchy Standard</a> to be an authoritative standard, although
-much of our policy coincides with it.
+Gentoo 不认为<a class="" href="http://www.pathname.com/fhs/">文件系统层次结构标准</a>是一个权威的标准，尽管许多策略都与之吻合。
 </p>
 
 </div>
