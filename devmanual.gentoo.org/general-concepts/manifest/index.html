@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Manifest – Gentoo Development Guide</title>
+<title>Manifest 文件 – Gentoo 开发指南</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
 <link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -56,28 +56,27 @@
 <li><a href="../../index.html">Master Index</a></li>
 <li><a href="../index.html">General Concepts</a></li>
 </ol></div></div></div></header><main><div class="container">
-<h1 class="first-header">Manifest</h1>
+<h1 class="first-header">Manifest 文件</h1>
 <div class="section">
-<h2 id="generating-the-manifest">Generating the Manifest</h2>
+<h2 id="generating-the-manifest">生成 Manifest</h2>
 <p>
-In the tree, every package has a <code class="docutils literal"><span class="pre">Manifest</span></code> file. This file lives
-in the same directory as the ebuilds for the package. The <code class="docutils literal"><span class="pre">Manifest</span></code> file
-contains digests (the current list can be found in <code class="docutils literal"><span class="pre">metadata/layout.conf</span></code>
-as <code class="docutils literal"><span class="pre">manifest-hashes</span></code>) and file size data for every distfile used
-by the package. This is used to verify integrity upon fetching them.
+在源码树中，每个软件包都有一个 <code class="docutils literal"><span class="pre">Manifest</span></code>
+文件。此文件和软件包的 ebuild 放在同一个目录中。<code class="docutils literal"><span class="pre">Manifest</span></code>
+文件包含软件包用到的每一个 distfile 的摘要（the current list can be found in <code class="docutils literal"><span class="pre">metadata/layout.conf</span></code>
+as <code class="docutils literal"><span class="pre">manifest-hashes</span></code>）和文件大小。这用于在获取它们时验证完整性。
 </p>
 
 <p>
-To generate the <code class="docutils literal"><span class="pre">Manifest</span></code>, use <code class="docutils literal"><span class="pre">ebuild foo.ebuild manifest</span></code>
-or <code class="docutils literal"><span class="pre">repoman manifest</span></code>. You may want to set <code class="docutils literal"><span class="pre">GENTOO_MIRRORS=</span></code> while
-calling it to fetch distfiles from their original locations immediately.
+要生成 <code class="docutils literal"><span class="pre">Manifest</span></code>，请使用
+<code class="docutils literal"><span class="pre">ebuild foo.ebuild manifest</span></code>
+或 <code class="docutils literal"><span class="pre">repoman manifest</span></code> 命令。你可能需要在执行命令时设置
+<code class="docutils literal"><span class="pre">GENTOO_MIRRORS=</span></code>，以便立即从其原始位置获取 distfile。
 </p>
 <div class="section">
-<h3 id="thin-and-thick-manifests">Thin and thick Manifests</h3>
+<h3 id="thin-and-thick-manifests">薄 Manifest 与厚 Manifest</h3>
 <p>
-There are two kinds of Manifest files in Gentoo: thin Manifests that are used
-in the development repositories, and thick Manifests that are distributed
-via rsync to end users. Thin Manifests are described above.
+Gentoo 中有两种 Manifest：在代码开发仓库中使用的薄 Manifest 和通过 rsync 分发到最终用户的厚 Manifest。
+前面说的都是薄 Manifest。
 </p>
 
 <p>
