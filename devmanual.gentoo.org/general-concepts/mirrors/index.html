@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Mirrors – Gentoo Development Guide</title>
+<title>镜像同步 – Gentoo 开发指南</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="The Gentoo Devmanual is a technical manual which covers topics such as writing ebuilds and eclasses, and policies that developers should be abiding by.">
 <link href="/assets.gentoo.org/tyrian/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -61,9 +61,9 @@
 <li><a href="../../index.html">Master Index</a></li>
 <li><a href="../index.html">General Concepts</a></li>
 </ol></div></div></div></header><main><div class="container">
-<h1 class="first-header">Mirrors</h1>
+<h1 class="first-header">镜像同步</h1>
 <div class="section">
-<h2 id="automatic-mirroring">Automatic Mirroring</h2>
+<h2 id="automatic-mirroring">自动同步</h2>
 <p>
 软件包会自动获取同步在 Gentoo 镜像站上的 <code class="docutils literal"><span class="pre">SRC_URI</span></code>
 组件，包括托管在 Gentoo 官方基础设施（例如，<code class="docutils literal"><span class="pre">dev.gentoo.org</span></code>
@@ -71,39 +71,35 @@
 </p>
 
 <p>
-This is generally desired behaviour — upstream mirrors are prone to being
-rearranged, tidied out or having files modified.
+这通常是所需的行为 —— 上游网站比较容易重新规划、整理，或是修改文件。
 </p>
 <div class="section">
-<h3 id="restricting-automatic-mirroring">Restricting Automatic Mirroring</h3>
+<h3 id="restricting-automatic-mirroring">自动同步约束</h3>
 <p>
-Three <code class="docutils literal"><span class="pre">RESTRICT</span></code> keywords can be used to control the mirroring process.
+三个 <code class="docutils literal"><span class="pre">RESTRICT</span></code> 关键字可以用来控制同步过程。
 </p>
 
 <p>
-The <code class="docutils literal"><span class="pre">RESTRICT="mirror"</span></code> setting should be used if we cannot legally mirror
-certain files; files will still be downloaded from the original locations.
+<code class="docutils literal"><span class="pre">RESTRICT="mirror"</span></code> 应该在无法合法地同步某一个文件时使用，随后文件将会从原始位置下载。
 </p>
 
 <p>
-The <code class="docutils literal"><span class="pre">RESTRICT="primaryuri"</span></code> setting causes Portage to try
-original locations <i>first</i>, and then fall back to mirrors if necessary.
-This should not be used in new ebuilds.
+<code class="docutils literal"><span class="pre">RESTRICT="primaryuri"</span></code> 会使得 Portage <i>首先</i>去尝试原始位置，不行的话再回来用镜像站。
+它不应该用在新的 ebuild 上。
 </p>
 
 <p>
-There is also <code class="docutils literal"><span class="pre">RESTRICT="fetch"</span></code>, which prevents Portage from trying to
-fetch anything manually. The <a class="" href="../../ebuild-writing/functions/pkg_nofetch/index.html">
-pkg_nofetch</a> function will be called if any <code class="docutils literal"><span class="pre">SRC_URI</span></code> components cannot be
-found. This should only be used if a license requires it.
+<code class="docutils literal"><span class="pre">RESTRICT="fetch"</span></code> 用来禁止 Portage 手动获取任何东西。如果找不到
+<code class="docutils literal"><span class="pre">SRC_URI</span></code> 则会调用
+<a class="" href="../../ebuild-writing/functions/pkg_nofetch/index.html">pkg_nofetch</a>
+函数。只有在为满足许可证需要的情况下才应该使用此值。
 </p>
 </div>
 <div class="section">
-<h3 id="replacing-automatically-mirrored-files">Replacing Automatically Mirrored Files</h3>
+<h3 id="replacing-automatically-mirrored-files">替换自动同步的文件</h3>
 <p>
-On rare occasions you may need to replace a file that is already mirrored.
-This is usually the case when upstream remakes a release package. If this
-is necessary, please use <code class="docutils literal"><span class="pre">SRC_URI</span></code> arrow to rename the file. For example:
+在极少数情况下，你可能会需要替换已同步的文件。一般是由于上游重新制作了一个软件包的发行版。如果有必要，请使用
+<code class="docutils literal"><span class="pre">SRC_URI</span></code> 箭头来重命名文件。例如：
 </p>
 
 <pre><span class="Constant"><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">#</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">upstream</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">updated</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">the</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">distfile</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">in</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">place,</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">so</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">suffix</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">it</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">with</span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment"> </span><span xmlns="http://www.w3.org/1999/xhtml" class="Comment">_YYYYMMDD</span>
@@ -111,31 +107,27 @@ is necessary, please use <code class="docutils literal"><span class="pre">SRC_UR
 </span></pre>
 
 <p>
-Since Gentoo mirrors operate using local distfile names, they will automatically
-fetch and start distributing the new version.
+由于 Gentoo 镜像操作用的是本地 distfile 的文件名，因此它们将自动获取并开始分发新版本。
 </p>
 
 <p>
-Please note that if upstream made any changes affecting the built
-package, you need to also bump the ebuild's revision. Finally,
-remember to remove the ebuilds that are associated with the old
-distfile, or regenerate their checksums in <code class="docutils literal"><span class="pre">Manifest</span></code>, if there
-are any. This is necessary because these ebuilds will cause checksum
-mismatch errors as the checksum recorded in the Manifest file no
-longer matches the computed checksum of the fetched distfile.
+请注意，如果上游做了任何对已构建的软件包有影响的改动，你还需要修改 ebuild 的版本。最后，记得删除和旧 distfile 关联的 ebuild 文件，或者在
+<code class="docutils literal"><span class="pre">Manifest</span></code>（如果有的话）中重新生成它们的校验和。
+这很有必要，因为如果 Manifest 文件中记录的校验和跟获取到的 distfile 计算出来的校验和不匹配的话 ebuild 就会报出校验和不匹配的错误。
 </p>
 
 <p>
-More general information about the internals of mirroring can be found on <a class="" href="https://wiki.gentoo.org/wiki/Project:Infrastructure/Mirrors/Distfile_Mirroring_System">
-Infrastructure project's Distfile Mirroring System page</a>.
+更多关于外部镜像同步的信息可以在
+<a class="" href="https://wiki.gentoo.org/wiki/Project:Infrastructure/Mirrors/Distfile_Mirroring_System">Infrastructure project's Distfile Mirroring System page</a>
+中找到。
 </p>
 </div>
 <div class="section">
-<h3 id="suitable-download-hosts">Suitable Download Hosts</h3>
+<h3 id="suitable-download-hosts">合适的下载主机</h3>
 <p>
-If you have to host a source file (patch or tarball) yourself, as long as it
-can be freely distributed (by license and legality), you're suggested to use
-your developer's space at <code class="docutils literal"><span class="pre">dev.gentoo.org</span></code>. Since external overlays may
+如果你有一个源文件（补丁或者源码压缩包）需要自己托管，只要它允许自由分发（根据许可证和合法性），就建议使用
+<code class="docutils literal"><span class="pre">dev.gentoo.org</span></code> 上你的开发者空间。
+Since external overlays may
 depend on your patches/tarballs, using the dev space at <code class="docutils literal"><span class="pre">dev.gentoo.org</span></code>
 keeps the distfiles at a stable and reliable infrastructure. If you retire,
 other developers can take over your distfiles and place them into their own
